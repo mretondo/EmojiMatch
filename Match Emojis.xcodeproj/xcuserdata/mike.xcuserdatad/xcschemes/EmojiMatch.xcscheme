@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EA5F13031FB861A0009590B6"
-               BuildableName = "EmojiMatch.app"
-               BlueprintName = "EmojiMatch"
-               ReferencedContainer = "container:EmojiMatch.xcodeproj">
+               BuildableName = "Match Emojis.app"
+               BlueprintName = "Match Emojis"
+               ReferencedContainer = "container:Match Emojis.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA5F13031FB861A0009590B6"
-            BuildableName = "EmojiMatch.app"
-            BlueprintName = "EmojiMatch"
-            ReferencedContainer = "container:EmojiMatch.xcodeproj">
+            BuildableName = "Match Emojis.app"
+            BlueprintName = "Match Emojis"
+            ReferencedContainer = "container:Match Emojis.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA5F13031FB861A0009590B6"
-            BuildableName = "EmojiMatch.app"
-            BlueprintName = "EmojiMatch"
-            ReferencedContainer = "container:EmojiMatch.xcodeproj">
+            BuildableName = "Match Emojis.app"
+            BlueprintName = "Match Emojis"
+            ReferencedContainer = "container:Match Emojis.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA5F13031FB861A0009590B6"
-            BuildableName = "EmojiMatch.app"
-            BlueprintName = "EmojiMatch"
-            ReferencedContainer = "container:EmojiMatch.xcodeproj">
+            BuildableName = "Match Emojis.app"
+            BlueprintName = "Match Emojis"
+            ReferencedContainer = "container:Match Emojis.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -19,7 +19,7 @@
 
 /* Begin PBXFileReference section */
 		27D6CDE721F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchThemeChooserTableViewController.swift; sourceTree = "<group>"; };
-		EA5F13041FB861A0009590B6 /* EmojiMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA5F13041FB861A0009590B6 /* Match Emojis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Match Emojis.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA5F13091FB861A0009590B6 /* EmojiMatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchViewController.swift; sourceTree = "<group>"; };
 		EA5F130C1FB861A0009590B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -52,7 +52,7 @@
 		EA5F13051FB861A0009590B6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EA5F13041FB861A0009590B6 /* EmojiMatch.app */,
+				EA5F13041FB861A0009590B6 /* Match Emojis.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,9 +84,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EA5F13031FB861A0009590B6 /* EmojiMatch */ = {
+		EA5F13031FB861A0009590B6 /* Match Emojis */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "EmojiMatch" */;
+			buildConfigurationList = EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Match Emojis" */;
 			buildPhases = (
 				EA5F13001FB861A0009590B6 /* Sources */,
 				EA5F13011FB861A0009590B6 /* Frameworks */,
@@ -96,9 +96,9 @@
 			);
 			dependencies = (
 			);
-			name = EmojiMatch;
+			name = "Match Emojis";
 			productName = Concentration;
-			productReference = EA5F13041FB861A0009590B6 /* EmojiMatch.app */;
+			productReference = EA5F13041FB861A0009590B6 /* Match Emojis.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -118,7 +118,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "EmojiMatch" */;
+			buildConfigurationList = EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Match Emojis" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -131,7 +131,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EA5F13031FB861A0009590B6 /* EmojiMatch */,
+				EA5F13031FB861A0009590B6 /* Match Emojis */,
 			);
 		};
 /* End PBXProject section */
@@ -333,7 +333,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "EmojiMatch" */ = {
+		EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Match Emojis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EA5F13141FB861A0009590B6 /* Debug */,
@@ -342,7 +342,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "EmojiMatch" */ = {
+		EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Match Emojis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EA5F13171FB861A0009590B6 /* Debug */,
