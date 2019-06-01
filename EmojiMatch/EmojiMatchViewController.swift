@@ -47,8 +47,14 @@ class EmojiMatchViewController: UIViewController
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        if areAllCardsMatched() {
+            AppDelegate.lowestFlips = flipCount
+        }
+    }
+    
 	@IBAction private func touchCard(_ sender: UIButton) {
-        if let cardNumber = cardButtons.index(of: sender) {
+        if let cardNumber = cardButtons.firstIndex(of: sender) {
             let card = game.cards[cardNumber]
 
             // if card isMatched then it can't be pressed

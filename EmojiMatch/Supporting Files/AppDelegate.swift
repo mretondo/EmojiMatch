@@ -2,18 +2,30 @@
 //  AppDelegate.swift
 //  EmojiMatch
 //
-//  Created by CS193p Instructor  on 09/25/17.
-//  Copyright © 2017 Stanford University. All rights reserved.
-//
 
 import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-	var window: UIWindow?
-
-
+    var window: UIWindow?
+    let defaults = UserDefaults.standard
+    
+    public static var lowestFlips: Int? {
+        get { return UserDefaults.standard.object(forKey: "lowestFlips") as? Int }
+        
+        set(newValue) {
+            if let lowestFlips = lowestFlips, let newValue = newValue {
+                if newValue < lowestFlips {
+                    UserDefaults.standard.set(newValue, forKey: "lowestFlips")
+                }
+            } else {
+                // save first value
+                UserDefaults.standard.set(newValue, forKey: "lowestFlips")
+            }
+        }
+    }
+    
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		return true
@@ -40,7 +52,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-
-
 }
 

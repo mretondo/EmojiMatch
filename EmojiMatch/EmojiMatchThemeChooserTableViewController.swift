@@ -91,5 +91,24 @@ class EmojiMatchThemeChooserTableViewController: UITableViewController
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        for view in self.navigationController?.navigationBar.subviews ?? [] {
+            let subviews = view.subviews
+            if subviews.count > 0, let label = subviews[0] as? UILabel {
+                label.text = "Low Score: "
+                if let lowestFlips = AppDelegate.lowestFlips {
+                    label.text?.append("\(lowestFlips) Flips")
+                }
+            }
+        }
+    }
+}
 
+extension UIViewController {
+    var appDelegate: AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
 }
