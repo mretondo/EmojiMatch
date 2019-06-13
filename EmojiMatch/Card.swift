@@ -6,9 +6,9 @@ import Foundation
 
 struct Card: Hashable
 {
-    // Swift 5 depricates hashValue
-    // var hashValue: Int {return identifier}
-    func hash(into hasher: inout Hasher) {hasher.combine(identifier)}
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
     
     static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.identifier == rhs.identifier
