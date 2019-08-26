@@ -50,7 +50,7 @@ class EmojiMatchViewController: UIViewController
     override func viewWillDisappear(_ animated: Bool) {
         if areAllCardsMatched() {
             AppDelegate.lowestFlips = flipCount
-            //try? AppDelegate.viewContext.save()
+            try? AppDelegate.viewContext.save()
         }
     }
     
