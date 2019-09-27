@@ -12,11 +12,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     let defaults = UserDefaults.standard
 
-    static var persistentContainer: NSPersistentContainer {
+    public static var persistentContainer: NSPersistentContainer {
         return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     }
 
-    static var viewContext: NSManagedObjectContext {
+    public static var viewContext: NSManagedObjectContext {
         return persistentContainer.viewContext // only use on main queue
     }
 

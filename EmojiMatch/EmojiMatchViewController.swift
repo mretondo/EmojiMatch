@@ -243,9 +243,9 @@ class EmojiMatchViewController: UIViewController
         didSet {
             themeName = theme?.themeName ?? ""
             emojiChoices = theme?.emojis ?? ""
-            faceUpColor = theme?.faceUpColor ?? #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-            faceDownColor = theme?.faceDownColor ?? #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
             backgroundColor = theme?.backgroundColor ?? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            faceDownColor = theme?.faceDownColor ?? #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+            faceUpColor = theme?.faceUpColor ?? #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             self.view.backgroundColor = backgroundColor
             
             emoji = [:]

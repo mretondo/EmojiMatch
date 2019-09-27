@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EmojiMatchThemeChooserTableViewController: UITableViewController
+class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewController
 {
     // theme, emojis, backgroundColor, faceDownColor, faceUpColor
     let themes = [
@@ -127,11 +127,11 @@ class EmojiMatchThemeChooserTableViewController: UITableViewController
     }
 }
 
-extension UIViewController {
-    var appDelegate: AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
-    }
-}
+//extension UIViewController {
+//    var appDelegate: AppDelegate {
+//        return UIApplication.shared.delegate as! AppDelegate
+//    }
+//}
 
 extension String {
     //
