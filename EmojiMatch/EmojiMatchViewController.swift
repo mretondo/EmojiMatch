@@ -59,7 +59,7 @@ class EmojiMatchViewController: UIViewController
             let card = game.cards[cardNumber]
 
             // if card isMatched then it can't be pressed
-            if !card.isMatched {
+            if !card.isMatched && !card.isFaceUp {
                 flipCount += 1
                 game.chooseCard(at: cardNumber)
                 updateViewFromModel(touchedCard: cardNumber)
@@ -143,35 +143,35 @@ class EmojiMatchViewController: UIViewController
                                                                    options: .curveEaseOut,
                                                                    animations: { button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) },
                                                                    completion: { finished in
-                                                                                self.hidePairOfFaceUpCards(afterTimeInterval: 0.5)
+                                                                        self.hidePairOfFaceUpCards(afterTimeInterval: 0.5)
 
-                                                                                //
-                                                                                // 5 - if the game is over then zoom out and rotate "Game Over"
-                                                                                //
-                                                                                if self.areAllCardsMatched() {
-                                                                                    self.gameOver.isHidden = false
+                                                                        //
+                                                                        // 5 - if the game is over then zoom out and rotate "Game Over"
+                                                                        //
+                                                                        if self.areAllCardsMatched() {
+                                                                            self.gameOver.isHidden = false
 
-                                                                                    // zoom out gameOver label 4X
-                                                                                    UIView.animate(withDuration: 2.0,
-                                                                                                   delay: 0.0,
-                                                                                                   usingSpringWithDamping: 0.4,
-                                                                                                   initialSpringVelocity: 0.4,
-                                                                                                   animations: {
-                                                                                                       // zoom out and rotate gameOver label to normal size
-                                                                                                       let scale = CGAffineTransform(scaleX: 1, y: 1)
-                                                                                                       let rotationAngle = CGAffineTransform(rotationAngle: 0.0)
+                                                                            // zoom out gameOver label 4X
+                                                                            UIView.animate(withDuration: 2.0,
+                                                                                           delay: 0.0,
+                                                                                           usingSpringWithDamping: 0.4,
+                                                                                           initialSpringVelocity: 0.4,
+                                                                                           animations: {
+                                                                                               // zoom out and rotate gameOver label to normal size
+                                                                                               let scale = CGAffineTransform(scaleX: 1, y: 1)
+                                                                                               let rotationAngle = CGAffineTransform(rotationAngle: 0.0)
 
-                                                                                                       let transform = scale.concatenating(rotationAngle)
+                                                                                               let transform = scale.concatenating(rotationAngle)
 
-                                                                                                       self.gameOver.transform = transform
-                                                                                                   })
-                                                                                }
+                                                                                               self.gameOver.transform = transform
+                                                                                           })
+                                                                        }
                                                                    })
                                               })
                         })
     }
 
-    fileprivate func hidePairOfFaceUpCards(afterTimeInterval deley: TimeInterval){
+    fileprivate func hidePairOfFaceUpCards(afterTimeInterval deley: TimeInterval) {
         var upButtons = [UIButton]()
         var matchedCards: [Card] = []
         var faceUpIndexs: [Array<Any>.Index] = []
@@ -221,6 +221,10 @@ class EmojiMatchViewController: UIViewController
             } else {
                 Thread.sleep(forTimeInterval: deley)
             }
+
+            // both face up cards are now down and maybe invisable if they matched
+            game.cards[faceUpIndexs[0]].isFaceUp = false
+            game.cards[faceUpIndexs[1]].isFaceUp = false
 
             updateViewFromModel(touchedCard: nil)
         }

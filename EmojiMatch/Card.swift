@@ -21,8 +21,9 @@ struct Card: Hashable
     private static var identifierFactory = 0
     
     private static func getUniqueIdentifier() -> Int {
+        let uniqueIdentifier = identifierFactory
         identifierFactory += 1
-        return identifierFactory
+        return uniqueIdentifier
     }
     
     init() {

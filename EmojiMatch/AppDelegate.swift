@@ -21,76 +21,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     public static var lowestFlips: Int? {
-        get {
-//            return UserDefaults.standard.object(forKey: "lowestFlips") as? Int
-            let request: NSFetchRequest<Score> = Score.fetchRequest()
-//            request.predicate = NSPredicate(format: "lowestScore = %@", "*")
-//            request.sortDescriptors =
-
-            do {
-                let lowestScores = try viewContext.fetch(request)
-                assert(lowestScores.count <= 1, "lowestFlips - lowestScores count doesn't equal 1")
-                if lowestScores.count == 1 {
-                    return Int(lowestScores[0].lowestScore)
-                } else {
-                    return nil
-                }
-            } catch {
-                return nil
-            }
-        }
-        
-        set(newValue) {
-//            if let lowestFlips = lowestFlips, let newValue = newValue {
-//                if newValue < lowestFlips {
-//                    UserDefaults.standard.set(newValue, forKey: "lowestFlips")
-//                }
-//            } else {
-//                // save first value
-//                UserDefaults.standard.set(newValue, forKey: "lowestFlips")
-//            }
-            if let newValue = newValue, newValue > -1 {
-                let lowestFlipsScore = lowestFlips
-
-                if lowestFlipsScore == nil || newValue < lowestFlipsScore! {
-                    // no data is retrieved, the database only retrieves the record count
-                    if let count = try? AppDelegate.viewContext.count(for: Score.fetchRequest()), count == 0 {
-                        // save first lowest score
-                        let score = Score(context: viewContext)
-                        score.lowestScore = Int64(newValue)
-                    } else {
-                        // modify previous saved lowest score
-                        let request: NSFetchRequest<Score> = Score.fetchRequest()
-                        do {
-                            let lowestScores = try? viewContext.fetch(request)
-                            let score = lowestScores![0]
-                            score.lowestScore = Int64(newValue)
-                        }
-                    }
-                }
-            }
-
-            printDatabaseStats()
-        }
+        get { return Score.lowestScore }
+        set(newValue) { Score.lowestScore = newValue }
     }
 
-    public static func printDatabaseStats() {
-        #if DEBUG
-        // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        AppDelegate.viewContext.perform {
-            // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.viewContext.count(for: Score.fetchRequest()) {
-                print ("\(count) Score records\n")
-            } else {
-                print ("No Score records\n")
-            }
-        }
-        #endif
-    }
-    
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
-		return true
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        print(paths[0])
+        do {
+            // theme, emojis, backgroundColor, faceDownColor, faceUpColor
+            let themes = [
+                ("Sports",        "🏀🏈⚾️🏊‍♀️🏌️‍♂️🚴‍♀️🏸🏒🏄‍♀️🎯🎳🏇🏂⛷🏋🏻‍♂️🤸‍♂️⛹️‍♂️🎾🏓⚽️🏏🛹🏹⛸🥌", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Animals",       "🐶🐠🦊🐻🐨🐒🐸🐤🐰🐽🦆🦅🦋🐞🐌🐺🦖🕷🦞🐬🐫🦒🦜🐎🐄", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Faces",         "😃🤣😍🤢🤪🤓😬🙄😡😎🥶🤥😇🤠🤮🙁😤😫🥳😁😮🤐😳😅🥺", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Christmas",     "🎅🏻🧣🎄❄️⛄️🎁🌨☃️🤶🏻🧤", #colorLiteral(red: 0, green: 0.2784313725, blue: 0.1529411765, alpha: 1), #colorLiteral(red: 0.6043836805, green: 0.0901325949, blue: 0, alpha: 1), #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+                ("Halloween",     "🎃🦇😱🙀😈👻🍭🍬🍎🧛🏻‍♂️🧟‍♂️👺⚰️", #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), #colorLiteral(red: 1, green: 0.5781051517, blue: 0, alpha: 1), #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+                ("Food",          "🍏🍎🍋🍉🍇🍒🥥🥑🥦🌽🥕🥯🥨🥩🍗🌭🍔🍟🍕🌮🍦🧁🍰🎂🍭🍩☕️🍺🧀🍌🌶🍅🥒🍊", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Travel-Places", "🚗🚌🏎🚑🚒🚜🛴🚲🛵🚔🚠🚃🚂✈️🛩🛰🚀🛸🚁🛶⛵️🛳🚦🗽🗿🏰🏯🎢🏝🌋⛺️🏠🏛🕌⛩", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Fags",          "🏴‍☠️🚩🏳️‍🌈🇺🇸🇨🇦🇫🇷🇨🇳🇷🇺🇮🇳🇮🇱🇯🇵🇮🇹🎌🇲🇾🇲🇽🇳🇵🇳🇴🇵🇦🇨🇭🇬🇧🏁🇮🇪🇲🇾🇻🇳🇧🇩", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Objects",       "⌚️📱💻⌨️🖥🖨🕹🗜📀📸🎥📽🎞📞📺🧭⏰⏳📡🔦🧯🛠🧲🧨💈💊🛎🛏🛒📭📜📆📌🔍🔐🚿🧬📋📎🧷🧮🔬", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+                ("Potpourri",     "🌎🦕🧵🌴🌭🚀⏰❤️🍿⭐️🥶🎓🕶🤡🐝🦄🍄🌈🌹☔️🍎🍉🍪🥨🍒🎲🎱🥁🛵✈️🏰⛵️💾💡🧲✏️📌💰🔔🇺🇸📫🏆", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+            ]
+
+            // create the Themes table if it doesn't already exist then add the themes that don't exist
+
+            try Themes.populateTable(with :themes)
+        } catch {
+            let nserror = error as NSError
+            fatalError("func application -- Unresolved CoreData error \(nserror), \(nserror.userInfo)")
+        }
+
+        return true
 	}
 
 	func applicationWillResignActive(_ application: UIApplication) {
