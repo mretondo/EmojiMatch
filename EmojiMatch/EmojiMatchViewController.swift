@@ -97,7 +97,7 @@ class EmojiMatchViewController: UIViewController
                 let button = cardButtons[index]
                 let card = game.cards[index]
               
-                if touchedCard != nil, card.isFaceUp {
+                if touchedCard != nil && card.isFaceUp {
                     if touchedCard == index {
                         animateFlippingCard(card, button)
                     } else {
@@ -143,7 +143,7 @@ class EmojiMatchViewController: UIViewController
                                                                    options: .curveEaseOut,
                                                                    animations: { button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) },
                                                                    completion: { finished in
-                                                                        self.hidePairOfFaceUpCards(afterTimeInterval: 0.5)
+                                                                        self.hidePairOfFaceUpCards(afterTimeInterval: 0.6)
 
                                                                         //
                                                                         // 5 - if the game is over then zoom out and rotate "Game Over"
@@ -173,7 +173,6 @@ class EmojiMatchViewController: UIViewController
 
     fileprivate func hidePairOfFaceUpCards(afterTimeInterval deley: TimeInterval) {
         var upButtons = [UIButton]()
-        var matchedCards: [Card] = []
         var faceUpIndexs: [Array<Any>.Index] = []
 
         for i in cardButtons.indices {
@@ -184,20 +183,16 @@ class EmojiMatchViewController: UIViewController
         }
 
         if upButtons.count == 2 {
-            if game.cards[faceUpIndexs[0]].isMatched && game.cards[faceUpIndexs[1]].isMatched{
-                matchedCards.append(game.cards[faceUpIndexs[0]])
-            }
-
-            if matchedCards.count == 2 {
-                cardButtons.forEach() {
-                    $0.layer.zPosition = 0
-                }
-
-                upButtons[0].layer.zPosition = 1
-                upButtons[1].layer.zPosition = 2
+            if game.cards[faceUpIndexs[0]].isMatched && game.cards[faceUpIndexs[1]].isMatched {
+//                cardButtons.forEach() {
+//                    $0.layer.zPosition = 0
+//                }
+//
+//                upButtons[0].layer.zPosition = 1
+//                upButtons[1].layer.zPosition = 2
 
                 UIView.animate(withDuration: 0.4,
-                               delay: 0.6,
+                               delay: deley,
                                options: [.curveEaseInOut],
                                animations: {
                                     upButtons[0].transform = CGAffineTransform(scaleX: 3.00, y: 3.00)
@@ -243,9 +238,9 @@ class EmojiMatchViewController: UIViewController
     }
     
     // sets the current theme and get ready for new game
-    var theme: (themeName: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
+    var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
         didSet {
-            themeName = theme?.themeName ?? ""
+            themeName = theme?.name ?? ""
             emojiChoices = theme?.emojis ?? ""
             backgroundColor = theme?.backgroundColor ?? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             faceDownColor = theme?.faceDownColor ?? #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)

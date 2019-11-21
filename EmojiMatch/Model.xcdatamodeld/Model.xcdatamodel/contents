@@ -8,7 +8,7 @@
         <attribute name="emojis" optional="YES" attributeType="String"/>
         <attribute name="faceDownColor" optional="YES" attributeType="Transformable"/>
         <attribute name="faceUpColor" optional="YES" attributeType="Transformable"/>
-        <attribute name="themeName" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <elements>
         <element name="Score" positionX="-316.66015625" positionY="-14.3515625" width="136.59375" height="45"/>

@@ -63,9 +63,9 @@ class Score: NSManagedObject
         AppDelegate.viewContext.perform {
             // no data is retrieved, the database only retrieves the record count
             if let count = try? AppDelegate.viewContext.count(for: Score.fetchRequest()) {
-                print ("\(count) Score records\n")
+                print ("\(count) Score\n")
             } else {
-                print ("No Score records\n")
+                print ("No Score\n")
             }
         }
         #endif

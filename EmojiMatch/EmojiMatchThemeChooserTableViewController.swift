@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import CoreData
 
-class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewController
+class EmojiMatchThemeChooserTableViewController: UITableViewController //FetchedResultsTableViewController
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
 
-    let themes = Themes.themes
+    //var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
 
     // MARK: - Table view data source
 
@@ -20,18 +21,24 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return themes.count
+        if let count = try? AppDelegate.viewContext.count(for: Themes.fetchRequest()) {
+            return count
+        } else {
+            return 0
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath)
 
-        let label = themes[indexPath.row].0
-        cell.textLabel?.text = label
-        
-        // pick random emoji to display before label
-        let emoji = pickRandomEmoji(from: themes[indexPath.row].1)
-        cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
+        let contentsOfCells: [(name: String, emojis: String)] = Themes.namesAndEmojis
+        if contentsOfCells.count > indexPath.row {
+            cell.textLabel?.text = contentsOfCells[indexPath.row].name
+
+            // pick random emoji to display before label
+            let emoji = pickRandomEmoji(from: contentsOfCells[indexPath.row].emojis)
+            cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
+        }
 
         return cell
     }
@@ -86,9 +93,11 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "Choose Theme" else { return }
         
-        if let indexPath = tableView.indexPathForSelectedRow {
-            if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
-                EmojiMatchVC.theme = themes[indexPath.row]
+        if let indexPath = tableView.indexPathForSelectedRow, let themeName = tableView.cellForRow(at: indexPath)?.textLabel?.text {
+            if let theme = Themes.theme(forName: themeName) {
+                if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
+                    EmojiMatchVC.theme = theme
+                }
             }
         }
     }
@@ -116,12 +125,6 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
         self.tableView.reloadData()
     }
 }
-
-//extension UIViewController {
-//    var appDelegate: AppDelegate {
-//        return UIApplication.shared.delegate as! AppDelegate
-//    }
-//}
 
 extension String {
     //
