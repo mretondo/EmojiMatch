@@ -19,6 +19,22 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     // MARK: - Table view data source
     var fetchedResultsController: NSFetchedResultsController<Themes>?
 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath)
+
+        guard let theme = fetchedResultsController?.object(at: indexPath) else {
+            fatalError("Attempt to configure cell without a managed object")
+        }
+
+        cell.textLabel?.text = theme.name
+
+        // pick random emoji to display before label
+        let emoji = pickRandomEmoji(from: theme.emojis ?? "")
+        cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
+
+        return cell
+    }
+
     private func updateUI() {
         if let context = container?.viewContext {
             let request: NSFetchRequest<Themes> = Themes.fetchRequest()
@@ -35,22 +51,6 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
             // force table view to rearange the cell icons
             tableView.reloadData()
         }
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath)
-
-        guard let theme = fetchedResultsController?.object(at: indexPath) else {
-            fatalError("Attempt to configure cell without a managed object")
-        }
-
-        cell.textLabel?.text = theme.name
-
-        // pick random emoji to display before label
-        let emoji = pickRandomEmoji(from: theme.emojis ?? "")
-        cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
-
-        return cell
     }
 
     public func pickRandomEmoji(from emojiChoices: String) -> String {
