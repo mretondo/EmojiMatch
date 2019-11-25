@@ -8,37 +8,47 @@
 import UIKit
 import CoreData
 
-class EmojiMatchThemeChooserTableViewController: UITableViewController //FetchedResultsTableViewController
+class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewController
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
 
-    //var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
-
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
+        didSet { updateUI() }
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let count = try? AppDelegate.viewContext.count(for: Themes.fetchRequest()) {
-            return count
-        } else {
-            return 0
+    // MARK: - Table view data source
+    var fetchedResultsController: NSFetchedResultsController<Themes>?
+
+    private func updateUI() {
+        if let context = container?.viewContext {
+            let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:)))]
+
+            fetchedResultsController = NSFetchedResultsController<Themes>(fetchRequest: request,
+                                                                          managedObjectContext: context,
+                                                                          sectionNameKeyPath: nil,
+                                                                          cacheName: nil)
+
+            fetchedResultsController?.delegate = self
+            try? fetchedResultsController?.performFetch()
+
+            // force table view to rearange the cell icons
+            tableView.reloadData()
         }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath)
 
-        let contentsOfCells: [(name: String, emojis: String)] = Themes.namesAndEmojis
-        if contentsOfCells.count > indexPath.row {
-            cell.textLabel?.text = contentsOfCells[indexPath.row].name
-
-            // pick random emoji to display before label
-            let emoji = pickRandomEmoji(from: contentsOfCells[indexPath.row].emojis)
-            cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
+        guard let theme = fetchedResultsController?.object(at: indexPath) else {
+            fatalError("Attempt to configure cell without a managed object")
         }
+
+        cell.textLabel?.text = theme.name
+
+        // pick random emoji to display before label
+        let emoji = pickRandomEmoji(from: theme.emojis ?? "")
+        cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
 
         return cell
     }
@@ -54,7 +64,7 @@ class EmojiMatchThemeChooserTableViewController: UITableViewController //Fetched
         
         return emoji
     }
-    
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -92,11 +102,20 @@ class EmojiMatchThemeChooserTableViewController: UITableViewController //Fetched
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "Choose Theme" else { return }
-        
-        if let indexPath = tableView.indexPathForSelectedRow, let themeName = tableView.cellForRow(at: indexPath)?.textLabel?.text {
-            if let theme = Themes.theme(forName: themeName) {
-                if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
-                    EmojiMatchVC.theme = theme
+
+        if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
+            EmojiMatchVC.container = container
+
+            if let indexPath = tableView.indexPathForSelectedRow {
+                // fetch a theme from the database
+                if let result = fetchedResultsController?.object(at: indexPath) {
+                    EmojiMatchVC.theme = (name: result.name!,
+                                          emojis: result.emojis!,
+                                          backgroundColor: result.backgroundColor as! UIColor,
+                                          faceDownColor: result.faceDownColor as! UIColor,
+                                          faceUpColor: result.faceUpColor as! UIColor)
+                } else {
+                    fatalError("prepare(for:sender:) - Attempt to fetched Results based on selected row failed")
                 }
             }
         }
@@ -121,8 +140,7 @@ class EmojiMatchThemeChooserTableViewController: UITableViewController //Fetched
         }
         themeHeading.prompt = prompt
         
-        // force table view to rearange the cell icons
-        self.tableView.reloadData()
+        updateUI()
     }
 }
 

@@ -37,29 +37,6 @@ class Themes: NSManagedObject
         }
     }
 
-    class func theme(forName name: String) -> (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
-        let context = AppDelegate.viewContext
-        let request: NSFetchRequest<Themes> = Themes.fetchRequest()
-        request.predicate = NSPredicate(format: "name = %@", name)
-
-        if let results = try? context.fetch(request) {
-            if let result = results.first {
-                // theme name, emojis, backgroundColor, faceDownColor, faceUpColor
-                var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)
-
-                theme.name = result.name!
-                theme.emojis = result.emojis!
-                theme.backgroundColor = result.backgroundColor as! UIColor
-                theme.faceUpColor = result.faceUpColor as! UIColor
-                theme.faceDownColor = result.faceDownColor as! UIColor
-
-                return theme
-            }
-        }
-
-        return nil
-    }
-
     class var namesAndEmojis: [(name: String, emojis: String)] {
         get {
             // theme name, emojis
@@ -83,6 +60,29 @@ class Themes: NSManagedObject
 
             return themeNames
         }
+    }
+
+    class func theme(forName name: String) -> (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
+        let context = AppDelegate.viewContext
+        let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+        request.predicate = NSPredicate(format: "name = %@", name)
+
+        if let results = try? context.fetch(request) {
+            if let result = results.first {
+                // theme name, emojis, backgroundColor, faceDownColor, faceUpColor
+                var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)
+
+                theme.name = result.name!
+                theme.emojis = result.emojis!
+                theme.backgroundColor = result.backgroundColor as! UIColor
+                theme.faceUpColor = result.faceUpColor as! UIColor
+                theme.faceDownColor = result.faceDownColor as! UIColor
+
+                return theme
+            }
+        }
+
+        return nil
     }
 
     ///

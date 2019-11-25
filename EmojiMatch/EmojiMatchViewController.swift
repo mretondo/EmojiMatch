@@ -4,32 +4,48 @@
 
 import UIKit
 import Foundation
+import CoreData
 
 class EmojiMatchViewController: UIViewController
 {
+    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
+        didSet { updateViewFromModel(touchedCard: nil) }
+    }
+
+    // sets the current theme and get ready for new game
+    var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
+        didSet {
+            self.view.backgroundColor = theme?.backgroundColor
+            emojiChoices = theme?.emojis ?? ""
+
+            flipCount = 0
+
+            updateViewFromModel(touchedCard: nil)
+        }
+    }
+
+    private var emojiChoices = ""
+    private var emoji: [Card : String] = [:]
+
 	private lazy var game = EmojiMatch(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
 
     @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
-
     @IBOutlet private var cardButtons: [UIButton]!
-
     @IBOutlet private weak var gameOver: UILabel!
+    @IBAction private func touchCard(_ sender: UIButton) {
+        if let cardNumber = cardButtons.firstIndex(of: sender) {
+            let card = game.cards[cardNumber]
 
-    private func updateFlipCountLabel() {
-        var attributes: [ NSAttributedString.Key: Any ] = [:]
-
-        if backgroundColor == #colorLiteral(red: 0, green: 0.2784313725, blue: 0.1529411765, alpha: 1)  {
-            attributes = [ .foregroundColor: faceDownColor ]
-        } else if backgroundColor == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
-            attributes = [ .foregroundColor: faceDownColor ]
+            // if card isMatched then it can't be pressed
+            if !card.isMatched && !card.isFaceUp {
+                flipCount += 1
+                game.chooseCard(at: cardNumber)
+                updateViewFromModel(touchedCard: cardNumber)
+            }
         } else {
-            attributes = [ .strokeWidth: 2.0, .strokeColor: faceDownColor ]
+            print("touchCard(_:) - choosen card was not in cardButtons")
         }
-
-        let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
-
-        flipCountLabel.attributedText = attributedString
     }
 
     override func viewDidLoad() {
@@ -54,25 +70,28 @@ class EmojiMatchViewController: UIViewController
         }
     }
     
-	@IBAction private func touchCard(_ sender: UIButton) {
-        if let cardNumber = cardButtons.firstIndex(of: sender) {
-            let card = game.cards[cardNumber]
-
-            // if card isMatched then it can't be pressed
-            if !card.isMatched && !card.isFaceUp {
-                flipCount += 1
-                game.chooseCard(at: cardNumber)
-                updateViewFromModel(touchedCard: cardNumber)
-            }
-        } else {
-            print("choosen card was not in cardButtons")
-        }
-	}
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         setButtonsFontSize()
     }
-    
+
+    private func updateFlipCountLabel() {
+        if let theme = theme {
+            var attributes: [ NSAttributedString.Key : Any ] = [:]
+
+            if theme.backgroundColor == #colorLiteral(red: 0, green: 0.2784313725, blue: 0.1529411765, alpha: 1) /* dark green for Christmas */ {
+                attributes = [ .foregroundColor : theme.faceDownColor as Any ]
+            } else if theme.backgroundColor == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) /* black */ {
+                attributes = [ .foregroundColor : theme.faceDownColor as Any ]
+            } else {
+                attributes = [ .strokeWidth: 2.0, .strokeColor: theme.faceDownColor as Any ]
+            }
+
+            let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
+
+            flipCountLabel.attributedText = attributedString
+        }
+    }
+
     private func setButtonsFontSize() {
         if cardButtons != nil {
             for index in cardButtons.indices {
@@ -102,13 +121,13 @@ class EmojiMatchViewController: UIViewController
                         animateFlippingCard(card, button)
                     } else {
                         button.setTitle(emoji(for: card), for: .normal)
-                        button.backgroundColor = faceUpColor
+                        button.backgroundColor = theme?.faceUpColor
                     }
                 } else {
                     // card is face down so no emoji to show
                     button.setTitle("", for: .normal)
                     // if card isMatched then it's effectively hidden i.e transparent
-                    button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0) : faceDownColor
+                    button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0) : theme?.faceDownColor
                 }
             }
         }
@@ -125,7 +144,7 @@ class EmojiMatchViewController: UIViewController
                        completion: { finished in
                             // after card is lifted then change the title and background - this will be the FlipTo side
                             button.setTitle(self.emoji(for: card), for: .normal)
-                            button.backgroundColor = self.faceUpColor
+                            button.backgroundColor = self.theme?.faceUpColor
 
                             //
                             // 2 - flip the card
@@ -237,38 +256,15 @@ class EmojiMatchViewController: UIViewController
         return true
     }
     
-    // sets the current theme and get ready for new game
-    var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
-        didSet {
-            themeName = theme?.name ?? ""
-            emojiChoices = theme?.emojis ?? ""
-            backgroundColor = theme?.backgroundColor ?? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            faceDownColor = theme?.faceDownColor ?? #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
-            faceUpColor = theme?.faceUpColor ?? #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-            self.view.backgroundColor = backgroundColor
-            
-            emoji = [:]
-            flipCount = 0
-            
-            updateViewFromModel(touchedCard: nil)
-        }
-    }
-
-    private var themeName = ""
-    private var emojiChoices = ""
-    private var emoji = [Card: String]()
-    private var backgroundColor = UIColor.clear
-    private var faceDownColor = UIColor.clear
-    private var faceUpColor = UIColor.clear
-	
     private func emoji(for card: Card) -> String {
-        if emoji[card] == nil, emojiChoices.count > 0 {
+        if emoji[card] == nil && emojiChoices.count > 0 {
             let offset = emojiChoices.count.random
             let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: offset)
-            
+
             // get random emoji character and then remove it from string to prevent duplication
             emoji[card] = String(emojiChoices.remove(at: randomStringIndex))
         }
+
         return emoji[card] ?? "?"
     }
 }
@@ -303,8 +299,8 @@ extension UIView {
     }
 }
 
-extension UIView {
-    func shadow(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+//extension UIView {
+//    func shadow(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
 //        let shadowAnimation = CABasicAnimation(keyPath: "shadowOpacity")
 //        shadowAnimation.fromValue = self.layer.shadowOpacity
 //        shadowAnimation.toValue = 0.0
@@ -316,11 +312,10 @@ extension UIView {
 //
 //        self.layer.add(animation, forKey: shadowAnimation.keyPath)
 //        self.layer.shadowOpacity = 0.0
-    }
-}
+//    }
+//}
 
 extension UIColor {
-
     func lighter(by percentage:CGFloat=30.0) -> UIColor? {
         return self.adjust(by: abs(percentage) )
     }
@@ -331,6 +326,7 @@ extension UIColor {
 
     func adjust(by percentage:CGFloat=30.0) -> UIColor? {
         var r:CGFloat=0, g:CGFloat=0, b:CGFloat=0, a:CGFloat=0;
+
         if(self.getRed(&r, green: &g, blue: &b, alpha: &a)){
             return UIColor(red: min(r + percentage/100, 1.0),
                            green: min(g + percentage/100, 1.0),
