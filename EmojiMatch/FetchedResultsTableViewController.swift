@@ -19,9 +19,16 @@ class FetchedResultsTableViewController: UITableViewController, NSFetchedResults
                            atSectionIndex sectionIndex: Int,
                            for type: NSFetchedResultsChangeType) {
         switch type {
-            case .insert: tableView.insertSections([sectionIndex], with: .fade)
-            case .delete: tableView.deleteSections([sectionIndex], with: .fade)
-            default: break
+            case .insert:
+                tableView.insertSections([sectionIndex], with: .fade)
+            case .delete:
+                tableView.deleteSections([sectionIndex], with: .fade)
+            case .move:
+                break
+            case .update:
+                break
+            default:
+                break
         }
     }
     
@@ -38,6 +45,7 @@ class FetchedResultsTableViewController: UITableViewController, NSFetchedResults
             case .update:
                 tableView.reloadRows(at: [indexPath!], with: .fade)
             case .move:
+                //tableView.moveRow(at: indexPath!, to: newIndexPath!)
                 tableView.deleteRows(at: [indexPath!], with: .fade)
                 tableView.insertRows(at: [newIndexPath!], with: .fade)
         }

@@ -10,7 +10,6 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-//    let defaults = UserDefaults.standard
 
     // only use on main queue
     public static var viewContext: NSManagedObjectContext {
