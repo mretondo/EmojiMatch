@@ -53,7 +53,7 @@ class EmojiMatchViewController: UIViewController
         super.viewDidLoad()
 
         // set view title to the theme's name
-        self.title = theme?.name
+        title = theme?.name
 
         setButtonsFontSize()
 
