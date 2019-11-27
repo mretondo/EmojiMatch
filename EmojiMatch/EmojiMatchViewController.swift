@@ -102,12 +102,26 @@ class EmojiMatchViewController: UIViewController
                 let button = cardButtons[index]
                 
                 if var font = button.titleLabel?.font {
-                    if UIDevice.current.orientation.isLandscape {
-                        font = font.withSize(42)
+                    let defaultFontSize: CGFloat = 46.0
+
+                    let deviceType = "\(UIDevice().type)"
+                    if  deviceType.starts(with: "iPhone3") ||
+                        deviceType.starts(with: "iPhone4") ||
+                        deviceType.starts(with: "iPhone5") ||
+                        deviceType.starts(with: "iPhone6") {
+                        if UIDevice.current.orientation.isLandscape {
+                            font = font.withSize(defaultFontSize - 10)
+                        } else {
+                            font = font.withSize(defaultFontSize - 4)
+                        }
                     } else {
-                        font = font.withSize(46)
+                        if UIDevice.current.orientation.isLandscape {
+                            font = font.withSize(defaultFontSize - 8)
+                        } else {
+                            font = font.withSize(defaultFontSize)
+                        }
                     }
-                    
+
                     button.titleLabel?.font = font
                 }
             }
