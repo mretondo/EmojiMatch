@@ -38,7 +38,7 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     private func updateUI() {
         if let context = container?.viewContext {
             let request: NSFetchRequest<Themes> = Themes.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedCaseInsensitiveCompare(_:)))]
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))]
 
             fetchedResultsController = NSFetchedResultsController<Themes>(fetchRequest: request,
                                                                           managedObjectContext: context,
@@ -104,6 +104,11 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
         guard segue.identifier == "Choose Theme" else { return }
 
         if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
+            let backItem = UIBarButtonItem()
+            backItem.title = "Back"
+            // This will show in the next view controller being pushed
+            navigationItem.backBarButtonItem = backItem
+
             EmojiMatchVC.container = container
 
             if let indexPath = tableView.indexPathForSelectedRow {

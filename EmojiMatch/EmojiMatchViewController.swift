@@ -33,6 +33,7 @@ class EmojiMatchViewController: UIViewController
     @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
     @IBOutlet private var cardButtons: [UIButton]!
     @IBOutlet private weak var gameOver: UILabel!
+
     @IBAction private func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.firstIndex(of: sender) {
             let card = game.cards[cardNumber]
@@ -50,6 +51,9 @@ class EmojiMatchViewController: UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // set view title to the theme's name
+        self.title = theme?.name
 
         setButtonsFontSize()
 
