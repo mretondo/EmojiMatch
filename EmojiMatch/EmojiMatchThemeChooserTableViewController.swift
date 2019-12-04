@@ -12,6 +12,9 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
 
+    // cache for the random emojis to be shown while the view table is shown, resets after a selection has been made
+    var emojiImageViewCache: [String : String] = [:]
+
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
         didSet { updateUI() }
     }
@@ -26,13 +29,26 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
             fatalError("Attempt to configure cell without a managed object")
         }
 
-        cell.textLabel?.text = theme.name
-
-        // pick random emoji to display before label
-        let emoji = pickRandomEmoji(from: theme.emojis ?? "")
-        cell.imageView?.image = emoji.textToImage(ofFontSize: 44.0)
+        cell.textLabel?.text = theme.name!
+        cell.imageView?.image = emojiImageForTheme(theme)
 
         return cell
+    }
+
+    // pick emoji to display before table item label
+    private func emojiImageForTheme(_ theme: Themes) -> UIImage? {
+        // pick emoji to display before label and cache it
+        // each time the table view is displayed a new set of random emojis will be choosen
+        let name = theme.name!
+        let fontSize = CGFloat(44.0)
+
+        if let emoji = emojiImageViewCache[name] {
+            return emoji.textToImage(ofFontSize: fontSize)
+        } else {
+            let emoji = pickRandomEmoji(from: theme.emojis!)
+            emojiImageViewCache[name] = emoji
+            return emoji.textToImage(ofFontSize: fontSize)
+        }
     }
 
     private func updateUI() {
@@ -54,8 +70,8 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     }
 
     public func pickRandomEmoji(from emojiChoices: String) -> String {
-        var emoji = ""
-        
+        var emoji = "?"
+
         if emojiChoices.count > 0 {
             let offset = emojiChoices.count.random
             let index = emojiChoices.index(emojiChoices.startIndex, offsetBy: offset)
@@ -104,21 +120,20 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
         guard segue.identifier == "Choose Theme" else { return }
 
         if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
-            let backItem = UIBarButtonItem()
-            backItem.title = "Back"
-            // This will show in the next view controller being pushed
-            navigationItem.backBarButtonItem = backItem
-
             EmojiMatchVC.container = container
 
             if let indexPath = tableView.indexPathForSelectedRow {
                 // fetch a theme from the database
                 if let result = fetchedResultsController?.object(at: indexPath) {
-                    EmojiMatchVC.theme = (name: result.name!,
+                    let name = result.name!
+                    EmojiMatchVC.theme = (name: name,
                                           emojis: result.emojis!,
                                           backgroundColor: result.backgroundColor as! UIColor,
                                           faceDownColor: result.faceDownColor as! UIColor,
                                           faceUpColor: result.faceUpColor as! UIColor)
+
+                    // show new random set of imojis in the table
+                    emojiImageViewCache.removeAll()
                 } else {
                     fatalError("prepare(for:sender:) - Attempt to fetched Results based on selected row failed")
                 }
@@ -144,7 +159,7 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
             prompt.append("\(lowestFlips) Flips")
         }
         themeHeading.prompt = prompt
-        
+
         updateUI()
     }
 }
@@ -163,21 +178,23 @@ extension String {
         // raise fractional size values to the nearest higher integer
         imageSize.height = ceil(imageSize.height)
         imageSize.width = ceil(imageSize.width)
-        
+
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
-        
+
         // fill image with color, in this case to a transparent background
         UIColor.clear.set()
-        UIRectFill(CGRect(origin: CGPoint(), size: imageSize))
-        
+
+        let rect = CGRect(origin: .zero, size: imageSize)
+        UIRectFill(rect)
+
         // draw text within current graphics context
-        nsString.draw(at: CGPoint.zero, withAttributes: stringAttributes)
-        
+        nsString.draw(at: .zero, withAttributes: stringAttributes)
+
         // create image from context
         let image = UIGraphicsGetImageFromCurrentImageContext()
         
         UIGraphicsEndImageContext()
-        
+
         return image ?? UIImage()
     }
 }
