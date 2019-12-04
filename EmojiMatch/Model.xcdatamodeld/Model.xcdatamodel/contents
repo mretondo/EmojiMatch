@@ -4,10 +4,10 @@
         <attribute name="lowestScore" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
     </entity>
     <entity name="Themes" representedClassName=".Themes" syncable="YES" codeGenerationType="category">
-        <attribute name="backgroundColor" optional="YES" attributeType="Transformable"/>
+        <attribute name="backgroundColor" optional="YES" attributeType="Transformable" valueTransformerName=""/>
         <attribute name="emojis" optional="YES" attributeType="String"/>
-        <attribute name="faceDownColor" optional="YES" attributeType="Transformable"/>
-        <attribute name="faceUpColor" optional="YES" attributeType="Transformable"/>
+        <attribute name="faceDownColor" optional="YES" attributeType="Transformable" valueTransformerName=""/>
+        <attribute name="faceUpColor" optional="YES" attributeType="Transformable" valueTransformerName=""/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
     <elements>

@@ -30,6 +30,8 @@ class EmojiMatchViewController: UIViewController
 	private lazy var game = EmojiMatch(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
 
+    private var defaultTitleAttributes: [ NSAttributedString.Key : Any ] = [:]
+
     @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
     @IBOutlet private var cardButtons: [UIButton]!
     @IBOutlet private weak var gameOver: UILabel!
@@ -66,12 +68,35 @@ class EmojiMatchViewController: UIViewController
             self.gameOver.transform = scale.concatenating(rotationAngle)
         }
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // save all title text attributes so we can restore them when view disappears
+        if let controller = navigationController {
+            defaultTitleAttributes = controller.navigationBar.titleTextAttributes!
+
+            // modify only the color and leave the rest alone
+            var attributes = defaultTitleAttributes
+
+            // change the title text color for Christmas and Halloween
+            if title == "Christmas" {
+                attributes[.foregroundColor] = UIColor.red
+                controller.navigationBar.titleTextAttributes = attributes
+            } else if title == "Halloween" {
+                attributes[.foregroundColor] = UIColor.orange
+                controller.navigationBar.titleTextAttributes = attributes
+            }
+        }
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         if areAllCardsMatched() {
             AppDelegate.lowestFlips = flipCount
             try? AppDelegate.viewContext.save()
         }
+
+        navigationController?.navigationBar.titleTextAttributes = defaultTitleAttributes
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -110,9 +135,9 @@ class EmojiMatchViewController: UIViewController
                         deviceType.starts(with: "iPhone5") ||
                         deviceType.starts(with: "iPhone6") {
                         if UIDevice.current.orientation.isLandscape {
-                            font = font.withSize(defaultFontSize - 10)
+                            font = font.withSize(defaultFontSize - 14)
                         } else {
-                            font = font.withSize(defaultFontSize - 4)
+                            font = font.withSize(defaultFontSize)
                         }
                     } else {
                         if UIDevice.current.orientation.isLandscape {
