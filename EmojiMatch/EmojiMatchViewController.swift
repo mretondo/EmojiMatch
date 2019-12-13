@@ -30,7 +30,7 @@ class EmojiMatchViewController: UIViewController
 	private lazy var game = EmojiMatch(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
 
-    private var defaultTitleAttributes: [ NSAttributedString.Key : Any ] = [:]
+    private var savedTitleAttributes: [ NSAttributedString.Key : Any ] = [:]
 
     @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
     @IBOutlet private var cardButtons: [UIButton]!
@@ -73,32 +73,39 @@ class EmojiMatchViewController: UIViewController
         super.viewWillAppear(animated)
 
         // save all title text attributes so we can restore them when view disappears
-        if let controller = navigationController {
-            defaultTitleAttributes = controller.navigationBar.titleTextAttributes!
+        if let navigationBar = navigationController?.navigationBar {
+            savedTitleAttributes = navigationBar.titleTextAttributes!
 
             // modify only the color and leave the rest alone
-            var attributes = defaultTitleAttributes
+            var attributes = savedTitleAttributes
 
             // change the title text color for Christmas and Halloween
             if title == "Christmas" {
                 attributes[.foregroundColor] = UIColor.red
-                controller.navigationBar.titleTextAttributes = attributes
+                navigationBar.titleTextAttributes = attributes
             } else if title == "Halloween" {
                 attributes[.foregroundColor] = UIColor.orange
-                controller.navigationBar.titleTextAttributes = attributes
+                navigationBar.titleTextAttributes = attributes
             }
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
         if areAllCardsMatched() {
             AppDelegate.lowestFlips = flipCount
             try? AppDelegate.viewContext.save()
         }
 
-        navigationController?.navigationBar.titleTextAttributes = defaultTitleAttributes
+        // reset tableview title to black
+        if let navigationBar = navigationController?.navigationBar {
+            var attributes = savedTitleAttributes
+            attributes[.foregroundColor] = UIColor.black
+            navigationBar.titleTextAttributes = attributes
+        }
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         setButtonsFontSize()
     }
@@ -109,10 +116,10 @@ class EmojiMatchViewController: UIViewController
 
             if theme.backgroundColor == #colorLiteral(red: 0, green: 0.2784313725, blue: 0.1529411765, alpha: 1) /* dark green for Christmas */ {
                 attributes = [ .foregroundColor : theme.faceDownColor as Any ]
-            } else if theme.backgroundColor == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) /* black */ {
+            } else if theme.backgroundColor == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) /* black for Holloween */ {
                 attributes = [ .foregroundColor : theme.faceDownColor as Any ]
             } else {
-                attributes = [ .strokeWidth: 2.0, .strokeColor: theme.faceDownColor as Any ]
+                attributes = [ .strokeWidth: 2.0, .strokeColor: theme.faceDownColor ]
             }
 
             let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
