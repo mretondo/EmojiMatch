@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 270612F822FF7412000EAA36 /* Model.xcdatamodeld */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
+		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
 		27B4C4F4238E306500531B15 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B4C4F3238E306500531B15 /* UIDevice.swift */; };
 		27B8046C2312194D00488154 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8046B2312194D00488154 /* Score.swift */; };
 		27C053E42389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		270612F922FF7412000EAA36 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
 		27B4C4F3238E306500531B15 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		27B8046B2312194D00488154 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
 		27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewDataSource+NSFetchedResultsControler.swift"; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 		EAB24F441FB8622400FD5E4D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2752756423C590510076EBBB /* MathHelpers.swift */,
 				EA5F130E1FB861A0009590B6 /* Assets.xcassets */,
 				EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */,
 			);
@@ -181,6 +184,7 @@
 				EA5F130A1FB861A0009590B6 /* EmojiMatchViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatch.swift in Sources */,
 				27C27AB123248D460091AB50 /* Themes.swift in Sources */,
+				2752756523C590510076EBBB /* MathHelpers.swift in Sources */,
 				27B4C4F4238E306500531B15 /* UIDevice.swift in Sources */,
 				27D6CDE821F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,

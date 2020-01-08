@@ -20,9 +20,32 @@ struct EmojiMatch
             }            
         }
     }
-	
+
+    func indicesOfCard(_ card: Card) -> (Int?, Int?) {
+        var first: Int?
+        var second: Int?
+
+        for i in cards.indices {
+            if cards[i] == card {
+                if first == nil {
+                    first = i
+                } else {
+                    second = i
+                }
+            }
+        }
+
+        return (first, second)
+    }
+
+    func areAllCardsMatched() -> Bool {
+        let notMatchedCards = cards.indices.filter { !cards[$0].isMatched }
+        return notMatchedCards.count == 0
+    }
+
 	mutating func chooseCard(at index: Int) {
         assert(cards.indices.contains(index), "EmojiMatch(at \(index)): chosen index not in cards")
+
 		if !cards[index].isMatched {
 			if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
 				// check if cards match
@@ -34,7 +57,6 @@ struct EmojiMatch
 			} else {
 				indexOfOneAndOnlyFaceUpCard = index
 			}
-			
 		}
 	}
 	
