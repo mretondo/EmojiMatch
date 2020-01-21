@@ -34,6 +34,8 @@ class EmojiMatchViewController: UIViewController
 
     private var flipCompleted = true
 
+//    private var startTime = 0
+
     @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
     @IBOutlet private var cardButtons: [UIButton]!
     @IBOutlet private weak var gameOver: UILabel!
@@ -42,19 +44,51 @@ class EmojiMatchViewController: UIViewController
         // ignore touches after game is over
         guard self.gameOver.isHidden else { return }
 
-        if let cardNumber = cardButtons.firstIndex(of: sender) {
-            let card = game.cards[cardNumber]
+        guard let cardNumber = cardButtons.firstIndex(of: sender) else {
+            print("touchCard(_:) - choosen card was not in cardButtons")
+            return
+        }
 
-            // if card isMatched then it can't be pressed
-            if !card.isMatched && !card.isFaceUp {
-                flipCount += 1
-                game.chooseCard(at: cardNumber)
-                updateViewFromModel(touchedCard: cardNumber)
-            }
+        let card = game.cards[cardNumber]
+        guard !card.isFaceUp else { return } // ignore touches on face up cards
+
+        if flipCompleted {
+            flipCompleted = false
+//            startTime = currentTimeInMilliSeconds()
         } else {
-            //print("touchCard(_:) - choosen card was not in cardButtons")
+            // async alows previous card flipping animation to
+            // complete before starting animation of second card.
+            DispatchQueue.main.async {
+                self.touchCard(sender)
+//                while true {
+//                    self.touchCard(sender)
+//                    break
+//                    let currentTime = self.currentTimeInMilliSeconds()
+//                    if self.startTime + 500 < currentTime {
+//                        self.touchCard(sender)
+//                        break
+//                    }
+//                }
+            }
+
+            return  // consume event - also prevents double flip of cards
+        }
+
+
+        // if card isMatched then it can't be pressed
+        if !card.isMatched && !card.isFaceUp {
+            flipCount += 1
+            game.chooseCard(at: cardNumber)
+            updateViewFromModel(touchedCard: cardNumber)
         }
     }
+
+//    func currentTimeInMilliSeconds() -> Int
+//    {
+//        let currentDate = Date()
+//        let since1970 = currentDate.timeIntervalSince1970
+//        return Int(since1970 * 1000)
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,21 +212,9 @@ class EmojiMatchViewController: UIViewController
                     if touchedCard == index {
                         // card has been tapped and needs to flip up
                         //print("\nStart \(flipCompleted)")
-                        if flipCompleted {
-                            flipCompleted = false
-                            animateFlippingCardUp(card, button)
-                        } else {
-                            // if second card is tapped before first card has fininshed
-                            // flipping we need to wait until first card finishes it's flip
-                            DispatchQueue.main.async {
-                                //print("DispatchQueue.main.async\n")
-                                self.flipCompleted = false
-                                self.animateFlippingCardUp(card, button)
-                            }
 
-                            // prevent double flipping of cards
-                            sleep(0.5)
-                        }
+                        animateFlippingCardUp(card, button)
+
                         //print("End \(flipCompleted)\n")
                     } else {
                         // card is face up so the emoji
@@ -226,11 +248,11 @@ class EmojiMatchViewController: UIViewController
             options: [.curveEaseIn],
             animations: { button.transform = CGAffineTransform(scaleX: 1.15, y: 1.15) },
             completion: { finished in
-                if finished {
-                    //print("Finished lift card 2")
-                } else {
-                    //print("NOT - finished lift card 2")
-                }
+//                if finished {
+//                    print("Finished lift card 2")
+//                } else {
+//                    print("NOT - finished lift card 2")
+//                }
                 // after card is lifted then change the title and background - this will be the FlipTo side
                 button.setTitle(self.emoji(for: card), for: .normal)
                 button.backgroundColor = self.theme?.faceUpColor
@@ -243,11 +265,11 @@ class EmojiMatchViewController: UIViewController
                     options: [.transitionFlipFromLeft, .curveEaseInOut],
                     animations: nil,
                     completion: { finished in
-                        if finished {
-                            //print("finished flip the card 4")
-                        } else {
-                            //print("NOT - finished flip the card 4")
-                        }
+//                        if finished {
+//                            //print("finished flip the card 4")
+//                        } else {
+//                            //print("NOT - finished flip the card 4")
+//                        }
 
                         // 3 - set card back down
                         //print("set card back down 5")
@@ -257,11 +279,11 @@ class EmojiMatchViewController: UIViewController
                             options: .curveEaseOut,
                             animations: { button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) },
                             completion: { finished in
-                                if finished {
-                                    //print("finished set card back down 6")
-                                } else {
-                                    //print("NOT - set card back down 6")
-                                }
+//                                if finished {
+//                                    //print("finished set card back down 6")
+//                                } else {
+//                                    //print("NOT - set card back down 6")
+//                                }
                                 // hide cards if matched
                                 if card.isMatched {
                                     let indicesOfCards = self.game.indicesOfCard(card)
@@ -296,8 +318,8 @@ class EmojiMatchViewController: UIViewController
                                     let faceUpCards = self.game.cards.indices.filter { self.game.cards[$0].isFaceUp }
 
                                     if faceUpCards.count == 2 {
-//                                        //print ("FlippingCardDown 1 - \(faceUpCards[0])")
-//                                        //print ("FlippingCardDown 2 - \(faceUpCards[1])")
+                                        //print ("FlippingCardDown 1 - \(faceUpCards[0])")
+                                        //print ("FlippingCardDown 2 - \(faceUpCards[1])")
                                         //print ("faceUpCards.count == 2")
 
                                         UIView.animate(
@@ -306,11 +328,11 @@ class EmojiMatchViewController: UIViewController
                                             options: [],
                                             animations: { button.transform = CGAffineTransform(scaleX: 1.01, y: 1.00) },
                                             completion: { finished in
-                                                if finished {
-                                                    //print("finished FlippingCardDown 7")
-                                                } else {
-                                                    //print("NOT - FlippingCardDown 7")
-                                                }
+//                                                if finished {
+//                                                    //print("finished FlippingCardDown 7")
+//                                                } else {
+//                                                    //print("NOT - FlippingCardDown 7")
+//                                                }
                                                 self.animateFlippingCardDown(at: faceUpCards[0], self.cardButtons[faceUpCards[0]])
 //                                                //print ("FlippingCardDown 0 - \(self.cardButtons[faceUpCards[0]])")
                                                 self.animateFlippingCardDown(at: faceUpCards[1], self.cardButtons[faceUpCards[1]])
