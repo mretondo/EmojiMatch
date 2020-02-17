@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xN2-rX-K5z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="aIw-ho-Dzt">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="4864" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Emoji Themes-->
+        <!--Emoji Match Theme Chooser Table View Controller-->
         <scene sceneID="1VP-72-uYx">
             <objects>
-                <tableViewController id="olM-tU-mkV" customClass="EmojiMatchThemeChooserTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="nJs-VE-KRT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <tableViewController storyboardIdentifier="ThemeChooserTableViewController" id="olM-tU-mkV" customClass="EmojiMatchThemeChooserTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" id="nJs-VE-KRT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ThemeChooserCell" textLabel="qnb-0q-B2o" imageView="BPR-eK-XR4" style="IBUITableViewCellStyleDefault" id="kCC-ff-Rxc">
@@ -49,27 +49,93 @@
                             <outlet property="delegate" destination="olM-tU-mkV" id="g1N-Af-Oj2"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Emoji Themes" prompt="Low Score: " leftItemsSupplementBackButton="YES" id="zg8-5x-H2O">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="mPO-Eg-pbL"/>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="themeHeading" destination="zg8-5x-H2O" id="ar8-ae-OzO"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mMp-iS-9Yk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1102" y="-698"/>
+            <point key="canvasLocation" x="1612" y="-698"/>
+        </scene>
+        <!--Emoji Themes-->
+        <scene sceneID="Sfm-XX-Yf4">
+            <objects>
+                <viewController id="2n0-Eg-YwI" customClass="EmojiMatchLeaderboardTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9Nt-0X-UVd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4CV-Dn-9N1" userLabel="Leaderboard Stack View">
+                                <rect key="frame" x="20" y="122" width="335" height="33"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b51-zO-ccW">
+                                        <rect key="frame" x="0.0" y="0.0" width="43" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Show"/>
+                                        <connections>
+                                            <action selector="checkGCLeaderboard:" destination="2n0-Eg-YwI" eventType="touchUpInside" id="rb2-TC-h82"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zFd-er-e5o">
+                                        <rect key="frame" x="97.666666666666686" y="0.0" width="121" height="33"/>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Leaderboard">
+                                                <attributes>
+                                                    <color key="NSColor" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <font key="NSFont" size="22" name=".AppleSystemUIFont"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbE-Ee-P5M">
+                                        <rect key="frame" x="255" y="0.0" width="80" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Add Score"/>
+                                        <connections>
+                                            <action selector="addScoreAndSubmitToGC:" destination="2n0-Eg-YwI" eventType="touchUpInside" id="XE2-lv-93g"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2T-xJ-xAe">
+                                <rect key="frame" x="0.0" y="155" width="375" height="657"/>
+                                <connections>
+                                    <segue destination="olM-tU-mkV" kind="embed" identifier="ThemeChooserTableViewController" id="RfL-Ar-YOp"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="4CV-Dn-9N1" firstAttribute="leading" secondItem="IB6-2s-eyj" secondAttribute="leading" constant="20" id="4FM-Do-imX"/>
+                            <constraint firstItem="IB6-2s-eyj" firstAttribute="trailing" secondItem="y2T-xJ-xAe" secondAttribute="trailing" id="IZf-Gx-ZKB"/>
+                            <constraint firstItem="y2T-xJ-xAe" firstAttribute="top" secondItem="4CV-Dn-9N1" secondAttribute="bottom" id="Sjk-ch-Ih0"/>
+                            <constraint firstItem="y2T-xJ-xAe" firstAttribute="leading" secondItem="IB6-2s-eyj" secondAttribute="leading" id="WcG-sH-dln"/>
+                            <constraint firstItem="4CV-Dn-9N1" firstAttribute="top" secondItem="IB6-2s-eyj" secondAttribute="top" id="cmC-ah-JYs"/>
+                            <constraint firstItem="IB6-2s-eyj" firstAttribute="trailing" secondItem="4CV-Dn-9N1" secondAttribute="trailing" constant="20" id="jSb-Iu-U3A"/>
+                            <constraint firstItem="y2T-xJ-xAe" firstAttribute="bottom" secondItem="9Nt-0X-UVd" secondAttribute="bottom" id="tTT-Zc-7T5"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="IB6-2s-eyj"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Emoji Themes" prompt="Low Score: " id="GGA-Zj-sGT">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="bux-FD-dRT"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="themeHeading" destination="GGA-Zj-sGT" id="CvC-PU-PAh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oOm-Hp-psi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="848.79999999999995" y="-698.27586206896558"/>
         </scene>
         <!--Theme-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController title="Theme" id="BYZ-38-t0r" customClass="EmojiMatchViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dtx-7c-ZE6">
-                                <rect key="frame" x="16" y="104" width="343" height="367"/>
+                                <rect key="frame" x="16" y="16" width="343" height="367"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="bHB-9b-Pjf">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="67"/>
@@ -479,7 +545,7 @@
                                 </subviews>
                             </stackView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYS-Xn-8bF">
-                                <rect key="frame" x="46.333333333333343" y="393.33333333333331" width="282.33333333333326" height="79.333333333333314"/>
+                                <rect key="frame" x="46.333333333333343" y="262" width="282.33333333333326" height="79.333333333333314"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Game Over">
                                         <attributes>
@@ -493,7 +559,7 @@
                                 <size key="shadowOffset" width="0.80000000000000004" height="0.69999999999999996"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Flips: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgj-y4-qbj">
-                                <rect key="frame" x="125.66666666666666" y="714" width="123.66666666666666" height="48"/>
+                                <rect key="frame" x="125.66666666666666" y="539" width="123.66666666666666" height="48"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -513,6 +579,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="WvE-sr-zhu"/>
                     <connections>
                         <outlet property="flipCountLabel" destination="xgj-y4-qbj" id="Imy-Mg-ppo"/>
                         <outlet property="gameOver" destination="aYS-Xn-8bF" id="07j-c8-PUv"/>
@@ -540,14 +607,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1839" y="-698"/>
+            <point key="canvasLocation" x="2348" y="-698"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="fxf-at-dh7">
+        <!--Emoji Themes-->
+        <scene sceneID="ieN-m3-esT">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xN2-rX-K5z" sceneMemberID="viewController">
+                <navigationController title="Emoji Themes" automaticallyAdjustsScrollViewInsets="NO" id="aIw-ho-Dzt" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Dfc-Ie-h00">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vfD-lV-af4">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
@@ -556,12 +623,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="olM-tU-mkV" kind="relationship" relationship="rootViewController" id="YFM-rB-JvK"/>
+                        <segue destination="2n0-Eg-YwI" kind="relationship" relationship="rootViewController" id="Ofu-M0-94t"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8zA-Zk-LkJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bBe-8W-bu8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="348" y="-698"/>
+            <point key="canvasLocation" x="85.599999999999994" y="-698.27586206896558"/>
         </scene>
     </scenes>
 </document>

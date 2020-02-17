@@ -10,9 +10,8 @@ import CoreData
 
 class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewController
 {
-    @IBOutlet weak var themeHeading: UINavigationItem!
-
-    // cache for the random emojis to be shown while the view table is shown, resets after a selection has been made
+    // cache for the random emojis to be shown while the view
+    // table is shown, resets after a selection has been made
     var emojiImageViewCache: [String : String] = [:]
 
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
@@ -154,15 +153,36 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        var prompt = "Low Score: "
-        if let lowestFlips = AppDelegate.lowestFlips {
-            prompt.append("\(lowestFlips) Flips")
-        }
-        themeHeading.prompt = prompt
-
         updateUI()
     }
 }
+
+//extension UIView {
+//    var heightConstaint: NSLayoutConstraint? {
+//        get {
+//            return constraints.first(where: {
+//                $0.firstAttribute == .height && $0.relation == .equal
+//            })
+//        }
+//        set { setNeedsLayout() }
+//    }
+//
+//    var widthConstaint: NSLayoutConstraint? {
+//        get {
+//            return constraints.first(where: {
+//                $0.firstAttribute == .width && $0.relation == .equal
+//            })
+//        }
+//        set { setNeedsLayout() }
+//    }
+//}
+//
+//extension UIView {
+//    func copyView<T: UIView>() throws -> T? {
+//        let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+//        return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? T
+//    }
+//}
 
 extension String {
     //

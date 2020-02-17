@@ -8,10 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 270612F822FF7412000EAA36 /* Model.xcdatamodeld */; };
+		2730628323F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
+		2794028F23F9F1C9003B6BC6 /* StringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794028E23F9F1C9003B6BC6 /* StringUtil.swift */; };
 		27B4C4F4238E306500531B15 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B4C4F3238E306500531B15 /* UIDevice.swift */; };
 		27B8046C2312194D00488154 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8046B2312194D00488154 /* Score.swift */; };
+		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
 		27C053E42389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */; };
 		27C27AB123248D460091AB50 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB023248D460091AB50 /* Themes.swift */; };
 		27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */; };
@@ -27,10 +30,13 @@
 
 /* Begin PBXFileReference section */
 		270612F922FF7412000EAA36 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		2730628223F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchLeaderboardTableViewController.swift; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
+		2794028E23F9F1C9003B6BC6 /* StringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtil.swift; sourceTree = "<group>"; };
 		27B4C4F3238E306500531B15 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		27B8046B2312194D00488154 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
+		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewDataSource+NSFetchedResultsControler.swift"; sourceTree = "<group>"; };
 		27C27AB023248D460091AB50 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
@@ -51,18 +57,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		27BBDDB523ED0A8300F1901C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				27BBDDB623ED0A8300F1901C /* GameKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EA5F12FB1FB861A0009590B6 = {
 			isa = PBXGroup;
 			children = (
 				2744374A22150D8800CBB56B /* README.md */,
 				EA5F13061FB861A0009590B6 /* EmojiMatch */,
 				EA5F13051FB861A0009590B6 /* Products */,
+				27BBDDB523ED0A8300F1901C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -78,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
+				2730628223F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
 				27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */,
 				27D6CDE721F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift */,
@@ -98,6 +115,7 @@
 		EAB24F441FB8622400FD5E4D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2794028E23F9F1C9003B6BC6 /* StringUtil.swift */,
 				2752756423C590510076EBBB /* MathHelpers.swift */,
 				EA5F130E1FB861A0009590B6 /* Assets.xcassets */,
 				EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */,
@@ -138,7 +156,6 @@
 					EA5F13031FB861A0009590B6 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -180,6 +197,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				27B8046C2312194D00488154 /* Score.swift in Sources */,
+				2730628323F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift in Sources */,
+				2794028F23F9F1C9003B6BC6 /* StringUtil.swift in Sources */,
 				27C053E42389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift in Sources */,
 				EA5F130A1FB861A0009590B6 /* EmojiMatchViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatch.swift in Sources */,
@@ -266,7 +285,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -321,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
@@ -337,6 +356,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 58ZACZB2L8;
@@ -346,9 +366,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1;
+				MARKETING_VERSION = 5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mretondo.EmojiMatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -359,6 +380,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 58ZACZB2L8;
@@ -368,10 +390,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.1;
+				MARKETING_VERSION = 5;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mretondo.EmojiMatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
