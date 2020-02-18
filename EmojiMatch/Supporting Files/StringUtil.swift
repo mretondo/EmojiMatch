@@ -245,47 +245,68 @@ public extension StringProtocol {
 
 extension StringProtocol {
     
-    /*
-     usage:
-
-     let str = "abcde"
-     if let index = str.index(of: "cd") {
-     let substring = str[..<index]   // ab
-     let string = String(substring)
-     print(string)  // "ab\n"
-     }
-
-     let str = "Hello, playground, playground, playground"
-     str.index(of: "play")      // 7
-     str.endIndex(of: "play")   // 11
-     str.indices(of: "play")    // [7, 19, 31]
-     str.ranges(of: "play")     // [{lowerBound 7, upperBound 11}, {lowerBound 19, upperBound 23}, {lowerBound 31, upperBound 35}]
-
-     case insensitive sample:
-
-     let query = "Play"
-     let ranges = str.ranges(of: query, options: .caseInsensitive)
-     let matches = ranges.map { str[$0] }   //
-     print(matches)  // ["play", "play", "play"]
-
-     regular expression sample:
-
-     let query = "play"
-     let escapedQuery = NSRegularExpression.escapedPattern(for: query)
-     let pattern = "\\b\(escapedQuery)\\w+"  // matches any word that starts with "play" prefix
-     let ranges = str.ranges(of: pattern, options: .regularExpression)
-     let matches = ranges.map { str[$0] }
-     print(matches) //  ["playground", "playground", "playground"]
-     */
-
+    /// Returns the index? starting where the subString was found.
+    ///
+    ///    let str = "abcde"
+    ///    if let index = str.index(of: "cd") {
+    ///        let substring = str[..<index]   // ab
+    ///        let string = String(substring)
+    ///        print(string)  // "ab\n"
+    ///    }
+    ///
+    ///    let str = "Hello, playground, playground, playground"
+    ///    str.index(of: "play")      // 7
+    ///    str.endIndex(of: "play")   // 11
+    ///    str.indices(of: "play")    // [7, 19, 31]
+    ///    str.ranges(of: "play")     // [{lowerBound 7, upperBound 11}, {lowerBound 19, upperBound 23}, {lowerBound 31, upperBound 35}]
+    ///
+    /// - Parameters:
+    ///   - string: subString to find.
+    ///   - options: Default [], String.CompareOptions,
+    ///     values that represent the options available to search and comparison.
+    /// - Returns: index where string starts
     func index<T: StringProtocol>(of string: T, options: String.CompareOptions = []) -> Index? {
         range(of: string, options: options)?.lowerBound
     }
 
+    /// Returns the index? after where the subString was found.
+    ///
+    ///    let str = "abcde"
+    ///    if let index = str.index(of: "cd") {
+    ///        let substring = str[..<index]   // ab
+    ///        let string = String(substring)
+    ///        print(string)  // "ab\n"
+    ///    }
+    ///
+    ///    let str = "Hello, playground, playground, playground"
+    ///    str.endIndex(of: "play")   // 11
+    ///
+    /// - Parameters:
+    ///   - string: subString to find.
+    ///   - options: Default [], String.CompareOptions,
+    ///     values that represent the options available to search and comparison.
+    /// - Returns: index where string ends
     func endIndex<T: StringProtocol>(of string: T, options: String.CompareOptions = []) -> Index? {
         range(of: string, options: options)?.upperBound
     }
 
+    /// Return indeces of all the locations where the subString was found.
+    ///
+    ///    let str = "abcde"
+    ///    if let index = str.index(of: "cd") {
+    ///        let substring = str[..<index]   // ab
+    ///        let string = String(substring)
+    ///        print(string)  // "ab\n"
+    ///    }
+    ///
+    ///    let str = "Hello, playground, playground, playground"
+    ///    str.indices(of: "play")    // [7, 19, 31]
+    ///
+    /// - Parameters:
+    ///   - string: subString to find.
+    ///   - options: Default [], String.CompareOptions,
+    ///     values that represent the options available to search and comparison.
+    /// - Returns: [String.Index] where string was found
     func indices<T: StringProtocol>(of string: T, options: String.CompareOptions = []) -> [Index] {
         var indices: [Index] = []
         var startIndex = self.startIndex
@@ -300,6 +321,32 @@ extension StringProtocol {
         return indices
     }
 
+    /// Return ranges of all the locations where the subString was found.
+    ///
+    ///    let str = "Hello, playground, playground, playground"
+    ///    str.ranges(of: "play")     // [{lowerBound 7, upperBound 11}, {lowerBound 19, upperBound 23}, {lowerBound 31, upperBound 35}]
+    ///
+    ///    case insensitive sample:
+    ///
+    ///    let query = "Play"
+    ///    let ranges = str.ranges(of: query, options: .caseInsensitive)
+    ///    let matches = ranges.map { str[$0] }
+    ///    print(matches)  // ["play", "play", "play"]
+    ///
+    ///    regular expression sample:
+    ///
+    ///    let query = "play"
+    ///    let escapedQuery = NSRegularExpression.escapedPattern(for: query)
+    ///    let pattern = "\\b\(escapedQuery)\\w+"  // matches any word that starts with "play" prefix
+    ///    let ranges = str.ranges(of: pattern, options: .regularExpression)
+    ///    let matches = ranges.map { str[$0] }
+    ///    print(matches) //  ["playground", "playground", "playground"]
+    ///
+    /// - Parameters:
+    ///   - string: subString to find.
+    ///   - options: Default [], String.CompareOptions,
+    ///     values that represent the options available to search and comparison.
+    /// - Returns: [Range<Index>] where string was found
     func ranges<T: StringProtocol>(of string: T, options: String.CompareOptions = []) -> [Range<Index>] {
         var result: [Range<Index>] = []
         var startIndex = self.startIndex
