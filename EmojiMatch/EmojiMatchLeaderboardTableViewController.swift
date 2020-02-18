@@ -118,16 +118,66 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
 
                 // Submit new best score to GC leaderboard
                 GKScore.report([bestScore]) { error in
-                    #if DEBUG
-                    if error != nil {
-                        print(error!.localizedDescription)
+                    var title: String
+                    var message: String
+
+                    if error == nil {
+                        title = "Success"
+                        message = "The score was added to the Leaderboard."
                     } else {
-                        print("Lowest Flip Count Score submitted to your Leaderboard!")
+                        title = "The score was unable to be added to the Leaderboard"
+                        message = "error!.localizedDescription"
                     }
-                    #endif
+
+                    self.showOkAlert(title: title, message: message)
                 }
             }
         }
+    }
+
+    /// shows Alert with OK button
+    func showOkAlert(title: String, message: String) {
+        // Create the alert controller
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        // Create the actions
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { UIAlertAction in
+            NSLog("OK Pressed")
+        }
+
+        // Add the actions
+        alertController.addAction(okAction)
+
+        // Present the controller
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    /// shows Alert with OK and Cancel button
+    /// returns 0=OK 1=Cancel
+    func showOkCancelAlert(title: String, message: String) -> Int {
+        var buttonPressed: Int = 0 // Default OK button
+
+        // Create the alert controller
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        // Create the actions
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { UIAlertAction in
+            NSLog("OK Pressed")
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) { UIAlertAction in
+            buttonPressed = 1
+            NSLog("Cancel Pressed")
+        }
+
+        // Add the actions
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+
+        // Present the controller
+        self.present(alertController, animated: true, completion: nil)
+
+        return buttonPressed
     }
 
     /// if user deleted there local data this will try to update it with the score from there Leaderboard score
