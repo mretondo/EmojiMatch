@@ -50,13 +50,11 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
         let localPlayer: GKLocalPlayer = GKLocalPlayer.local
 
         // this is completion block
-        localPlayer.authenticateHandler = {(ViewController, error) -> Void in
-            //            if ViewController != nil {
-            //                // 1. Show login if player is not logged in
-            //                self.present(ViewController!, animated: true, completion: nil)
-            //            } else if localPlayer.isAuthenticated {
-
-            if localPlayer.isAuthenticated {
+        localPlayer.authenticateHandler = { ViewController, error -> Void in
+            if ViewController != nil {
+                // 1. Show login if player is not logged in
+                self.present(ViewController!, animated: true, completion: nil)
+            } else if localPlayer.isAuthenticated {
                 // 2. Player is already authenticated & logged in, load game center
                 self.gcEnabled = true
 
@@ -84,7 +82,7 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
                 #if DEBUG
                 print("Local player could not be authenticated!")
                 if let error = error {
-                    print(error)
+                    print(error.localizedDescription)
                 }
                 #endif
             }
