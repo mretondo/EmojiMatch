@@ -17,7 +17,7 @@ class Score: NSManagedObject
 
             do {
                 let lowestScores = try context.fetch(request)
-                assert(lowestScores.count <= 1, "lowestFlips - lowestScores count doesn't equal 1")
+                assert(lowestScores.count <= 1, "lowestFlips - lowestScores count isn't <= 1")
 
                 if lowestScores.count == 1 {
                     return Int(lowestScores[0].lowestScore)

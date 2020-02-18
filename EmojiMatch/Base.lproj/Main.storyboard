@@ -65,7 +65,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4CV-Dn-9N1" userLabel="Leaderboard Stack View">
                                 <rect key="frame" x="20" y="122" width="335" height="33"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b51-zO-ccW">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b51-zO-ccW">
                                         <rect key="frame" x="0.0" y="0.0" width="43" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Show"/>
@@ -86,7 +86,7 @@
                                         </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbE-Ee-P5M">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbE-Ee-P5M">
                                         <rect key="frame" x="255" y="0.0" width="80" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Add Score"/>
@@ -103,7 +103,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="4CV-Dn-9N1" firstAttribute="leading" secondItem="IB6-2s-eyj" secondAttribute="leading" constant="20" id="4FM-Do-imX"/>
                             <constraint firstItem="IB6-2s-eyj" firstAttribute="trailing" secondItem="y2T-xJ-xAe" secondAttribute="trailing" id="IZf-Gx-ZKB"/>
@@ -119,6 +119,10 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="bux-FD-dRT"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="addScoreButton" destination="KbE-Ee-P5M" id="hkU-M1-Lh1"/>
+                        <outlet property="leaderboardStackView" destination="4CV-Dn-9N1" id="L6h-ap-t0y"/>
+                        <outlet property="safeAreaView" destination="9Nt-0X-UVd" id="Ros-gF-fBc"/>
+                        <outlet property="showButton" destination="b51-zO-ccW" id="8lz-iJ-FGg"/>
                         <outlet property="themeHeading" destination="GGA-Zj-sGT" id="CvC-PU-PAh"/>
                     </connections>
                 </viewController>

@@ -12,10 +12,15 @@ import GameKit
 class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
+    @IBOutlet weak var leaderboardStackView: UIStackView!
+    @IBOutlet weak var showButton: UIButton!
+    @IBOutlet weak var addScoreButton: UIButton!
 
     var gcEnabled = false // Check if the user has Game Center enabled
     var gcDefaultLeaderboardIdentifier = String() // Check the default leaderboardID
     let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch"
+
+    var bestScoreFromGC: Int? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +29,27 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
         authenticateLocalPlayer()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        updatePrompt()
+
+        // give leaderboardStackView a background color as wide as the safeAreaView
+        pinBackgroundView(backgroundView,
+                          toStackView: leaderboardStackView,
+                          leading: safeAreaView.leadingAnchor,
+                          trailing: safeAreaView.trailingAnchor,
+                          top: leaderboardStackView.topAnchor,
+                          bottom: leaderboardStackView.bottomAnchor
+        )
+
+        themeHeading.rightBarButtonItem?.isHidden = !self.gcEnabled
+    }
+
     func authenticateLocalPlayer() {
         let localPlayer: GKLocalPlayer = GKLocalPlayer.local
 
+        // this is completion block
         localPlayer.authenticateHandler = {(ViewController, error) -> Void in
             //            if ViewController != nil {
             //                // 1. Show login if player is not logged in
@@ -37,19 +60,26 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
                 // 2. Player is already authenticated & logged in, load game center
                 self.gcEnabled = true
 
-                // Get the default leaderboard ID
+                // Get the default leaderboard ID - updated in completion block
                 localPlayer.loadDefaultLeaderboardIdentifier() { leaderboardIdentifer, error in
                     if let error = error {
                         #if DEBUG
-                        print(error)
+                        print("authenticateLocalPlayer() localPlayer.loadDefaultLeaderboardIdentifier(): \(error)")
                         #endif
                     } else {
-                        self.gcDefaultLeaderboardIdentifier = leaderboardIdentifer!
+                        // get current best score - updated in completion block
+                        self.updateLowestFlipsFromLeaderboard()
                     }
                 }
+
+                self.showButton.isEnabled = true
+                self.addScoreButton.isEnabled = true
             } else {
                 // 3. Game center is not enabled on the users device
                 self.gcEnabled = false
+
+                self.showButton.isEnabled = false
+                self.addScoreButton.isEnabled = false
 
                 #if DEBUG
                 print("Local player could not be authenticated!")
@@ -100,9 +130,57 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    /// if user deleted there local data this will try to update it with the score from there Leaderboard score
+    /// gets the score from GC in a completion block
+    func updateLowestFlipsFromLeaderboard() {
+        if GKLocalPlayer.local.isAuthenticated {
+            // Initialize the leaderboard for the current local player
+            let gkLeaderboard = GKLeaderboard(players: [GKLocalPlayer.local])
+            gkLeaderboard.identifier = gcLeaderboardIdentifier
+            gkLeaderboard.timeScope = GKLeaderboard.TimeScope.allTime
 
+            // Load the scores in a completion block
+            gkLeaderboard.loadScores() { (scores, error) -> Void in
+                // Get current score
+                if error == nil {
+                    if scores!.count > 0 {
+                        let currentScore = Int(truncatingIfNeeded: scores![0].value)
+
+                        updateLowestFlips(with: currentScore)
+
+                        do {
+                            try AppDelegate.viewContext.save()
+
+                            self.updatePrompt()
+
+                            #if DEBUG
+                            print("Best score from Game Center: \(currentScore)")
+                            #endif
+                        }
+                        catch {
+                            print("updateLowestFlipsFromLeaderboard() - Couldn't save AppDelegate.viewContext")
+                        }
+                    }
+                }
+            }
+        }
+
+        /// if user deleted there local data this will try to update it with the score from the Leaderboard
+        func updateLowestFlips(with score: Int) {
+            if score > 0 {
+                if let lowestFlips = AppDelegate.lowestFlips {
+                    if score < lowestFlips {
+                        AppDelegate.lowestFlips = score
+                    }
+                } else {
+                    AppDelegate.lowestFlips = score
+                }
+            }
+        }
+    }
+
+    /// update the heading prompt flip count with the lower of Leaderboard value or
+    fileprivate func updatePrompt() {
         if var prompt = themeHeading.prompt, let appendIndex = themeHeading.prompt?.endIndex(of: ": ") {
             prompt = String(prompt.prefix(upTo: appendIndex))
 
@@ -112,8 +190,33 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
 
             themeHeading.prompt = prompt
         }
+    }
 
-        themeHeading.rightBarButtonItem?.isHidden = !self.gcEnabled
+    @IBOutlet var safeAreaView: UIView!
+
+    /// backgroundView gives UIStackView a background color since UIStackView does NO rendering
+    private lazy var backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .groupTableViewBackground
+        return view
+    }()
+
+    private func pinBackgroundView(_ backgroundView: UIView,
+                                   toStackView view: UIStackView,
+                                   leading: NSLayoutXAxisAnchor,
+                                   trailing: NSLayoutXAxisAnchor,
+                                   top: NSLayoutYAxisAnchor,
+                                   bottom: NSLayoutYAxisAnchor) {
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.insertSubview(backgroundView, at: 0)
+
+        NSLayoutConstraint.activate([
+            backgroundView.leadingAnchor.constraint(equalTo: leading),
+            backgroundView.trailingAnchor.constraint(equalTo: trailing),
+            backgroundView.topAnchor.constraint(equalTo: top),
+            backgroundView.bottomAnchor.constraint(equalTo: bottom)
+        ])
     }
 
     /*
