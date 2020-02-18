@@ -66,30 +66,17 @@
                                 <rect key="frame" x="20" y="122" width="335" height="33"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b51-zO-ccW">
-                                        <rect key="frame" x="0.0" y="0.0" width="43" height="33"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="98" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Show"/>
+                                        <state key="normal" title="Leaderboard"/>
                                         <connections>
                                             <action selector="checkGCLeaderboard:" destination="2n0-Eg-YwI" eventType="touchUpInside" id="rb2-TC-h82"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zFd-er-e5o">
-                                        <rect key="frame" x="97.666666666666686" y="0.0" width="121" height="33"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="Leaderboard">
-                                                <attributes>
-                                                    <color key="NSColor" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="22" name=".AppleSystemUIFont"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbE-Ee-P5M">
-                                        <rect key="frame" x="255" y="0.0" width="80" height="33"/>
+                                        <rect key="frame" x="216" y="0.0" width="119" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <state key="normal" title="Add Score"/>
+                                        <state key="normal" title="Add Your Score"/>
                                         <connections>
                                             <action selector="addScoreAndSubmitToGC:" destination="2n0-Eg-YwI" eventType="touchUpInside" id="XE2-lv-93g"/>
                                         </connections>
@@ -120,9 +107,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="addScoreButton" destination="KbE-Ee-P5M" id="hkU-M1-Lh1"/>
+                        <outlet property="leaderboardButton" destination="b51-zO-ccW" id="h50-GC-axm"/>
                         <outlet property="leaderboardStackView" destination="4CV-Dn-9N1" id="L6h-ap-t0y"/>
                         <outlet property="safeAreaView" destination="9Nt-0X-UVd" id="Ros-gF-fBc"/>
-                        <outlet property="showButton" destination="b51-zO-ccW" id="8lz-iJ-FGg"/>
                         <outlet property="themeHeading" destination="GGA-Zj-sGT" id="CvC-PU-PAh"/>
                     </connections>
                 </viewController>

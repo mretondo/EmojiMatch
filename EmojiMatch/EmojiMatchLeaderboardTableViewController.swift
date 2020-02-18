@@ -13,7 +13,7 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
     @IBOutlet weak var leaderboardStackView: UIStackView!
-    @IBOutlet weak var showButton: UIButton!
+    @IBOutlet weak var leaderboardButton: UIButton!
     @IBOutlet weak var addScoreButton: UIButton!
 
     var gcEnabled = false // Check if the user has Game Center enabled
@@ -70,13 +70,13 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
                     }
                 }
 
-                self.showButton.isEnabled = true
+                self.leaderboardButton.isEnabled = true
                 self.addScoreButton.isEnabled = true
             } else {
                 // 3. Game center is not enabled on the users device
                 self.gcEnabled = false
 
-                self.showButton.isEnabled = false
+                self.leaderboardButton.isEnabled = false
                 self.addScoreButton.isEnabled = false
 
                 #if DEBUG
@@ -121,9 +121,9 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
 
                     if error == nil {
                         title = "Success"
-                        message = "The score was added to the Leaderboard."
+                        message = "Your low score was added to the Leaderboard."
                     } else {
-                        title = "The score was unable to be added to the Leaderboard"
+                        title = "The low score was unable to be added to the Leaderboard"
                         message = "error!.localizedDescription"
                     }
 
