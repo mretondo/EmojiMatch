@@ -49,11 +49,15 @@ public extension StringProtocol {
 
 public extension StringProtocol {
 
+    /// ONLY USE WITH ASCII STRINGS!!!
+    ///
     /// Returns the number of bytes used to hold the string. This works because
     /// Swift 5 now uses UTF-8 as it's backing store.
     @inline(__always)
     var size: Int {
-        get { self.utf8.count }
+        // \n character is actually 2 bytes (CR+LF) even though the string is completly ASCII
+        // count treats \n as 1 displayable character so we have to double them
+        get { self.utf8.count + self.indices(of: "\n", options: []).count }
     }
 }
 
