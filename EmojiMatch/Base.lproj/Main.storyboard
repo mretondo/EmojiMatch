@@ -63,19 +63,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4CV-Dn-9N1" userLabel="Leaderboard Stack View">
-                                <rect key="frame" x="20" y="122" width="335" height="33"/>
+                                <rect key="frame" x="20" y="122" width="335" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b51-zO-ccW">
-                                        <rect key="frame" x="0.0" y="0.0" width="98" height="33"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="109" height="35"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal" title="Leaderboard"/>
                                         <connections>
                                             <action selector="checkGCLeaderboard:" destination="2n0-Eg-YwI" eventType="touchUpInside" id="rb2-TC-h82"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KbE-Ee-P5M">
-                                        <rect key="frame" x="216" y="0.0" width="119" height="33"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="203" y="0.0" width="132" height="35"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal" title="Add Your Score"/>
                                         <connections>
                                             <action selector="addScoreAndSubmitToGC:" destination="2n0-Eg-YwI" eventType="touchUpInside" id="XE2-lv-93g"/>
@@ -84,7 +84,7 @@
                                 </subviews>
                             </stackView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2T-xJ-xAe">
-                                <rect key="frame" x="0.0" y="155" width="375" height="657"/>
+                                <rect key="frame" x="0.0" y="157" width="375" height="655"/>
                                 <connections>
                                     <segue destination="olM-tU-mkV" kind="embed" identifier="ThemeChooserTableViewController" id="RfL-Ar-YOp"/>
                                 </connections>

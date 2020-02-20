@@ -20,6 +20,8 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
     var gcDefaultLeaderboardIdentifier = String() // Check the default leaderboardID
     let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch"
 
+    let lowestScorePosible = 20
+
     var bestScoreFromGC: Int? = nil
 
     override func viewDidLoad() {
@@ -187,16 +189,23 @@ class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterCo
             gkLeaderboard.identifier = gcLeaderboardIdentifier
             gkLeaderboard.timeScope = GKLeaderboard.TimeScope.allTime
 
-            // Load the scores in a completion block
+            // Get best score in Game Center if it exists
+            // Scores are reported in the Closure
             gkLeaderboard.loadScores() { (scores, error) -> Void in
-                // Get current score
-                if error == nil {
-                    if scores!.count > 0 {
-                        let currentScore = Int(truncatingIfNeeded: scores![0].value)
+                if error != nil {
+                    #if DEBUG
+                    print("updateLowestFlipsFromLeaderboard() - gkLeaderboard.loadScores() - " + error.debugDescription)
+                    #endif
+                } else {
+                    // are there scores available
+                    if let scores = scores, scores.count > 0 {
+                        // convert Int64 to Int
+                        let currentScore = Int(truncatingIfNeeded: scores[0].value)
 
                         updateLowestFlips(with: currentScore)
 
                         do {
+                            // save score to Core Data
                             try AppDelegate.viewContext.save()
 
                             self.updatePrompt()
