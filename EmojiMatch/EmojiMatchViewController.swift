@@ -119,9 +119,13 @@ class EmojiMatchViewController: UIViewController
 
         // reset tableview title to black
         if let navigationBar = navigationController?.navigationBar {
-            var attributes = savedTitleAttributes
-            attributes[.foregroundColor] = UIColor.black
-            navigationBar.titleTextAttributes = attributes
+            if #available(iOS 13, *) {
+                navigationBar.titleTextAttributes = savedTitleAttributes
+            } else {
+                var attributes = savedTitleAttributes
+                attributes[.foregroundColor] = UIColor.black
+                navigationBar.titleTextAttributes = attributes
+            }
         }
     }
 

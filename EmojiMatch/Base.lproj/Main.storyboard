@@ -9,12 +9,12 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Emoji Match Theme Chooser Table View Controller-->
+        <!--Theme Chooser Table-->
         <scene sceneID="1VP-72-uYx">
             <objects>
-                <tableViewController storyboardIdentifier="ThemeChooserTableViewController" id="olM-tU-mkV" customClass="EmojiMatchThemeChooserTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ThemeChooserTableViewController" title="Theme Chooser Table" id="olM-tU-mkV" customClass="EmojiMatchThemeChooserTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" id="nJs-VE-KRT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="657"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="655"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -57,7 +57,7 @@
         <!--Emoji Themes-->
         <scene sceneID="Sfm-XX-Yf4">
             <objects>
-                <viewController id="2n0-Eg-YwI" customClass="EmojiMatchLeaderboardTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Emoji Themes" id="2n0-Eg-YwI" customClass="EmojiMatchLeaderboardTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9Nt-0X-UVd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -122,7 +122,7 @@
             <objects>
                 <viewController title="Theme" id="BYZ-38-t0r" customClass="EmojiMatchViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="601"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dtx-7c-ZE6">
@@ -536,7 +536,7 @@
                                 </subviews>
                             </stackView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYS-Xn-8bF">
-                                <rect key="frame" x="46.333333333333343" y="262" width="282.33333333333326" height="79.333333333333314"/>
+                                <rect key="frame" x="46.333333333333343" y="261" width="282.33333333333326" height="79.333333333333314"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Game Over">
                                         <attributes>
@@ -550,7 +550,7 @@
                                 <size key="shadowOffset" width="0.80000000000000004" height="0.69999999999999996"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Flips: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgj-y4-qbj">
-                                <rect key="frame" x="125.66666666666666" y="539" width="123.66666666666666" height="48"/>
+                                <rect key="frame" x="125.66666666666666" y="537" width="123.66666666666666" height="48"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -600,16 +600,16 @@
             </objects>
             <point key="canvasLocation" x="2348" y="-698"/>
         </scene>
-        <!--Emoji Themes-->
+        <!--Navigation-->
         <scene sceneID="ieN-m3-esT">
             <objects>
-                <navigationController title="Emoji Themes" automaticallyAdjustsScrollViewInsets="NO" id="aIw-ho-Dzt" sceneMemberID="viewController">
+                <navigationController title="Navigation" automaticallyAdjustsScrollViewInsets="NO" id="aIw-ho-Dzt" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vfD-lV-af4">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
