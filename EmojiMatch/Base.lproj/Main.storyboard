@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="aIw-ho-Dzt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zqp-9S-yqg">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment version="4864" identifier="iOS"/>
@@ -14,7 +14,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="ThemeChooserTableViewController" title="Theme Chooser Table" id="olM-tU-mkV" customClass="EmojiMatchThemeChooserTableViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" id="nJs-VE-KRT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="655"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="584.33333333333337"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -63,7 +63,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4CV-Dn-9N1" userLabel="Leaderboard Stack View">
-                                <rect key="frame" x="20" y="122" width="335" height="35"/>
+                                <rect key="frame" x="20" y="174" width="335" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b51-zO-ccW">
                                         <rect key="frame" x="0.0" y="0.0" width="109" height="35"/>
@@ -84,7 +84,7 @@
                                 </subviews>
                             </stackView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y2T-xJ-xAe">
-                                <rect key="frame" x="0.0" y="157" width="375" height="655"/>
+                                <rect key="frame" x="0.0" y="209" width="375" height="603"/>
                                 <connections>
                                     <segue destination="olM-tU-mkV" kind="embed" identifier="ThemeChooserTableViewController" id="RfL-Ar-YOp"/>
                                 </connections>
@@ -122,7 +122,7 @@
             <objects>
                 <viewController title="Theme" id="BYZ-38-t0r" customClass="EmojiMatchViewController" customModule="Match_Emojis" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="601"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="530.33333333333337"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dtx-7c-ZE6">
@@ -536,7 +536,7 @@
                                 </subviews>
                             </stackView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYS-Xn-8bF">
-                                <rect key="frame" x="46.333333333333343" y="261" width="282.33333333333326" height="79.333333333333314"/>
+                                <rect key="frame" x="46.333333333333343" y="225.66666666666666" width="282.33333333333326" height="79.333333333333343"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Game Over">
                                         <attributes>
@@ -550,7 +550,7 @@
                                 <size key="shadowOffset" width="0.80000000000000004" height="0.69999999999999996"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Flips: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgj-y4-qbj">
-                                <rect key="frame" x="125.66666666666666" y="537" width="123.66666666666666" height="48"/>
+                                <rect key="frame" x="125.66666666666666" y="466.33333333333331" width="123.66666666666666" height="47.999999999999943"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -600,26 +600,23 @@
             </objects>
             <point key="canvasLocation" x="2348" y="-698"/>
         </scene>
-        <!--Navigation-->
-        <scene sceneID="ieN-m3-esT">
+        <!--Navigation Controller-->
+        <scene sceneID="eAD-ss-6bH">
             <objects>
-                <navigationController title="Navigation" automaticallyAdjustsScrollViewInsets="NO" id="aIw-ho-Dzt" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zqp-9S-yqg" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vfD-lV-af4">
-                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="e82-oP-nj4">
+                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
-                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="2n0-Eg-YwI" kind="relationship" relationship="rootViewController" id="Ofu-M0-94t"/>
+                        <segue destination="2n0-Eg-YwI" kind="relationship" relationship="rootViewController" id="pkJ-xl-gtz"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bBe-8W-bu8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L6q-Ca-Cx0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="85.599999999999994" y="-698.27586206896558"/>
+            <point key="canvasLocation" x="66" y="-699"/>
         </scene>
     </scenes>
 </document>

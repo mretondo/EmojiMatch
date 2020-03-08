@@ -91,20 +91,21 @@ class EmojiMatchViewController: UIViewController
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // save all title text attributes so we can restore them when view disappears
-        if let navigationBar = navigationController?.navigationBar {
-            savedTitleAttributes = navigationBar.titleTextAttributes!
+        // change the titles text color for Christmas and Halloween
+        if title == "Christmas" || title == "Halloween", let theme = theme {
+            if #available(iOS 13.0, *) {
+                let appearance = UINavigationBarAppearance(idiom: .phone)
+                appearance.largeTitleTextAttributes = [.foregroundColor: theme.faceDownColor]
+                appearance.titleTextAttributes = [.foregroundColor: theme.faceDownColor]
 
-            // modify only the color and leave the rest alone
-            var attributes = savedTitleAttributes
-
-            // change the title text color for Christmas and Halloween
-            if title == "Christmas" {
-                attributes[.foregroundColor] = UIColor.red
-                navigationBar.titleTextAttributes = attributes
-            } else if title == "Halloween" {
-                attributes[.foregroundColor] = UIColor.orange
-                navigationBar.titleTextAttributes = attributes
+                navigationItem.standardAppearance = appearance
+            } else {
+                // Fallback on earlier versions
+                if let navigationBar = navigationController?.navigationBar {
+                    // change the titles text color for Christmas and Halloween
+                    navigationBar.largeTitleTextAttributes = [.foregroundColor: theme.faceDownColor]
+                    navigationBar.titleTextAttributes = [.foregroundColor: theme.faceDownColor]
+                }
             }
         }
     }
@@ -117,16 +118,9 @@ class EmojiMatchViewController: UIViewController
             try? AppDelegate.viewContext.save()
         }
 
-        // reset tableview title to black
-        if let navigationBar = navigationController?.navigationBar {
-            if #available(iOS 13, *) {
-                navigationBar.titleTextAttributes = savedTitleAttributes
-            } else {
-                var attributes = savedTitleAttributes
-                attributes[.foregroundColor] = UIColor.black
-                navigationBar.titleTextAttributes = attributes
-            }
-        }
+        // reset titles text to default color if changed in viewWillAppear
+        navigationController?.navigationBar.largeTitleTextAttributes = nil
+        navigationController?.navigationBar.titleTextAttributes = nil
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
