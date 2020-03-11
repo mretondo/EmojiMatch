@@ -1,12 +1,12 @@
 //
-//  EmojiMatchViewController.swift
+//  CardsViewController.swift
 //
 
 import UIKit
 import Foundation
 import CoreData
 
-class EmojiMatchViewController: UIViewController
+class CardsViewController: UIViewController
 {
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
         didSet { updateViewFromModel(touchedCard: nil) }
@@ -27,7 +27,7 @@ class EmojiMatchViewController: UIViewController
     private var emojiChoices = ""
     private var emoji: [Card : String] = [:]
 
-	private lazy var game = EmojiMatch(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+	private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
 
     private var savedTitleAttributes: [ NSAttributedString.Key : Any ] = [:]

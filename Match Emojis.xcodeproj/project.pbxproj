@@ -8,48 +8,48 @@
 
 /* Begin PBXBuildFile section */
 		270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 270612F822FF7412000EAA36 /* Model.xcdatamodeld */; };
-		2730628323F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift */; };
+		2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
 		2794028F23F9F1C9003B6BC6 /* StringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794028E23F9F1C9003B6BC6 /* StringUtil.swift */; };
-		27B4C4F4238E306500531B15 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B4C4F3238E306500531B15 /* UIDevice.swift */; };
+		27B4C4F4238E306500531B15 /* DeviceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B4C4F3238E306500531B15 /* DeviceModels.swift */; };
 		27B8046C2312194D00488154 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8046B2312194D00488154 /* Score.swift */; };
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
-		27C053E42389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */; };
+		27C053E42389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */; };
 		27C27AB123248D460091AB50 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB023248D460091AB50 /* Themes.swift */; };
 		27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */; };
-		27D6CDE821F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6CDE721F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift */; };
+		27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */; };
 		EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13071FB861A0009590B6 /* AppDelegate.swift */; };
-		EA5F130A1FB861A0009590B6 /* EmojiMatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* EmojiMatchViewController.swift */; };
+		EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* CardsViewController.swift */; };
 		EA5F130D1FB861A0009590B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130B1FB861A0009590B6 /* Main.storyboard */; };
 		EA5F130F1FB861A0009590B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130E1FB861A0009590B6 /* Assets.xcassets */; };
 		EA5F13121FB861A0009590B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */; };
 		EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE61FB9AB1000EF2C53 /* Card.swift */; };
-		EAFC4CE91FB9AC8600EF2C53 /* EmojiMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE81FB9AC8600EF2C53 /* EmojiMatch.swift */; };
+		EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		270612F922FF7412000EAA36 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		2730628223F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchLeaderboardTableViewController.swift; sourceTree = "<group>"; };
+		2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewController.swift; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
 		2794028E23F9F1C9003B6BC6 /* StringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtil.swift; sourceTree = "<group>"; };
-		27B4C4F3238E306500531B15 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
+		27B4C4F3238E306500531B15 /* DeviceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModels.swift; sourceTree = "<group>"; };
 		27B8046B2312194D00488154 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
 		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewDataSource+NSFetchedResultsControler.swift"; sourceTree = "<group>"; };
+		27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewControllerDataSource.swift; sourceTree = "<group>"; };
 		27C27AB023248D460091AB50 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
-		27D6CDE721F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchThemeChooserTableViewController.swift; sourceTree = "<group>"; };
+		27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewController.swift; sourceTree = "<group>"; };
 		EA5F13041FB861A0009590B6 /* Match Emojis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Match Emojis.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EA5F13091FB861A0009590B6 /* EmojiMatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchViewController.swift; sourceTree = "<group>"; };
+		EA5F13091FB861A0009590B6 /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
 		EA5F130C1FB861A0009590B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EA5F130E1FB861A0009590B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA5F13111FB861A0009590B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EA5F13131FB861A0009590B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EAFC4CE61FB9AB1000EF2C53 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		EAFC4CE81FB9AC8600EF2C53 /* EmojiMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatch.swift; sourceTree = "<group>"; };
+		EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,15 +94,15 @@
 			isa = PBXGroup;
 			children = (
 				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
-				2730628223F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift */,
+				2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
 				27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */,
-				27D6CDE721F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift */,
-				27C053E32389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift */,
-				EA5F13091FB861A0009590B6 /* EmojiMatchViewController.swift */,
-				27B4C4F3238E306500531B15 /* UIDevice.swift */,
+				27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */,
+				27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */,
+				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
+				27B4C4F3238E306500531B15 /* DeviceModels.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
-				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatch.swift */,
+				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */,
 				27B8046B2312194D00488154 /* Score.swift */,
 				27C27AB023248D460091AB50 /* Themes.swift */,
 				EAB24F441FB8622400FD5E4D /* Supporting Files */,
@@ -197,15 +197,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				27B8046C2312194D00488154 /* Score.swift in Sources */,
-				2730628323F8D771001BD19E /* EmojiMatchLeaderboardTableViewController.swift in Sources */,
+				2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */,
 				2794028F23F9F1C9003B6BC6 /* StringUtil.swift in Sources */,
-				27C053E42389F6660022C88D /* UITableViewDataSource+NSFetchedResultsControler.swift in Sources */,
-				EA5F130A1FB861A0009590B6 /* EmojiMatchViewController.swift in Sources */,
-				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatch.swift in Sources */,
+				27C053E42389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift in Sources */,
+				EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */,
+				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */,
 				27C27AB123248D460091AB50 /* Themes.swift in Sources */,
 				2752756523C590510076EBBB /* MathHelpers.swift in Sources */,
-				27B4C4F4238E306500531B15 /* UIDevice.swift in Sources */,
-				27D6CDE821F69B4B0047A3DB /* EmojiMatchThemeChooserTableViewController.swift in Sources */,
+				27B4C4F4238E306500531B15 /* DeviceModels.swift in Sources */,
+				27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
 				27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */,
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  EmojiMatchThemeChooserTableViewController.swift
+//  ThemeChooserTableViewController.swift
 //  EmojiMatch
 //
 //  Created by Mike Retondo on 1/21/19.
@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewController
+class ThemeChooserTableViewController: FetchedResultsTableViewController
 {
     // cache for the random emojis to be shown while the view
     // table is shown, resets after a selection has been made
@@ -118,7 +118,7 @@ class EmojiMatchThemeChooserTableViewController: FetchedResultsTableViewControll
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "Choose Theme" else { return }
 
-        if let EmojiMatchVC = segue.destination as? EmojiMatchViewController {
+        if let EmojiMatchVC = segue.destination as? CardsViewController {
             EmojiMatchVC.container = container
 
             if let indexPath = tableView.indexPathForSelectedRow {

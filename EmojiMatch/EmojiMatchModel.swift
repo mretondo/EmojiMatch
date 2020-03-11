@@ -1,12 +1,10 @@
 //
-//  EmojiMatch.swift
+//  EmojiMatchModel.swift
 //
 //  This is the data Model
 //
 
-//import Foundation
-
-struct EmojiMatch
+struct EmojiMatchModel
 {
 	//private(set) var cards = [Card]()
     var cards = [Card]()

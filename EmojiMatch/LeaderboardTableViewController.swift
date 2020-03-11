@@ -1,5 +1,5 @@
 //
-//  EmojiMatchLeaderboardTableViewController.swift
+//  LeaderboardTableViewController.swift
 //  Match Emojis
 //
 //  Created by Mike Retondo on 2/15/20.
@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import GameKit
 
-class EmojiMatchLeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate
+class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
     @IBOutlet weak var leaderboardStackView: UIStackView!

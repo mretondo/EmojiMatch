@@ -1,5 +1,5 @@
 //
-//  UITableViewDataSource+NSFetchedResultsControler.swift
+//  ThemeChooserTableViewControllerDataSource.swift
 //  Match Emojis
 //
 //  Created by Mike Retondo on 11/23/19.
@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-extension EmojiMatchThemeChooserTableViewController
+extension ThemeChooserTableViewController
 {
     // MARK: - Table view data source
 
