@@ -8,6 +8,10 @@ import CoreData
 
 class CardsViewController: UIViewController
 {
+    @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
+    @IBOutlet private var cardButtons: [UIButton]!
+    @IBOutlet private weak var gameOver: UILabel!
+
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
         didSet { updateViewFromModel(touchedCard: nil) }
     }
@@ -24,19 +28,14 @@ class CardsViewController: UIViewController
         }
     }
 
+    private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
+    private var flipCompleted = true
     private var emojiChoices = ""
     private var emoji: [Card : String] = [:]
+    private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
 
-	private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-    private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
-
-    private var savedTitleAttributes: [ NSAttributedString.Key : Any ] = [:]
-
-    private var flipCompleted = true
-
-    @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
-    @IBOutlet private var cardButtons: [UIButton]!
-    @IBOutlet private weak var gameOver: UILabel!
+    // used to restore buttons frame sizes on new game
+    private var savedFramesOfCardButtons: [CGRect] = []
 
     @IBAction private func touchCard(_ sender: UIButton) {
         // ignore touches after game is over
@@ -78,14 +77,13 @@ class CardsViewController: UIViewController
 
         setButtonsFontSize()
 
-        // zoom in gameOver label 4X
-        let scale = CGAffineTransform(scaleX: 0.25, y: 0.25)
-        // rotate label upsidedown
-        let rotationAngle = CGAffineTransform(rotationAngle: .pi)
-
-        UIView.animate(withDuration: 0.0) {
-            self.gameOver.transform = scale.concatenating(rotationAngle)
+        // save the buttons frame sizes so on new game they can be reset, they get changed on tranforms
+        savedFramesOfCardButtons = [CGRect].init(repeating: CGRect(), count: cardButtons.count)
+        for index in cardButtons.indices {
+            savedFramesOfCardButtons[index] = cardButtons[index].frame
         }
+
+        setupNewGame()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -125,6 +123,49 @@ class CardsViewController: UIViewController
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         setButtonsFontSize()
+    }
+
+    @IBAction func newGame(_ sender: UIBarButtonItem) {
+        setupNewGame()
+
+        updateViewFromModel(touchedCard: nil)
+    }
+
+    fileprivate func setupGameOverLabel() {
+        self.gameOver.isHidden = true
+
+        // zoom in gameOver label 4X
+        let scale = CGAffineTransform(scaleX: 0.25, y: 0.25)
+        // rotate label upsidedown
+        let rotationAngle = CGAffineTransform(rotationAngle: .pi)
+
+        UIView.animate(withDuration: 0.0) {
+            self.gameOver.transform = scale.concatenating(rotationAngle)
+        }
+    }
+
+    fileprivate func setupButtonsDefaults() {
+        // setup buttons to start of game defaults
+        for index in cardButtons.indices {
+            cardButtons[index].transform = .identity
+            cardButtons[index].isOpaque = true
+            cardButtons[index].alpha = 1.0
+            cardButtons[index].frame = savedFramesOfCardButtons[index]
+            cardButtons[index].setTitle("", for: .normal)
+            cardButtons[index].backgroundColor = theme?.faceDownColor
+        }
+    }
+
+    private func setupNewGame() {
+        setupGameOverLabel()
+
+        setupButtonsDefaults()
+
+        flipCount = 0
+        flipCompleted = true
+        emojiChoices = theme?.emojis ?? ""
+        emoji = [:]
+        game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     }
 
     private func updateFlipCountLabel() {
@@ -427,6 +468,41 @@ extension UIColor {
     }
 }
 
+extension UIButton {
+    func copy() throws -> UIButton? {
+        let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+        return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? UIButton
+    }
+}
+
+/// UIButton extension which enables the caller to duplicate a UIButton
+//extension UIButton {
+//
+//    /// Creates a duplicate of the terget UIButton
+//    /// The caller specified the UIControlEvent types to copy across to the duplicate
+//    ///
+//    /// - Parameter controlEvents: UIControlEvent types to copy
+//    /// - Returns: A UIButton duplicate of the original button
+//    func duplicate(forControlEvents controlEvents: [UIControl.Event]) -> UIButton? {
+//
+//        // Attempt to duplicate button by archiving and unarchiving the original UIButton
+//        let archivedButton = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+//        guard let buttonDuplicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(archivedButton!) else { return nil }
+//
+//        // Copy targets and associated actions
+//        self.allTargets.forEach { target in
+//
+//            controlEvents.forEach { controlEvent in
+//
+//                self.actions(forTarget: target, forControlEvent: controlEvent)?.forEach { action in
+//                    buttonDuplicate.addTarget(target, action: Selector(action), for: controlEvent)
+//                }
+//            }
+//        }
+//
+//        return buttonDuplicate
+//    }
+//}
 
 
 
