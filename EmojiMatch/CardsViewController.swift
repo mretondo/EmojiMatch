@@ -180,10 +180,17 @@ class CardsViewController: UIViewController
                 attributes = [ .strokeWidth: 2.0, .strokeColor: theme.faceDownColor ]
             }
 
-            let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
+            let attributedString = NSAttributedString(
+                string: traitCollection.verticalSizeClass == .compact ? "Flips\n\(flipCount)" : "Flips: \(flipCount)",
+                attributes: attributes)
 
             flipCountLabel.attributedText = attributedString
         }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateFlipCountLabel()
     }
 
     private func setButtonsFontSize() {
@@ -206,7 +213,7 @@ class CardsViewController: UIViewController
                         }
                     } else {
                         if UIDevice.current.orientation.isLandscape {
-                            font = font.withSize(defaultFontSize - 8)
+                            font = font.withSize(defaultFontSize - 6)
                         } else {
                             font = font.withSize(defaultFontSize)
                         }
