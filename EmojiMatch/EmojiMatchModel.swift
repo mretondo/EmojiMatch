@@ -79,7 +79,7 @@ extension Sequence {
         return result
     }
 }
-
+		
 extension Collection {
     var oneAndOnly: Element? {
         return count == 1 ? first : nil

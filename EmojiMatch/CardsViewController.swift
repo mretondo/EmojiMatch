@@ -34,9 +34,6 @@ class CardsViewController: UIViewController
     private var emoji: [Card : String] = [:]
     private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
 
-    // used to restore buttons frame sizes on new game
-    private var savedFramesOfCardButtons: [CGRect] = []
-
     @IBAction private func touchCard(_ sender: UIButton) {
         // ignore touches after game is over
         guard self.gameOver.isHidden else { return }
@@ -76,12 +73,6 @@ class CardsViewController: UIViewController
         title = theme?.name
 
         setButtonsFontSize()
-
-        // save the buttons frame sizes so on new game they can be reset, they get changed on tranforms
-        savedFramesOfCardButtons = [CGRect].init(repeating: CGRect(), count: cardButtons.count)
-        for index in cardButtons.indices {
-            savedFramesOfCardButtons[index] = cardButtons[index].frame
-        }
 
         setupNewGame()
     }
@@ -150,7 +141,6 @@ class CardsViewController: UIViewController
             cardButtons[index].transform = .identity
             cardButtons[index].isOpaque = true
             cardButtons[index].alpha = 1.0
-            cardButtons[index].frame = savedFramesOfCardButtons[index]
             cardButtons[index].setTitle("", for: .normal)
             cardButtons[index].backgroundColor = theme?.faceDownColor
         }
@@ -252,14 +242,6 @@ class CardsViewController: UIViewController
             }
         }
 	}
-
-//    private func sleep(_ seconds: Double) {
-//        let integerPart = seconds.integerPart() * 1_000_000 // convert to micro seconds
-//        let fractionalPart = seconds.fractionalPart(toNumberOfPlaces: 3) * 1_000 // convert to micro seconds
-//        let s = integerPart + fractionalPart
-//
-//        usleep(useconds_t(s))
-//    }
 
     fileprivate func animateFlippingCardUp(_ card: Card, _ button: UIButton) {
         UIView.animate(
