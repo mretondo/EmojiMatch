@@ -20,9 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     }
 
-    public static var lowestFlips: Int? {
-        get { return Score.lowestScore }
-        set(newValue) { Score.lowestScore = newValue }
+    public static var highScore: Int? {
+        get { return Score.highScore }
+        set(newValue) { Score.highScore = newValue }
     }
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -53,7 +53,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // update the database to reflect themes from above
         // might have deleted some and added new ones
         do {
-            try Themes.updateDatabase(with: themes, in: persistentContainer.viewContext)
+            // Transformer for UIColor
+            UIColorValueTransformer.register()
+
+            try Themes.updateDatabase(with: themes)
         } catch let error as NSError {
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             fatalError("Couldn't update database - CoreData error \(error), \(error.userInfo)")
@@ -113,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          error conditions that could cause the creation of the store to fail.
          */
         let container = NSPersistentContainer(name: "Model")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -128,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                  */
                 fatalError("Unresolved CoreData error \(error), \(error.userInfo)")
             }
-        })
+        }
         return container
     }()
 

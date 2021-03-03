@@ -8,7 +8,7 @@ import CoreData
 
 class CardsViewController: UIViewController
 {
-    @IBOutlet private weak var flipCountLabel: UILabel! { didSet { updateFlipCountLabel() } }
+    @IBOutlet private weak var scoreLabel: UILabel! { didSet { updateScoreLabel() } }
     @IBOutlet private var cardButtons: [UIButton]!
     @IBOutlet private weak var gameOver: UILabel!
 
@@ -19,19 +19,18 @@ class CardsViewController: UIViewController
     // sets the current theme and get ready for new game
     var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
         didSet {
-            self.view.backgroundColor = theme?.backgroundColor
+            view.backgroundColor = theme?.backgroundColor
             emojiChoices = theme?.emojis ?? ""
-
-            flipCount = 0
 
             updateViewFromModel(touchedCard: nil)
         }
     }
 
-    private(set) var flipCount = 0 { didSet { updateFlipCountLabel() } }
+    private(set) var score = 0 { didSet { updateScoreLabel() } }
     private var flipCompleted = true
     private var emojiChoices = ""
     private var emoji: [Card : String] = [:]
+    private var seenCards: [Card : Bool] = [:]
     private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
 
     @IBAction private func touchCard(_ sender: UIButton) {
@@ -46,6 +45,7 @@ class CardsViewController: UIViewController
         let card = game.cards[cardNumber]
         guard !card.isFaceUp else { return } // ignore touches on face up cards
 
+        // if a card is currently being flipped i.e. animated, wait for it to finish before processing new touched card
         if flipCompleted {
             flipCompleted = false
         } else {
@@ -59,9 +59,36 @@ class CardsViewController: UIViewController
         }
 
         // if card isMatched then it can't be pressed
-        if !card.isMatched && !card.isFaceUp {
-            flipCount += 1
+        if !card.isMatched {
             game.chooseCard(at: cardNumber)
+
+            let indicesOfFaceUpCards = game.indicesOfFaceUpCards
+
+            if game.cards[cardNumber].isMatched {
+                // Congradulations! you found matching cards and get 2 points
+                score += 2
+
+                game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
+                game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
+            }
+            else {
+                // deduct points if 2 cards are face up and don't match
+                if indicesOfFaceUpCards.count == 2 {
+                    // loose a point for each card that was seen before
+                    if game.cards[indicesOfFaceUpCards[0]].hasBeenSeen {
+                        score -= 1
+                    } else {
+                        game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
+                    }
+
+                    if game.cards[indicesOfFaceUpCards[1]].hasBeenSeen {
+                        score -= 1
+                    } else {
+                        game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
+                    }
+                }
+            }
+
             updateViewFromModel(touchedCard: cardNumber)
         }
     }
@@ -77,23 +104,35 @@ class CardsViewController: UIViewController
         setupNewGame()
     }
 
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        if title == "Christmas" || title == "Halloween" {
+//            return .darkContent
+//        } else {
+//            return .default
+//        }
+//    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         // change the titles text color for Christmas and Halloween
         if title == "Christmas" || title == "Halloween", let theme = theme {
             if #available(iOS 13.0, *) {
-                let appearance = UINavigationBarAppearance(idiom: .phone)
-                appearance.largeTitleTextAttributes = [.foregroundColor: theme.faceDownColor]
-                appearance.titleTextAttributes = [.foregroundColor: theme.faceDownColor]
+//                let appearance = UINavigationBarAppearance(idiom: .phone)
+//                appearance.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
+//                appearance.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
+//
+//                navigationItem.standardAppearance = appearance
 
-                navigationItem.standardAppearance = appearance
+                navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
+                navigationController?.navigationBar.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
+                navigationController?.navigationBar.barStyle = .black
             } else {
                 // Fallback on earlier versions
                 if let navigationBar = navigationController?.navigationBar {
                     // change the titles text color for Christmas and Halloween
-                    navigationBar.largeTitleTextAttributes = [.foregroundColor: theme.faceDownColor]
-                    navigationBar.titleTextAttributes = [.foregroundColor: theme.faceDownColor]
+                    navigationBar.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
+                    navigationBar.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
                 }
             }
         }
@@ -103,13 +142,16 @@ class CardsViewController: UIViewController
         super.viewWillDisappear(animated)
 
         if areAllCardsMatched() {
-            AppDelegate.lowestFlips = flipCount
+            AppDelegate.highScore = score
             try? AppDelegate.viewContext.save()
         }
 
         // reset titles text to default color if changed in viewWillAppear
-        navigationController?.navigationBar.largeTitleTextAttributes = nil
-        navigationController?.navigationBar.titleTextAttributes = nil
+//        navigationController?.navigationBar.largeTitleTextAttributes = nil
+//        navigationController?.navigationBar.titleTextAttributes = nil
+        navigationController?.navigationBar.largeTitleTextAttributes = [:]
+        navigationController?.navigationBar.titleTextAttributes = [:]
+        navigationController?.navigationBar.barStyle = .default
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -117,9 +159,17 @@ class CardsViewController: UIViewController
     }
 
     @IBAction func newGame(_ sender: UIBarButtonItem) {
-        setupNewGame()
+        // scale all cards to zero size so we can zoom cards back out
+        for index in cardButtons.indices {
+            cardButtons[index].transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+            cardButtons[index].alpha = 0.0
+            cardButtons[index].isOpaque = false
+        }
 
-        updateViewFromModel(touchedCard: nil)
+        UIView.animate(withDuration: 0.6, delay: 0.2, options: [.curveEaseOut]) { [self] in
+            setupNewGame()
+            updateViewFromModel(touchedCard: nil)
+        }
     }
 
     fileprivate func setupGameOverLabel() {
@@ -151,14 +201,15 @@ class CardsViewController: UIViewController
 
         setupButtonsDefaults()
 
-        flipCount = 0
+        score = 0
         flipCompleted = true
-        emojiChoices = theme?.emojis ?? ""
+//        emojiChoices = theme?.emojis ?? ""
         emoji = [:]
+        seenCards = [:]
         game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     }
 
-    private func updateFlipCountLabel() {
+    private func updateScoreLabel() {
         if let theme = theme {
             var attributes: [ NSAttributedString.Key : Any ] = [:]
 
@@ -171,16 +222,16 @@ class CardsViewController: UIViewController
             }
 
             let attributedString = NSAttributedString(
-                string: traitCollection.verticalSizeClass == .compact ? "Flips\n\(flipCount)" : "Flips: \(flipCount)",
+                string: traitCollection.verticalSizeClass == .compact ? "Score\n\(score)" : "Score: \(score)",
                 attributes: attributes)
 
-            flipCountLabel.attributedText = attributedString
+            scoreLabel.attributedText = attributedString
         }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateFlipCountLabel()
+        updateScoreLabel()
     }
 
     private func setButtonsFontSize() {
@@ -191,23 +242,23 @@ class CardsViewController: UIViewController
                 if var font = button.titleLabel?.font {
                     let defaultFontSize: CGFloat = 46.0
 
-                    let deviceType = "\(UIDevice().type)"
-                    if  deviceType.starts(with: "iPhone3") ||
-                        deviceType.starts(with: "iPhone4") ||
-                        deviceType.starts(with: "iPhone5") ||
-                        deviceType.starts(with: "iPhone6") {
-                        if UIDevice.current.orientation.isLandscape {
-                            font = font.withSize(defaultFontSize - 14)
-                        } else {
-                            font = font.withSize(defaultFontSize)
-                        }
-                    } else {
+//                    let deviceType = "\(UIDevice().type)"
+//                    if  deviceType.starts(with: "iPhone3") ||
+//                        deviceType.starts(with: "iPhone4") ||
+//                        deviceType.starts(with: "iPhone5") ||
+//                        deviceType.starts(with: "iPhone6") {
+//                        if UIDevice.current.orientation.isLandscape {
+//                            font = font.withSize(defaultFontSize - 14)
+//                        } else {
+//                            font = font.withSize(defaultFontSize)
+//                        }
+//                    } else {
                         if UIDevice.current.orientation.isLandscape {
                             font = font.withSize(defaultFontSize - 6)
                         } else {
                             font = font.withSize(defaultFontSize)
                         }
-                    }
+//                    }
 
                     button.titleLabel?.font = font
                 }
@@ -324,7 +375,7 @@ class CardsViewController: UIViewController
     fileprivate func animateFlippingCardDown(at cardIndex: Int, _ button: UIButton, extraDelay: Double = 0.0) {
         if self.game.cards[cardIndex].isFaceUp {
             button.setTitle("", for: .normal)
-            button.backgroundColor = self.theme?.faceDownColor
+            button.backgroundColor = theme?.faceDownColor
 
             UIView.transition(
                 with: button,

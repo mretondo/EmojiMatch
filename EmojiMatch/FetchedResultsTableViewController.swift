@@ -48,6 +48,8 @@ class FetchedResultsTableViewController: UITableViewController, NSFetchedResults
                 //tableView.moveRow(at: indexPath!, to: newIndexPath!)
                 tableView.deleteRows(at: [indexPath!], with: .fade)
                 tableView.insertRows(at: [newIndexPath!], with: .fade)
+            @unknown default:
+                fatalError("Should never get here")
         }
     }
     

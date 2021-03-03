@@ -10,17 +10,17 @@ import CoreData
 
 class Score: NSManagedObject
 {
-    public static var lowestScore: Int? {
+    public static var highScore: Int? {
         get {
             let context = AppDelegate.viewContext
             let request: NSFetchRequest<Score> = Score.fetchRequest()
 
             do {
-                let lowestScores = try context.fetch(request)
-                assert(lowestScores.count <= 1, "lowestFlips - lowestScores count isn't <= 1")
+                let scores = try context.fetch(request)
+                assert(scores.count <= 1, "highScore - scores count isn't <= 1")
 
-                if lowestScores.count == 1 {
-                    return Int(lowestScores[0].lowestScore)
+                if scores.count == 1 {
+                    return Int(scores[0].highScore)
                 } else {
                     return nil
                 }
@@ -30,34 +30,35 @@ class Score: NSManagedObject
         }
 
         set(newValue) {
-            if let newValue = newValue, newValue > -1 {
-                let lowestFlipsScore = lowestScore
+            if let newValue = newValue {
+                let highestScore = highScore
 
-                if lowestFlipsScore == nil || newValue < lowestFlipsScore! {
+                if highestScore == nil || newValue > highestScore! {
                     let context = AppDelegate.viewContext
 
                     // no data is retrieved here, the database only retrieves the record count
-                    if let count = try? AppDelegate.viewContext.count(for: Score.fetchRequest()), count == 0 {
-                        // save first lowest score
+                    if let count = try? context.count(for: Score.fetchRequest()), count == 0 {
+                        // save first highest score into empty table
                         let score = Score(context: context)
-                        score.lowestScore = Int64(newValue)
+                        score.highScore = Int64(newValue)
                     } else {
-                        // modify previous saved lowest score
+                        // modify previous saved highest score
                         let request: NSFetchRequest<Score> = Score.fetchRequest()
                         do {
-                            let lowestScores = try? context.fetch(request)
-                            let score = lowestScores![0]
-                            score.lowestScore = Int64(newValue)
+                            if let highestScores = try? context.fetch(request) {
+                                let score = highestScores[0]    // there's only one score in the table
+                                score.highScore = Int64(newValue)
+                            }
                         }
                     }
                 }
             }
 
-            printLowestFlipsTableStats()
+            printScoreTableStats()
         }
     }
 
-    public static func printLowestFlipsTableStats() {
+    public static func printScoreTableStats() {
         #if DEBUG
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
         AppDelegate.viewContext.perform {

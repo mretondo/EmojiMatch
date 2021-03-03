@@ -63,9 +63,9 @@ class Themes: NSManagedObject
     }
 
     class func theme(forName name: String) -> (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
-        let context = AppDelegate.viewContext
         let request: NSFetchRequest<Themes> = Themes.fetchRequest()
         request.predicate = NSPredicate(format: "name = %@", name)
+        let context = AppDelegate.viewContext
 
         if let results = try? context.fetch(request) {
             if let result = results.first {
@@ -88,15 +88,39 @@ class Themes: NSManagedObject
     ///
     /// create the Themes entity if it doesn't exist then add the new themes and delete old unused themes
     ///
-    class func updateDatabase(with themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)], in context: NSManagedObjectContext) throws {
-        try deleteUnusedThemes(themes, in: context)
-        try addNewThemes(themes, in: context)
+    class func updateDatabase(with themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
+//        try removeAllData()
+        try deleteUnusedThemes(themes)
+        try addNewThemes(themes)
+    }
+
+    ///
+    /// remove all data from themes
+    ///
+    class func removeAllData() throws {
+        let context = AppDelegate.viewContext
+
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Themes.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try context.persistentStoreCoordinator!.execute(deleteRequest, with: context)
+            #if DEBUG
+            print ("Removed All Theme Data\n")
+            #endif
+        } catch let error as NSError {
+            #if DEBUG
+            print ("removeAllData() - \(error.localizedDescription)\n")
+            #endif
+        }
     }
 
     ///
     /// delete themes that are no longer used
     ///
-    class func deleteUnusedThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)], in context: NSManagedObjectContext) throws {
+    class func deleteUnusedThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
+        let context = AppDelegate.viewContext
+
         let request: NSFetchRequest<Themes> = Themes.fetchRequest()
         let results = try context.fetch(request)
 
@@ -119,7 +143,9 @@ class Themes: NSManagedObject
     ///
     /// add themes that don't already exist in database
     ///
-    class func addNewThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)], in context: NSManagedObjectContext) throws {
+    class func addNewThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
+        let context = AppDelegate.viewContext
+
         let request: NSFetchRequest<Themes> = Themes.fetchRequest()
 
         for theme in themes {

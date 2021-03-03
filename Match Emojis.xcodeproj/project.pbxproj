@@ -3,16 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 270612F822FF7412000EAA36 /* Model.xcdatamodeld */; };
 		2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */; };
+		2739752C25EF29F10099F216 /* MRUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 2739752B25EF29F10099F216 /* MRUtils */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
-		2794028F23F9F1C9003B6BC6 /* StringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794028E23F9F1C9003B6BC6 /* StringUtil.swift */; };
-		27B4C4F4238E306500531B15 /* DeviceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B4C4F3238E306500531B15 /* DeviceModels.swift */; };
+		278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */; };
+		27AFE90025C0F76600A0BE5F /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AFE8FF25C0F76600A0BE5F /* Pie.swift */; };
 		27B8046C2312194D00488154 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8046B2312194D00488154 /* Score.swift */; };
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
 		27C053E42389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */; };
@@ -33,8 +34,8 @@
 		2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewController.swift; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
-		2794028E23F9F1C9003B6BC6 /* StringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtil.swift; sourceTree = "<group>"; };
-		27B4C4F3238E306500531B15 /* DeviceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModels.swift; sourceTree = "<group>"; };
+		278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorValueTransformer.swift; sourceTree = "<group>"; };
+		27AFE8FF25C0F76600A0BE5F /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
 		27B8046B2312194D00488154 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
 		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewControllerDataSource.swift; sourceTree = "<group>"; };
@@ -58,12 +59,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */,
+				2739752C25EF29F10099F216 /* MRUtils in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2713C12C25C50E590067E664 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */,
+				27B8046B2312194D00488154 /* Score.swift */,
+				27C27AB023248D460091AB50 /* Themes.swift */,
+				270612F822FF7412000EAA36 /* Model.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		27BBDDB523ED0A8300F1901C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,21 +106,18 @@
 		EA5F13061FB861A0009590B6 /* EmojiMatch */ = {
 			isa = PBXGroup;
 			children = (
-				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
 				2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
 				27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */,
 				27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */,
 				27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */,
 				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
-				27B4C4F3238E306500531B15 /* DeviceModels.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */,
-				27B8046B2312194D00488154 /* Score.swift */,
-				27C27AB023248D460091AB50 /* Themes.swift */,
+				27AFE8FF25C0F76600A0BE5F /* Pie.swift */,
 				EAB24F441FB8622400FD5E4D /* Supporting Files */,
+				2713C12C25C50E590067E664 /* CoreData */,
 				EA5F13131FB861A0009590B6 /* Info.plist */,
-				270612F822FF7412000EAA36 /* Model.xcdatamodeld */,
 			);
 			path = EmojiMatch;
 			sourceTree = "<group>";
@@ -115,9 +125,9 @@
 		EAB24F441FB8622400FD5E4D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2794028E23F9F1C9003B6BC6 /* StringUtil.swift */,
 				2752756423C590510076EBBB /* MathHelpers.swift */,
 				EA5F130E1FB861A0009590B6 /* Assets.xcassets */,
+				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
 				EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */,
 			);
 			path = "Supporting Files";
@@ -139,6 +149,9 @@
 			dependencies = (
 			);
 			name = "Match Emojis";
+			packageProductDependencies = (
+				2739752B25EF29F10099F216 /* MRUtils */,
+			);
 			productName = Concentration;
 			productReference = EA5F13041FB861A0009590B6 /* Match Emojis.app */;
 			productType = "com.apple.product-type.application";
@@ -150,7 +163,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					EA5F13031FB861A0009590B6 = {
@@ -160,7 +173,7 @@
 				};
 			};
 			buildConfigurationList = EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Match Emojis" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -168,6 +181,9 @@
 				Base,
 			);
 			mainGroup = EA5F12FB1FB861A0009590B6;
+			packageReferences = (
+				2739752A25EF29F10099F216 /* XCRemoteSwiftPackageReference "MRUtils" */,
+			);
 			productRefGroup = EA5F13051FB861A0009590B6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -198,13 +214,13 @@
 			files = (
 				27B8046C2312194D00488154 /* Score.swift in Sources */,
 				2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */,
-				2794028F23F9F1C9003B6BC6 /* StringUtil.swift in Sources */,
 				27C053E42389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift in Sources */,
+				278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */,
+				27AFE90025C0F76600A0BE5F /* Pie.swift in Sources */,
 				EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */,
 				27C27AB123248D460091AB50 /* Themes.swift in Sources */,
 				2752756523C590510076EBBB /* MathHelpers.swift in Sources */,
-				27B4C4F4238E306500531B15 /* DeviceModels.swift in Sources */,
 				27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
 				27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */,
@@ -260,6 +276,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -285,7 +302,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -321,6 +338,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -340,7 +358,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
@@ -361,7 +379,7 @@
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 58ZACZB2L8;
 				INFOPLIST_FILE = EmojiMatch/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -385,7 +403,7 @@
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 58ZACZB2L8;
 				INFOPLIST_FILE = EmojiMatch/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -422,6 +440,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2739752A25EF29F10099F216 /* XCRemoteSwiftPackageReference "MRUtils" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mretondo/MRUtils.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2739752B25EF29F10099F216 /* MRUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2739752A25EF29F10099F216 /* XCRemoteSwiftPackageReference "MRUtils" */;
+			productName = MRUtils;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		270612F822FF7412000EAA36 /* Model.xcdatamodeld */ = {

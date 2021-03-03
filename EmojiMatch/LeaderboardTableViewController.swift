@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import GameKit
+import MRUtils
 
 class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate
 {
@@ -22,7 +23,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
     let lowestScorePosible = 20
 
-    var bestScoreFromGC: Int? = nil
+    var highScoreFromGC: Int? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +69,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                         #endif
                     } else {
                         // get current best score - updated in completion block
-                        self.updateLowestFlipsFromLeaderboard()
+                        self.updateScoreFromLeaderboard()
                     }
                 }
 
@@ -107,25 +108,25 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     }
 
     @IBAction func addScoreAndSubmitToGC(_ sender: Any) {
-        if let lowestFlips = AppDelegate.lowestFlips {
+        if let highestScore = AppDelegate.highScore {
             // get current best score
-            let bestScore = GKScore(leaderboardIdentifier: gcLeaderboardIdentifier)
+            let highScore = GKScore(leaderboardIdentifier: gcLeaderboardIdentifier)
 
-            // add score only if its the players lowest score
-            if bestScore.value == 0 || lowestFlips < bestScore.value {
+            // add score only if its the players highest score
+            if highScore.value == 0 || highestScore > highScore.value {
                 // set new best score
-                bestScore.value = Int64(lowestFlips)
+                highScore.value = Int64(highestScore)
 
                 // Submit new best score to GC leaderboard
-                GKScore.report([bestScore]) { error in
+                GKScore.report([highScore]) { error in
                     var title: String
                     var message: String
 
                     if error == nil {
                         title = "Success"
-                        message = "Your low score was added to the Leaderboard."
+                        message = "Your high score was added to the Leaderboard."
                     } else {
-                        title = "The low score was unable to be added to the Leaderboard"
+                        title = "The high score was unable to be added to the Leaderboard"
                         message = "error!.localizedDescription"
                     }
 
@@ -180,9 +181,9 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         return buttonPressed
     }
 
-    /// if user deleted there local data this will try to update it with the score from there Leaderboard score
-    /// gets the score from GC in a completion block
-    func updateLowestFlipsFromLeaderboard() {
+    /// If user deleted there local data this will try to update it with the score from there Leaderboard score
+    /// Gets the score from GC in a completion block
+    func updateScoreFromLeaderboard() {
         if GKLocalPlayer.local.isAuthenticated {
             // Initialize the leaderboard for the current local player
             let gkLeaderboard = GKLeaderboard(players: [GKLocalPlayer.local])
@@ -194,7 +195,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
             gkLeaderboard.loadScores() { (scores, error) -> Void in
                 if error != nil {
                     #if DEBUG
-                    print("updateLowestFlipsFromLeaderboard() - gkLeaderboard.loadScores() - " + error.debugDescription)
+                    print("updateScoreFromLeaderboard() - gkLeaderboard.loadScores() - " + error.debugDescription)
                     #endif
                 } else {
                     // are there scores available
@@ -202,7 +203,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                         // convert Int64 to Int
                         let currentScore = Int(truncatingIfNeeded: scores[0].value)
 
-                        updateLowestFlips(with: currentScore)
+                        updatehighestScore(with: currentScore)
 
                         do {
                             // save score to Core Data
@@ -215,7 +216,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                             #endif
                         }
                         catch {
-                            print("updateLowestFlipsFromLeaderboard() - Couldn't save AppDelegate.viewContext")
+                            print("updateScoreFromLeaderboard() - Couldn't save AppDelegate.viewContext")
                         }
                     }
                 }
@@ -223,26 +224,26 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         }
 
         /// if user deleted there local data this will try to update it with the score from the Leaderboard
-        func updateLowestFlips(with score: Int) {
+        func updatehighestScore(with score: Int) {
             if score > 0 {
-                if let lowestFlips = AppDelegate.lowestFlips {
-                    if score < lowestFlips {
-                        AppDelegate.lowestFlips = score
+                if let highestScore = AppDelegate.highScore {
+                    if score < highestScore {
+                        AppDelegate.highScore = score
                     }
                 } else {
-                    AppDelegate.lowestFlips = score
+                    AppDelegate.highScore = score
                 }
             }
         }
     }
 
-    /// update the heading prompt flip count with the lower of Leaderboard value or
+    /// update the heading prompt high score
     fileprivate func updatePrompt() {
         if var prompt = themeHeading.prompt, let appendIndex = themeHeading.prompt?.endIndex(of: ": ") {
             prompt = String(prompt.prefix(upTo: appendIndex))
 
-            if let lowestFlips = AppDelegate.lowestFlips {
-                prompt.append("\(lowestFlips) Flips")
+            if let highestScore = AppDelegate.highScore {
+                prompt.append("\(highestScore)")
             }
 
             themeHeading.prompt = prompt
@@ -254,7 +255,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     /// backgroundView gives UIStackView a background color since UIStackView does NO rendering
     private lazy var backgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .groupTableViewBackground
+        view.backgroundColor = .systemGroupedBackground
         return view
     }()
 

@@ -183,38 +183,3 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
 //        return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? T
 //    }
 //}
-
-extension String {
-    //
-    // convert the string to an UIImage
-    //
-    func textToImage(ofFontSize fontSize: CGFloat) -> UIImage? {
-        let nsString = (self as NSString)
-        let font = UIFont.systemFont(ofSize: fontSize) // you can change your font size here
-        let stringAttributes = [NSAttributedString.Key.font: font]
-        
-        // calculate size of image
-        var imageSize = nsString.size(withAttributes: stringAttributes)
-        // raise fractional size values to the nearest higher integer
-        imageSize.height = ceil(imageSize.height)
-        imageSize.width = ceil(imageSize.width)
-
-        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0.0)
-
-        // fill image with color, in this case to a transparent background
-        UIColor.clear.set()
-
-        let rect = CGRect(origin: .zero, size: imageSize)
-        UIRectFill(rect)
-
-        // draw text within current graphics context
-        nsString.draw(at: .zero, withAttributes: stringAttributes)
-
-        // create image from context
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-
-        return image ?? UIImage()
-    }
-}
