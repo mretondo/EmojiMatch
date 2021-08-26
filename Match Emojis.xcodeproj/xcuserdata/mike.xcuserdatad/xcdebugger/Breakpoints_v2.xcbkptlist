@@ -7,81 +7,113 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "18FD858E-E6D8-491E-BE02-B5328710DE31"
+            uuid = "E2458CBD-338D-40E3-877E-6FCE48D60CFE"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EmojiMatch/CardsViewController.swift"
+            filePath = "EmojiMatch/LeaderboardTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "touchCard(_:)"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "updateScoreFromLeaderboard()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "954EC728-3A26-4F87-9708-51D2DF7567DE"
+            uuid = "AB8C9DE1-C036-4AD4-AD38-DB226B67A8FB"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EmojiMatch/CardsViewController.swift"
+            filePath = "EmojiMatch/LeaderboardTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "touchCard(_:)"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "updateScoreFromLeaderboard()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "88C24E1F-7067-443E-BDEF-48094F0F08B8"
-            shouldBeEnabled = "No"
+            uuid = "0FB44E3C-6757-40B9-B9CF-4C075317FD44"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EmojiMatch/CardsViewController.swift"
+            filePath = "EmojiMatch/LeaderboardTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "touchCard(_:)"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "addScoreAndSubmitToGC(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BDCA1D1B-1B92-4EF1-9372-C5F78C6E842B"
-            shouldBeEnabled = "No"
+            uuid = "4C3A9BAA-2D7F-44BF-896E-E81E677F9BD5"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EmojiMatch/EmojiMatchModel.swift"
+            filePath = "EmojiMatch/LeaderboardTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "chooseCard(at:)"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "addScoreAndSubmitToGC(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4C3A9BAA-2D7F-44BF-896E-E81E677F9BD5 - c001731a76eba163"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.GKScore&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Match_Emojis.LeaderboardTableViewController.addScoreAndSubmitToGC(Any) -&gt; ()"
+                  moduleName = "Match Emojis"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mike/Documents/Development/EmojiMatch/EmojiMatch/LeaderboardTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
+                  offsetFromSymbolStart = "2540">
+               </Location>
+               <Location
+                  uuid = "4C3A9BAA-2D7F-44BF-896E-E81E677F9BD5 - 9c2074d292c8fa25"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 (Swift.Optional&lt;Swift.Array&lt;__C.GKScore&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Match_Emojis.LeaderboardTableViewController.addScoreAndSubmitToGC(Any) -&gt; ()"
+                  moduleName = "Match Emojis"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mike/Documents/Development/EmojiMatch/EmojiMatch/LeaderboardTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "172">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1C7486C3-F206-4AB6-8599-68823846C128"
-            shouldBeEnabled = "No"
+            uuid = "79B172CF-5DA0-47A2-86C7-63D46766F9F1"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EmojiMatch/AppDelegate.swift"
+            filePath = "EmojiMatch/LeaderboardTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "highScore"
-            landmarkType = "24">
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "addScoreAndSubmitToGC(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

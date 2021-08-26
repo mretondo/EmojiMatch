@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     }
 
-    public static var highScore: Int? {
+    public static var highScore: Int64? {
         get { return Score.highScore }
         set(newValue) { Score.highScore = newValue }
     }

@@ -26,7 +26,7 @@ class CardsViewController: UIViewController
         }
     }
 
-    private(set) var score = 0 { didSet { updateScoreLabel() } }
+    private(set) var score: Int64 = 0 { didSet { updateScoreLabel() } }
     private var flipCompleted = true
     private var emojiChoices = ""
     private var emoji: [Card : String] = [:]
@@ -85,6 +85,11 @@ class CardsViewController: UIViewController
                         score -= 1
                     } else {
                         game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
+                    }
+
+                    // cap lowest score to -100
+                    if score < LeaderboardTableViewController.lowestScorePosible {
+                        score = LeaderboardTableViewController.lowestScorePosible
                     }
                 }
             }

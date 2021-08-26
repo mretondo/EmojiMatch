@@ -17,13 +17,11 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     @IBOutlet weak var leaderboardButton: UIButton!
     @IBOutlet weak var addScoreButton: UIButton!
 
+    public static let lowestScorePosible: Int64 = -100
+
     var gcEnabled = false // Check if the user has Game Center enabled
-    var gcDefaultLeaderboardIdentifier = String() // Check the default leaderboardID
-    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch"
-
-    let lowestScorePosible = 20
-
-    var highScoreFromGC: Int? = nil
+    var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch2" // Check the default leaderboardID
+    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch2"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +59,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                 // 2. Player is already authenticated & logged in, load game center
                 self.gcEnabled = true
 
-                // Get the default leaderboard ID - updated in completion block
+                // Get the default leaderboard ID - updated in Completion block
                 localPlayer.loadDefaultLeaderboardIdentifier() { leaderboardIdentifer, error in
                     if let error = error {
                         #if DEBUG
@@ -109,28 +107,53 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
     @IBAction func addScoreAndSubmitToGC(_ sender: Any) {
         if let highestScore = AppDelegate.highScore {
-            // get current best score
-            let highScore = GKScore(leaderboardIdentifier: gcLeaderboardIdentifier)
+            if GKLocalPlayer.local.isAuthenticated {
+                // Initialize the leaderboard for the current local player
+                let gkLeaderboard = GKLeaderboard(players: [GKLocalPlayer.local])
+                gkLeaderboard.identifier = gcLeaderboardIdentifier
+                gkLeaderboard.timeScope = GKLeaderboard.TimeScope.allTime
 
-            // add score only if its the players highest score
-            if highScore.value == 0 || highestScore > highScore.value {
-                // set new best score
-                highScore.value = Int64(highestScore)
-
-                // Submit new best score to GC leaderboard
-                GKScore.report([highScore]) { error in
-                    var title: String
-                    var message: String
-
-                    if error == nil {
-                        title = "Success"
-                        message = "Your high score was added to the Leaderboard."
+                // Get best score from the leaderboard if it exists
+                // Scores are reported in the Closure
+                gkLeaderboard.loadScores() { (scores, error) -> Void in
+                    if error != nil {
+                        #if DEBUG
+                        print("updateScoreFromLeaderboard() - gkLeaderboard.loadScores() - " + error.debugDescription)
+                        #endif
                     } else {
-                        title = "The high score was unable to be added to the Leaderboard"
-                        message = "error!.localizedDescription"
-                    }
+                        var title = ""
+                        var message = ""
+                        let score = GKScore(leaderboardIdentifier: self.gcLeaderboardIdentifier)
 
-                    self.showOkAlert(title: title, message: message)
+                        // set score to the current highest score
+                        score.value = highestScore
+
+                        // if a score already exits on the leader board compare to it
+                        if let scores = scores, scores.count > 0 {
+                            let leaderboardsHighestScore = Int(scores[0].value)
+
+                            if leaderboardsHighestScore >= highestScore {
+                                title = "Your leaderboard score is already the best."
+                                message = ""
+                                self.showOkAlert(title: title, message: message)
+
+                                return
+                            }
+                        }
+
+                        // Submit best score to GC leaderboard
+                        GKScore.report([score]) { error in
+                            if error == nil {
+                                title = "Success"
+                                message = "Your high score was added to the Leaderboard."
+                            } else {
+                                title = "The high score was unable to be added to the Leaderboard."
+                                message = "error!.localizedDescription"
+                            }
+
+                            self.showOkAlert(title: title, message: message)
+                        }
+                    }
                 }
             }
         }
@@ -200,10 +223,9 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                 } else {
                     // are there scores available
                     if let scores = scores, scores.count > 0 {
-                        // convert Int64 to Int
-                        let currentScore = Int(truncatingIfNeeded: scores[0].value)
+                        let currentScore = scores[0].value
 
-                        updatehighestScore(with: currentScore)
+                        updateHighestScore(with: currentScore)
 
                         do {
                             // save score to Core Data
@@ -224,10 +246,10 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         }
 
         /// if user deleted there local data this will try to update it with the score from the Leaderboard
-        func updatehighestScore(with score: Int) {
-            if score > 0 {
+        func updateHighestScore(with score: Int64) {
+            if score >= LeaderboardTableViewController.lowestScorePosible {
                 if let highestScore = AppDelegate.highScore {
-                    if score < highestScore {
+                    if score > highestScore {
                         AppDelegate.highScore = score
                     }
                 } else {

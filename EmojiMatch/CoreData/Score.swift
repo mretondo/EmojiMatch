@@ -10,7 +10,7 @@ import CoreData
 
 class Score: NSManagedObject
 {
-    public static var highScore: Int? {
+    public static var highScore: Int64? {
         get {
             let context = AppDelegate.viewContext
             let request: NSFetchRequest<Score> = Score.fetchRequest()
@@ -20,7 +20,7 @@ class Score: NSManagedObject
                 assert(scores.count <= 1, "highScore - scores count isn't <= 1")
 
                 if scores.count == 1 {
-                    return Int(scores[0].highScore)
+                    return scores[0].highScore
                 } else {
                     return nil
                 }
@@ -36,18 +36,18 @@ class Score: NSManagedObject
                 if highestScore == nil || newValue > highestScore! {
                     let context = AppDelegate.viewContext
 
-                    // no data is retrieved here, the database only retrieves the record count
+                    // NOTE: no data is retrieved here, the database only retrieves the record count
                     if let count = try? context.count(for: Score.fetchRequest()), count == 0 {
                         // save first highest score into empty table
                         let score = Score(context: context)
-                        score.highScore = Int64(newValue)
+                        score.highScore = newValue
                     } else {
                         // modify previous saved highest score
                         let request: NSFetchRequest<Score> = Score.fetchRequest()
                         do {
                             if let highestScores = try? context.fetch(request) {
                                 let score = highestScores[0]    // there's only one score in the table
-                                score.highScore = Int64(newValue)
+                                score.highScore = newValue
                             }
                         }
                     }
