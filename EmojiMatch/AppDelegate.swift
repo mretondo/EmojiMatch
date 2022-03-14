@@ -11,13 +11,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    // only use on main queue
+    public static var sharedAppDelegate: AppDelegate {
+        //
+        // NOTE: UIApplication.delegate must be used from main thread only
+        //
+        if Thread.isMainThread {
+            return UIApplication.shared.delegate as! AppDelegate
+        } else {
+            return DispatchQueue.main.sync {
+                UIApplication.shared.delegate as! AppDelegate
+            }
+        }
+    }
+
     public static var viewContext: NSManagedObjectContext {
-        return (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        return container.viewContext
     }
 
     public static var container: NSPersistentContainer {
-        return (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+        return sharedAppDelegate.persistentContainer
     }
 
     public static var highScore: Int64? {

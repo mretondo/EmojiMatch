@@ -10,13 +10,13 @@ struct EmojiMatchModel
     var cards = [Card]()
 
     private var indexOfOneAndOnlyFaceUpCard: Int? {
-        get { return cards.indices.filter { cards[$0].isFaceUp}.oneAndOnly }
-        
-        set {
-            for i in cards.indices {
-                cards[i].isFaceUp = (i == newValue)
-            }            
-        }
+        get { return cards.indices.filter { cards[$0].isFaceUp || cards[$0].isTransitioningToFaceUp}.oneAndOnly }
+
+//        set {
+//            for i in cards.indices {
+//                cards[i].isFaceUp = (i == newValue)
+//            }
+//        }
     }
 
     func indicesOfCard(_ card: Card) -> (Int?, Int?) {
@@ -50,11 +50,40 @@ struct EmojiMatchModel
         get { return cards.filter { $0.isFaceUp } }
     }
 
+    var transitioningToFaceUpCards: [Card] {
+        get { return cards.filter { $0.isTransitioningToFaceUp } }
+    }
+
     var indicesOfFaceUpCards: [Int] {
         var indices = [Int]()
 
         for i in cards.indices {
             if cards[i].isFaceUp {
+                indices.append(i)
+            }
+        }
+
+        return indices
+    }
+
+    var indicesOfTransitioningToFaceUpCards: [Int] {
+        var indices = [Int]()
+
+        for i in cards.indices {
+            if cards[i].isTransitioningToFaceUp {
+                indices.append(i)
+            }
+        }
+
+        return indices
+    }
+
+
+    var indicesOfTransitioningToFaceUpCardsAndFaceUpCards: [Int] {
+        var indices = [Int]()
+
+        for i in cards.indices {
+            if cards[i].isTransitioningToFaceUp || cards[i].isFaceUp {
                 indices.append(i)
             }
         }
@@ -73,10 +102,12 @@ struct EmojiMatchModel
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                 }
-                cards[index].isFaceUp = true
-            } else {
-                indexOfOneAndOnlyFaceUpCard = index
+//                cards[index].isTransitioningToFaceUp = true
+//            } else {
+//                indexOfOneAndOnlyFaceUpCard = index
             }
+
+            cards[index].isTransitioningToFaceUp = true
 		}
 	}
 	

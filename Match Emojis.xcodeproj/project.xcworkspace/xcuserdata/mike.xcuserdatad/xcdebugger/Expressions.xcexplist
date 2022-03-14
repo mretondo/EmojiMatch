@@ -3,17 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "EmojiMatchThemeChooserTableViewController.viewWillAppear(_:):EmojiMatchThemeChooserTableViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "headerView.frame">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "EmojiMatchThemeChooserTableViewController.viewDidLoad():EmojiMatchThemeChooserTableViewController.swift">
-      </ContextState>
-      <ContextState
          contextName = "closure #2 in ConcentrationViewController.animateFlippingCard(_:_:):ConcentrationViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -23,6 +12,28 @@
                value = "">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "EmojiMatchThemeChooserTableViewController.viewWillAppear(_:):EmojiMatchThemeChooserTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "headerView.frame">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LeaderboardTableViewController.viewDidLoad():LeaderboardTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "LeaderboardTableViewController.lowestScorePosible">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static Score.highScore.setter:Score.swift">
+      </ContextState>
+      <ContextState
+         contextName = "EmojiMatchThemeChooserTableViewController.viewDidLoad():EmojiMatchThemeChooserTableViewController.swift">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

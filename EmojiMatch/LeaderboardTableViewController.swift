@@ -16,8 +16,9 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     @IBOutlet weak var leaderboardStackView: UIStackView!
     @IBOutlet weak var leaderboardButton: UIButton!
     @IBOutlet weak var addScoreButton: UIButton!
+    @IBOutlet var safeAreaView: UIView!
 
-    public static let lowestScorePosible: Int64 = -100
+    public static let lowestScorePosible = Int64(-100)
 
     var gcEnabled = false // Check if the user has Game Center enabled
     var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch2" // Check the default leaderboardID
@@ -33,7 +34,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        updatePrompt()
+        updateAppHighScoreTextField()
 
         // give leaderboardStackView a background color as wide as the safeAreaView
         pinBackgroundView(backgroundView,
@@ -66,8 +67,13 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                         print("authenticateLocalPlayer() localPlayer.loadDefaultLeaderboardIdentifier(): \(error)")
                         #endif
                     } else {
-                        // get current best score - updated in completion block
-                        self.updateScoreFromLeaderboard()
+                        // If user deleted there local database score this will try to update
+                        // it with the score from there Leaderboard score if it exists.
+                        if AppDelegate.highScore == nil {
+                            Task {
+                                await self.updateAppScoreFromLeaderboard()
+                            }
+                        }
                     }
                 }
 
@@ -93,68 +99,92 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     }
 
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-        gameCenterViewController.dismiss(animated: true, completion: nil)
+        gameCenterViewController.dismiss(animated: true)
     }
 
     @IBAction func checkGCLeaderboard(_ sender: Any) {
-        let gcVC = GKGameCenterViewController()
+        let gcVC = GKGameCenterViewController(leaderboardID: gcLeaderboardIdentifier, playerScope: .global, timeScope: .allTime)
         gcVC.gameCenterDelegate = self
-        gcVC.viewState = .leaderboards
-        gcVC.leaderboardIdentifier = gcLeaderboardIdentifier
 
         present(gcVC, animated: true, completion: nil)
     }
 
     @IBAction func addScoreAndSubmitToGC(_ sender: Any) {
         if let highestScore = AppDelegate.highScore {
-            if GKLocalPlayer.local.isAuthenticated {
-                // Initialize the leaderboard for the current local player
-                let gkLeaderboard = GKLeaderboard(players: [GKLocalPlayer.local])
-                gkLeaderboard.identifier = gcLeaderboardIdentifier
-                gkLeaderboard.timeScope = GKLeaderboard.TimeScope.allTime
-
-                // Get best score from the leaderboard if it exists
-                // Scores are reported in the Closure
-                gkLeaderboard.loadScores() { (scores, error) -> Void in
-                    if error != nil {
-                        #if DEBUG
-                        print("updateScoreFromLeaderboard() - gkLeaderboard.loadScores() - " + error.debugDescription)
-                        #endif
-                    } else {
-                        var title = ""
-                        var message = ""
-                        let score = GKScore(leaderboardIdentifier: self.gcLeaderboardIdentifier)
-
-                        // set score to the current highest score
-                        score.value = highestScore
-
-                        // if a score already exits on the leader board compare to it
-                        if let scores = scores, scores.count > 0 {
-                            let leaderboardsHighestScore = Int(scores[0].value)
-
-                            if leaderboardsHighestScore >= highestScore {
-                                title = "Your leaderboard score is already the best."
-                                message = ""
-                                self.showOkAlert(title: title, message: message)
-
-                                return
-                            }
-                        }
-
-                        // Submit best score to GC leaderboard
-                        GKScore.report([score]) { error in
-                            if error == nil {
-                                title = "Success"
-                                message = "Your high score was added to the Leaderboard."
-                            } else {
-                                title = "The high score was unable to be added to the Leaderboard."
-                                message = "error!.localizedDescription"
-                            }
-
-                            self.showOkAlert(title: title, message: message)
+            Task {
+                // get score from the leaderboard if one exists
+                if let leaderboardHighestScore = try await getHighScoreFromLeadboardForLocalPlayer(), leaderboardHighestScore >= highestScore {
+                    self.showOkAlert(title: "Your leaderboard score is already the best.", message: "")
+                } else {
+                    // Submit best score to GC leaderboard
+                    GKLeaderboard.submitScore(Int(highestScore), context: 0, player: GKLocalPlayer.local, leaderboardIDs: [self.gcLeaderboardIdentifier]) { error in
+                        if error == nil {
+                            self.showOkAlert(title: "Success", message: "Your score was added to the Leaderboard.")
+                        } else {
+                            self.showOkAlert(title: "The score was unable to be added to the Leaderboard.", message: "error!.localizedDescription")
                         }
                     }
                 }
+            }
+        }
+    }
+
+    func getHighScoreFromLeadboardForLocalPlayer() async throws -> Int? {
+        var score: Int? = nil
+
+        // Check if the user is authenticated
+        if (GKLocalPlayer.local.isAuthenticated) {
+            if let leaderboards = await loadLeaderboards() {
+                let (localPlayer, _) = try await leaderboards[0].loadEntries(for: [GKLocalPlayer.local], timeScope: .allTime)
+                if let localPlayer = localPlayer {
+                    score = localPlayer.score
+                }
+            } else {
+                #if DEBUG
+                print("getHighScoreFromLeadboardForLocalPlayer() - Can't loadLeaderboards")
+                #endif
+            }
+        } else {
+            #if DEBUG
+            print("getHighScoreFromLeadboardForLocalPlayer() - Player is not authenticated")
+            #endif
+        }
+
+        return score
+    }
+
+//    func loadEntries(for leaderboard: GKLeaderboard) async -> Int? {
+//        // since it's an async function, we are allowed to use await
+//        await withCheckedContinuation { continuation in
+//            leaderboard.loadEntries(for: [GKLocalPlayer.local], timeScope: .allTime) { player, _, error in
+//                var score: Int? = nil
+//
+//                if let player = player {
+//                    score = player.score
+//                } else {
+//#if DEBUG
+//                    print("getHighScoreFromLeadboardForLocalPlayer() - GKLeaderboard.loadEntries() - " + error.debugDescription)
+//#endif
+//                }
+//
+//                // resume the awaiting call to withCheckedContinuation
+//                continuation.resume(returning: score)
+//            }
+//        }
+//    }
+
+    func loadLeaderboards() async -> [GKLeaderboard]? {
+        // since it's an async function, we are allowed to use await
+        await withCheckedContinuation { continuation in
+            GKLeaderboard.loadLeaderboards(IDs: [gcLeaderboardIdentifier]) { leaderboards, error in
+                if error != nil {
+                    #if DEBUG
+                    print("loadLeaderboards() - GKLeaderboard.loadLeaderboards() - " + error.debugDescription)
+                    #endif
+                }
+
+                // resume the awaiting call to withCheckedContinuation
+                continuation.resume(returning: leaderboards)
             }
         }
     }
@@ -204,75 +234,59 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         return buttonPressed
     }
 
-    /// If user deleted there local data this will try to update it with the score from there Leaderboard score
-    /// Gets the score from GC in a completion block
-    func updateScoreFromLeaderboard() {
-        if GKLocalPlayer.local.isAuthenticated {
-            // Initialize the leaderboard for the current local player
-            let gkLeaderboard = GKLeaderboard(players: [GKLocalPlayer.local])
-            gkLeaderboard.identifier = gcLeaderboardIdentifier
-            gkLeaderboard.timeScope = GKLeaderboard.TimeScope.allTime
+    // If user deleted there local database score this will try to update
+    // it with the score from there Leaderboard score if it exists.
+    func updateAppScoreFromLeaderboard() async {
+        if let leaderboardHighestScore = try? await getHighScoreFromLeadboardForLocalPlayer() {
+            updateAppHighScore(with: Int64(leaderboardHighestScore))
 
-            // Get best score in Game Center if it exists
-            // Scores are reported in the Closure
-            gkLeaderboard.loadScores() { (scores, error) -> Void in
-                if error != nil {
-                    #if DEBUG
-                    print("updateScoreFromLeaderboard() - gkLeaderboard.loadScores() - " + error.debugDescription)
-                    #endif
-                } else {
-                    // are there scores available
-                    if let scores = scores, scores.count > 0 {
-                        let currentScore = scores[0].value
+            do {
+                // save score to Core Data
+                try AppDelegate.viewContext.save()
 
-                        updateHighestScore(with: currentScore)
+                updateAppHighScoreTextField()
 
-                        do {
-                            // save score to Core Data
-                            try AppDelegate.viewContext.save()
-
-                            self.updatePrompt()
-
-                            #if DEBUG
-                            print("Best score from Game Center: \(currentScore)")
-                            #endif
-                        }
-                        catch {
-                            print("updateScoreFromLeaderboard() - Couldn't save AppDelegate.viewContext")
-                        }
-                    }
-                }
+                #if DEBUG
+                print("Best score from Game Center: \(leaderboardHighestScore)")
+                #endif
+            } catch {
+                print("updateScoreFromLeaderboard() - Couldn't save viewContext")
             }
+        } else {
+            print("updateScoreFromLeaderboard() - Couldn't getHighScoreFromLeadboardForLocalPlayer")
         }
+    }
 
-        /// if user deleted there local data this will try to update it with the score from the Leaderboard
-        func updateHighestScore(with score: Int64) {
-            if score >= LeaderboardTableViewController.lowestScorePosible {
-                if let highestScore = AppDelegate.highScore {
-                    if score > highestScore {
-                        AppDelegate.highScore = score
-                    }
-                } else {
+    /// set applications high score if none yet exists or update it to a better score
+    func updateAppHighScore(with score: Int64) {
+        if score >= LeaderboardTableViewController.lowestScorePosible {
+            if let highScore = AppDelegate.highScore {
+                // compare score to current high score
+                if score > highScore {
                     AppDelegate.highScore = score
                 }
+            } else {
+                // no high score recorded yet
+                AppDelegate.highScore = score
             }
         }
     }
 
-    /// update the heading prompt high score
-    fileprivate func updatePrompt() {
-        if var prompt = themeHeading.prompt, let appendIndex = themeHeading.prompt?.endIndex(of: ": ") {
-            prompt = String(prompt.prefix(upTo: appendIndex))
+    /// update the applications high score TextField
+    fileprivate func updateAppHighScoreTextField() {
+        // update UI on main thread
+        return DispatchQueue.main.async { [self] in
+            if var prompt = themeHeading.prompt, let appendIndex = themeHeading.prompt?.endIndex(of: ": ") {
+                prompt = String(prompt.prefix(upTo: appendIndex))
 
-            if let highestScore = AppDelegate.highScore {
-                prompt.append("\(highestScore)")
+                if let highestScore = AppDelegate.highScore {
+                    prompt.append("\(highestScore)")
+                }
+
+                themeHeading.prompt = prompt
             }
-
-            themeHeading.prompt = prompt
         }
     }
-
-    @IBOutlet var safeAreaView: UIView!
 
     /// backgroundView gives UIStackView a background color since UIStackView does NO rendering
     private lazy var backgroundView: UIView = {

@@ -21,9 +21,10 @@ struct Card: Hashable
             } else {
                 stopUsingBonusTime()
             }
-
         }
     }
+
+    var isTransitioningToFaceUp = false
 
     var isMatched = false {
         didSet {

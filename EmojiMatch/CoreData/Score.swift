@@ -5,7 +5,6 @@
 //  Created by Mike Retondo on 8/24/19.
 //
 
-import UIKit
 import CoreData
 
 class Score: NSManagedObject
@@ -31,22 +30,23 @@ class Score: NSManagedObject
 
         set(newValue) {
             if let newValue = newValue {
-                let highestScore = highScore
+                // get high score from this Entity
+                let highScore = highScore
 
-                if highestScore == nil || newValue > highestScore! {
+                if highScore == nil || newValue > highScore! {
                     let context = AppDelegate.viewContext
 
-                    // NOTE: no data is retrieved here, the database only retrieves the record count
+                    // NOTE: no data is retrieved here, the database only retrieves the Entities record count
                     if let count = try? context.count(for: Score.fetchRequest()), count == 0 {
-                        // save first highest score into empty table
+                        // set first high score into empty Entity
                         let score = Score(context: context)
                         score.highScore = newValue
                     } else {
-                        // modify previous saved highest score
+                        // modify previous saved high score
                         let request: NSFetchRequest<Score> = Score.fetchRequest()
                         do {
-                            if let highestScores = try? context.fetch(request) {
-                                let score = highestScores[0]    // there's only one score in the table
+                            if let highScores = try? context.fetch(request) {
+                                let score = highScores[0]   // there's only one score in the Entity
                                 score.highScore = newValue
                             }
                         }

@@ -56,3 +56,58 @@ extension Int {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//func getNumber(playerOne: Int, playerTwo: Int) -> Int {
+//    guard playerOne >= 0 && playerOne <= 1_000_000_000 && playerTwo >= 0 && playerTwo <= 1_000_000_000 else {return -1}
+//
+//    var playerOneNums: [Int]
+//    var playerTwoNums: [Int]
+//
+//    for i in 0...1000000000 {
+//        var num: Int = i/2
+//        if num % 2 == 0 {
+//            playerOneNums.append(i)
+//        }
+//    }
+//}
+//
+//func getNumber(playerOne: Int, playerTwo: Int) -> Int {
+//    guard playerOne >= 0 && playerOne <= 1_000_000_000 && playerTwo >= 0 && playerTwo <= 1_000_000_000 else {return -1}
+//
+//    var playerOneNums: [Int] = []
+//    var playerTwoNums: [Int] = []
+//
+//    var currentNum = playerOne
+//    while currentNum % 2 == 0 {
+//        currentNum = currentNum / 2
+//        playerOneNums.append(currentNum / 2)
+//    }
+//    playerOneNums.append(currentNum % 2)
+//
+//    currentNum = playerTwo
+//    while currentNum % 2 == 0 {
+//        currentNum = currentNum / 2
+//        playerTwoNums.append(currentNum / 2)
+//    }
+//    playerTwoNums.append(currentNum % 2)
+//
+//    let commonElements: [Int] = playerOneNums.filter(playerTwoNums.contains)
+//
+//    return commonElements
+//
+//}
