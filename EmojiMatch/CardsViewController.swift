@@ -47,12 +47,12 @@ class CardsViewController: UIViewController
         let card = game.cards[cardNumber]
         guard !card.isFaceUp && !card.isTransitioningToFaceUp else { return } // ignore touches on Transitioning/face up cards
 
-        // if a card is currently being flipped i.e. animated, wait for it to finish before processing new touched card
+        // if two cards have not finished flipping back down then wait for them to finish before processing new touched card
         if flipCompleted {
             flipCompleted = false
         } else if game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards.count == 2 {
-            // async alows previous card flipping animation to
-            // complete before starting animation of second card.
+            // async alows previous cards flipping animation to
+            // complete before starting animation of third card.
             DispatchQueue.main.async {
                 self.touchCard(sender)
             }
