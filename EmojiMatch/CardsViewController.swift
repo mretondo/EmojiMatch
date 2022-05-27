@@ -425,8 +425,6 @@ class CardsViewController: UIViewController
                                                 )
                                             }
                                         )
-                                    } else {
-//                                        self.flipCompleted = true
                                     }
                                 }
                             }
