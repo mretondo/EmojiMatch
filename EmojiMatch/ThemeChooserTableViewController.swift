@@ -115,9 +115,12 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
     }
     */
 
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == "Choose Theme" else { return }
 
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
         if let EmojiMatchVC = segue.destination as? CardsViewController {
             EmojiMatchVC.container = container
 
@@ -139,16 +142,6 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
             }
         }
     }
-    
-    /*
-    // MARK: - Navigation
-     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
