@@ -21,33 +21,42 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
     // MARK: - Table view data source
     var fetchedResultsController: NSFetchedResultsController<Themes>?
 
+//    // need to call tableView.register() if not using Storyboard
+//    // if using Storyboard then in the Identity Inspector set Custom Class to your Custom Cell Classname
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        tableView.register(CustomThemeChooserCell.self, forCellReuseIdentifier: CustomThemeChooserCell.identifier)
+//    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath ) as? CustomThemeChooserCell {
+            guard let theme = fetchedResultsController?.object(at: indexPath) else {
+                fatalError("Attempt to configure cell without a managed object")
+            }
 
-        guard let theme = fetchedResultsController?.object(at: indexPath) else {
-            fatalError("Attempt to configure cell without a managed object")
+            cell.text = theme.name!
+            cell.image = emojiImageForTheme(theme)
+
+            return cell
+        } else {
+            return UITableViewCell()
         }
-
-        cell.textLabel?.text = theme.name!
-        cell.imageView?.image = emojiImageForTheme(theme)
-
-        return cell
     }
 
     // pick emoji to display before table item label
     private func emojiImageForTheme(_ theme: Themes) -> UIImage? {
-        // pick emoji to display before label and cache it
+        // pick emoji to display before label
         // each time the table view is displayed a new set of random emojis will be choosen
         let name = theme.name!
-        let fontSize = CGFloat(44.0)
 
-        if let emoji = emojiImageViewCache[name] {
-            return emoji.textToImage(ofFontSize: fontSize)
-        } else {
-            let emoji = pickRandomEmoji(from: theme.emojis!)
+        var emoji = emojiImageViewCache[name]
+        if emoji == nil {
+            // add emoji to cache
+            emoji = pickRandomEmoji(from: theme.emojis!)
             emojiImageViewCache[name] = emoji
-            return emoji.textToImage(ofFontSize: fontSize)
         }
+
+        return emoji?.textToImage(withFontSize: 44.0)
     }
 
     private func updateUI() {
@@ -150,29 +159,41 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
     }
 }
 
-//extension UIView {
-//    var heightConstaint: NSLayoutConstraint? {
-//        get {
-//            return constraints.first(where: {
-//                $0.firstAttribute == .height && $0.relation == .equal
-//            })
-//        }
-//        set { setNeedsLayout() }
-//    }
+class CustomThemeChooserCell: UITableViewCell {
+    static let identifier = "ThemeChooserCell"
+
+    public var text = "empty"
+    public var image: UIImage? = nil
+
+    // cache for the random emojis to be shown while the view
+    // table is shown, resets after a selection has been made
+    public var emojiImageViewCache: [String : String] = [:]
+
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        super.updateConfiguration(using: state)
+
+        var contentConfig = defaultContentConfiguration().updated(for: state)
+
+        // increase 'text' default font size
+        let fontSize = CGFloat(44.0)
+        contentConfig.textProperties.font = contentConfig.textProperties.font.withSize(fontSize)
+        contentConfig.text = text
+
+        contentConfig.image = image
+
+        contentConfiguration = contentConfig
+
+//        var backgroundConfig = backgroundConfiguration?.updated(for: state)
+//        backgroundConfig?.backgroundColor = .purple
 //
-//    var widthConstaint: NSLayoutConstraint? {
-//        get {
-//            return constraints.first(where: {
-//                $0.firstAttribute == .width && $0.relation == .equal
-//            })
+//        if state.isHighlighted || state.isSelected {
+//            backgroundConfig?.backgroundColor = .orange
+//            contentConfig.textProperties.color = .red
+//            contentConfig.imageProperties.tintColor = .yellow
 //        }
-//        set { setNeedsLayout() }
-//    }
-//}
-//
-//extension UIView {
-//    func copyView<T: UIView>() throws -> T? {
-//        let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
-//        return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? T
-//    }
-//}
+
+        contentConfiguration = contentConfig
+//        backgroundConfiguration = backgroundConfig
+    }
+}
+
