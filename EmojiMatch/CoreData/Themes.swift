@@ -15,11 +15,11 @@ class Themes: NSManagedObject
             // theme, emojis, backgroundColor, faceDownColor, faceUpColor
             var themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)] = []
 
-            let context = AppDelegate.viewContext
-            let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+            let moc = AppDelegate.viewContext
+            let request = fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
 
-            if let results = try? context.fetch(request) {
+            if let results = try? moc.fetch(request) {
                 for result in results {
                     var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)
 
@@ -42,12 +42,12 @@ class Themes: NSManagedObject
             // theme name, emojis
             var themeNames: [(name: String, emojis: String)] = []
 
-            let context = AppDelegate.viewContext
-            let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+            let moc = AppDelegate.viewContext
+            let request = fetchRequest()
             request.propertiesToFetch = ["name", "emojis"]
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
 
-            if let results = try? context.fetch(request) {
+            if let results = try? moc.fetch(request) {
                 for result in results {
                     var themeName: (name: String, emojis: String)
 
@@ -63,11 +63,11 @@ class Themes: NSManagedObject
     }
 
     class func theme(forName name: String) -> (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
-        let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+        let request = fetchRequest()
         request.predicate = NSPredicate(format: "name = %@", name)
-        let context = AppDelegate.viewContext
+        let moc = AppDelegate.viewContext
 
-        if let results = try? context.fetch(request) {
+        if let results = try? moc.fetch(request) {
             if let result = results.first {
                 // theme name, emojis, backgroundColor, faceDownColor, faceUpColor
                 var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)
@@ -98,13 +98,13 @@ class Themes: NSManagedObject
     /// remove all data from themes
     ///
     class func removeAllData() throws {
-        let context = AppDelegate.viewContext
+        let moc = AppDelegate.viewContext
 
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Themes.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
         do {
-            try context.persistentStoreCoordinator!.execute(deleteRequest, with: context)
+            try moc.persistentStoreCoordinator!.execute(deleteRequest, with: moc)
             #if DEBUG
             print ("Removed All Theme Data\n")
             #endif
@@ -119,10 +119,10 @@ class Themes: NSManagedObject
     /// delete themes that are no longer used
     ///
     class func deleteUnusedThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
-        let context = AppDelegate.viewContext
+        let moc = AppDelegate.viewContext
 
-        let request: NSFetchRequest<Themes> = Themes.fetchRequest()
-        let results = try context.fetch(request)
+        let request = fetchRequest()
+        let results = try moc.fetch(request)
 
         for result in results {
             var found = false
@@ -135,7 +135,7 @@ class Themes: NSManagedObject
             }
 
             if !found {
-                context.delete(result)
+                moc.delete(result)
             }
         }
     }
@@ -144,17 +144,17 @@ class Themes: NSManagedObject
     /// add themes that don't already exist in database
     ///
     class func addNewThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
-        let context = AppDelegate.viewContext
+        let moc = AppDelegate.viewContext
 
-        let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+        let request = fetchRequest()
 
         for theme in themes {
             request.predicate = NSPredicate(format: "name = %@", theme.name)
-            let matches = try context.fetch(request)
+            let matches = try moc.fetch(request)
 
             if matches.count != 1 {
                 // theme doesn't exist so add it
-                let themes = Themes(context: context)
+                let themes = Themes(context: moc)
 
                 themes.backgroundColor  = theme.backgroundColor
                 themes.emojis           = theme.emojis
