@@ -96,7 +96,7 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
 
     private func updateUI() {
         if let context = container?.viewContext {
-            let request: NSFetchRequest<Themes> = Themes.fetchRequest()
+            let request = Themes.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))]
 
             fetchedResultsController = NSFetchedResultsController<Themes>(fetchRequest: request,

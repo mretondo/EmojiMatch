@@ -100,8 +100,8 @@ class Themes: NSManagedObject
     class func removeAllData() throws {
         let moc = AppDelegate.viewContext
 
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Themes.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let request: NSFetchRequest<NSFetchRequestResult> = fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
 
         do {
             try moc.persistentStoreCoordinator!.execute(deleteRequest, with: moc)
