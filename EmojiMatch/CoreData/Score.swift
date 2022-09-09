@@ -12,7 +12,7 @@ class Score: NSManagedObject
     public static var highScore: Int64? {
         get {
             let context = AppDelegate.viewContext
-            let request: NSFetchRequest<Score> = Score.fetchRequest()
+            let request = fetchRequest()
 
             do {
                 let scores = try context.fetch(request)
@@ -63,7 +63,7 @@ class Score: NSManagedObject
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
         AppDelegate.viewContext.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.viewContext.count(for: Score.fetchRequest()) {
+            if let count = try? AppDelegate.viewContext.count(for: fetchRequest()) {
                 print ("\(count) Score\n")
             } else {
                 print ("No Score\n")

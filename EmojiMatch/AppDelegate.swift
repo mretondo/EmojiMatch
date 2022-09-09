@@ -40,14 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        #if DEBUG
-            // find where database is stored
-            let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,
-                                                            FileManager.SearchPathDomainMask.userDomainMask,
-                                                            true)
-            print(paths[0])
-        #endif
-
         let themes = [
             // name, emojis, backgroundColor, faceDownColor, faceUpColor
             ("Sports",        "🏀🏈⚾️🏊‍♀️🏌️‍♂️🚴‍♀️🏸🏒🏄‍♀️🎯🎳🏇🏂⛷🏋🏻‍♂️🤸‍♂️⛹️‍♂️🎾🏓⚽️🏏🛹🏹⛸🥌", #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
@@ -82,6 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func printThemesTableStats() {
         #if DEBUG
+        whereIsCoreDataFileDirectory()
+
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
         persistentContainer.viewContext.perform {
             // no data is retrieved, the database only retrieves the record count
@@ -92,6 +86,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         #endif
+    }
+
+    func whereIsCoreDataFileDirectory() {
+        let path = NSPersistentContainer
+            .defaultDirectoryURL()
+            .absoluteString
+            .replacingOccurrences(of: "file://", with: "Core Data Dir: ")
+            .removingPercentEncoding
+
+        print(path ?? "Not found")
     }
 
 	func applicationWillResignActive(_ application: UIApplication) {
