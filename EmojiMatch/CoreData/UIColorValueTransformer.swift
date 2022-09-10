@@ -21,6 +21,7 @@ final class UIColorValueTransformer: NSSecureUnarchiveFromDataTransformer {
     }
 
     /// Registers the transformer.
+    /// A good time to do this is right before setting up the persistent container.
     public static func register() {
         let transformer = UIColorValueTransformer()
         ValueTransformer.setValueTransformer(transformer, forName: name)
