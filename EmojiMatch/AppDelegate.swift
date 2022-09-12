@@ -57,9 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // update the database to reflect themes from above
         // might have deleted some and added new ones
         do {
-            // Transformer for UIColor
-            UIColorValueTransformer.register()
-
             try Themes.updateDatabase(with: themes)
         } catch let error as NSError {
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -131,6 +128,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
+
+        // Register the transformer at the very beginning.
+        // Transformer for UIColor
+        UIColorValueTransformer.register()
+
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
