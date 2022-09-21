@@ -8,12 +8,41 @@
 import UIKit
 import CoreData
 
+struct Theme: Hashable {
+    var name: String
+    var emojis: String
+    var backgroundColor: UIColor
+    var faceDownColor: UIColor
+    var faceUpColor: UIColor
+
+    let identifier = UUID()
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+    static func == (lhs: Theme, rhs: Theme) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+}
+
 class Themes: NSManagedObject
 {
-    class var themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)] {
+    static var defaultThemes = [
+        // name, emojis, backgroundColor, faceDownColor, faceUpColor
+        Theme(name: "Sports", emojis: "🏀🏈⚾️🏊‍♀️🏌️‍♂️🚴‍♀️🏸🏒🏄‍♀️🎯🎳🏇🏂⛷🏋🏻‍♂️🤸‍♂️⛹️‍♂️🎾🏓⚽️🏏🛹🏹⛸🥌", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Animals", emojis: "🐶🐠🦊🐻🐨🐒🐸🐤🐰🐽🦆🦅🦋🐞🐌🐺🦖🕷🦞🐬🐫🦒🦜🐎🐄", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Faces", emojis: "😃🤣😍🤢🤪🤓😬🙄😡😎🥶🤥😇🤠🤮🙁😤😫🥳😁😮🤐😳😅🥺", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Christmas", emojis: "🎅🏻🧣🎄❄️⛄️🎁🌨☃️🤶🏻🧤", backgroundColor: #colorLiteral(red: 0, green: 0.2784313725, blue: 0.1529411765, alpha: 1), faceDownColor: #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), faceUpColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+        Theme(name: "Halloween", emojis: "🎃🦇😱🙀😈👻🍭🍬🍎🧛🏻‍♂️🧟‍♂️👺⚰️", backgroundColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), faceDownColor: #colorLiteral(red: 1, green: 0.5781051517, blue: 0, alpha: 1), faceUpColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)),
+        Theme(name: "Food", emojis: "🍏🍎🍋🍉🍇🍒🥥🥑🥦🌽🥕🥯🥨🥩🍗🌭🍔🍟🍕🌮🍦🧁🍰🎂🍭🍩☕️🍺🧀🍌🌶🍅🥒🍊", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Travel", emojis: "🚗🚌🏎🚑🚒🚜🛴🚲🛵🚔🚠🚃🚂✈️🛩🛰🚀🛸🚁🛶⛵️🛳🚦🗽🗿🏰🏯🎢🏝🌋⛺️🏠🏛🕌⛩", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Flags", emojis: "🏴‍☠️🚩🏳️‍🌈🇺🇸🇨🇦🇫🇷🇨🇳🇷🇺🇮🇳🇮🇱🇯🇵🇮🇹🎌🇲🇾🇲🇽🇳🇵🇳🇴🇵🇦🇨🇭🇬🇧🏁🇮🇪🇲🇾🇻🇳🇧🇩", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Objects", emojis: "⌚️📱💻⌨️🖥🖨🕹🗜📀📸🎥📽🎞📞📺🧭⏰⏳📡🔦🧯🛠🧲🧨💈💊🛎🛏🛒📭📜📆📌🔍🔐🚿🧬📋📎🧷🧮🔬", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+        Theme(name: "Potpourri", emojis: "🌎🦕🧵🌴🌭🚀⏰❤️🍿⭐️🥶🎓🕶🤡🐝🦄🍄🌈🌹☔️🍎🍉🍪🥨🍒🎲🎱🥁🛵✈️🏰⛵️💾💡🧲✏️📌💰🔔🇺🇸📫🏆", backgroundColor: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), faceDownColor: #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), faceUpColor: #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)),
+    ]
+
+    class var themes: [Theme] {
         get {
-            // theme, emojis, backgroundColor, faceDownColor, faceUpColor
-            var themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)] = []
+            var themes: [Theme] = []
 
             let moc = AppDelegate.viewContext
             let request = fetchRequest()
@@ -21,13 +50,13 @@ class Themes: NSManagedObject
 
             if let results = try? moc.fetch(request) {
                 for result in results {
-                    var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)
-
-                    theme.name = result.name!
-                    theme.emojis = result.emojis!
-                    theme.backgroundColor = result.backgroundColor as! UIColor
-                    theme.faceUpColor = result.faceUpColor as! UIColor
-                    theme.faceDownColor = result.faceDownColor as! UIColor
+                    let theme = Theme (
+                        name: result.name!,
+                        emojis: result.emojis!,
+                        backgroundColor: result.backgroundColor as! UIColor,
+                        faceDownColor: result.faceDownColor as! UIColor,
+                        faceUpColor: result.faceUpColor as! UIColor
+                    )
 
                     themes.append(theme)
                 }
@@ -62,21 +91,20 @@ class Themes: NSManagedObject
         }
     }
 
-    class func theme(forName name: String) -> (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
+    class func theme(forName name: String) -> Theme? {
         let request = fetchRequest()
         request.predicate = NSPredicate(format: "name = %@", name)
         let moc = AppDelegate.viewContext
 
         if let results = try? moc.fetch(request) {
             if let result = results.first {
-                // theme name, emojis, backgroundColor, faceDownColor, faceUpColor
-                var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)
-
-                theme.name = result.name!
-                theme.emojis = result.emojis!
-                theme.backgroundColor = result.backgroundColor as! UIColor
-                theme.faceUpColor = result.faceUpColor as! UIColor
-                theme.faceDownColor = result.faceDownColor as! UIColor
+                let theme = Theme (
+                    name: result.name!,
+                    emojis: result.emojis!,
+                    backgroundColor: result.backgroundColor as! UIColor,
+                    faceDownColor: result.faceDownColor as! UIColor,
+                    faceUpColor: result.faceUpColor as! UIColor
+                )
 
                 return theme
             }
@@ -88,7 +116,7 @@ class Themes: NSManagedObject
     ///
     /// create the Themes entity if it doesn't exist then add the new themes and delete old unused themes
     ///
-    class func updateDatabase(with themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
+    class func updateDatabase(with themes: [Theme]) throws {
 //        try removeAllData()
         try deleteUnusedThemes(themes)
         try addNewThemes(themes)
@@ -118,7 +146,7 @@ class Themes: NSManagedObject
     ///
     /// delete themes that are no longer used
     ///
-    class func deleteUnusedThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
+    class func deleteUnusedThemes(_ themes: [Theme]) throws {
         let moc = AppDelegate.viewContext
 
         let request = fetchRequest()
@@ -143,7 +171,7 @@ class Themes: NSManagedObject
     ///
     /// add themes that don't already exist in database
     ///
-    class func addNewThemes(_ themes: [(name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)]) throws {
+    class func addNewThemes(_ themes: [Theme]) throws {
         let moc = AppDelegate.viewContext
 
         let request = fetchRequest()
