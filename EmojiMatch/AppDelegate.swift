@@ -40,14 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        do {
-            try Themes.updateDatabase(with: Themes.defaultThemes)
-        } catch let error as NSError {
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            fatalError("Couldn't update database - CoreData error \(error), \(error.userInfo)")
-        }
-
-        saveContext ()
+//        do {
+//            try Themes.updateDatabase(with: Themes.defaultThemes)
+//        } catch let error as NSError {
+//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            fatalError("Couldn't update database - CoreData error \(error), \(error.userInfo)")
+//        }
+//
+//        saveChangesToDisk ()
         printThemesTableStats()
 
         return true
@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveContext()
+        self.saveChangesToDisk()
     }
 
     // MARK: - Core Data stack
@@ -119,10 +119,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            // Avoid duplicating objects
+            // For properties which have been changed in both the external source and in memory, the in memory changes trump the external ones
+            container.viewContext.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
 
+            if let error = error as NSError? {
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -131,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
-                fatalError("Unresolved CoreData error \(error), \(error.userInfo)")
+                fatalError("Failed to load database: \(error), \(error.userInfo)")
             }
         }
         return container
@@ -139,17 +140,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data Saving support
 
-    func saveContext () {
+    /// Save the changes from the CoreData database held in memory to the on disk database
+    func saveChangesToDisk() {
         let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved CoreData error \(nserror), \(nserror.userInfo)")
-            }
+
+        guard context.hasChanges else { return }
+
+        do {
+            try context.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nserror = error as NSError
+            fatalError("Unresolved CoreData error \(nserror), \(nserror.userInfo)")
         }
     }
 }

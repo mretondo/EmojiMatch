@@ -15,32 +15,91 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
     var emojiImageViewCache: [String : String] = [:]
 
     var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
-        didSet { updateUI() }
+        didSet {  }
     }
 
-    // MARK: - Table view data source
-    var fetchedResultsController: NSFetchedResultsController<Themes>?
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-//    // need to call tableView.register() if not using Storyboard
-//    // if using Storyboard then in the Identity Inspector set Custom Class to your Custom Cell Classname
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        tableView.register(CustomThemeChooserCell.self, forCellReuseIdentifier: CustomThemeChooserCell.identifier)
-//    }
+        // need to call tableView.register() if NOT using Storyboard else
+        // in the Identity Inspector set Custom Class to your Custom Cell Classname
+        //tableView.register(CustomThemeChooserCell.self, forCellReuseIdentifier: CustomThemeChooserCell.identifier)
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "ThemeChooserCell", for: indexPath ) as? CustomThemeChooserCell {
-            guard let theme = fetchedResultsController?.object(at: indexPath) else {
-                fatalError("Attempt to configure cell without a managed object")
+        setupFetchedResultsController()
+        
+        setupTableViewDiffableDataSource()
+
+        loadDefaultThemes(Themes.defaultThemes)
+    }
+
+    /// Setup the `NSFetchedResultsController`, which manages the data shown in our table view
+    private func setupFetchedResultsController() {
+        if let moc = container?.viewContext {
+            let request = Themes.fetchRequest()
+            //            request.fetchBatchSize = 10 // getting data over url
+
+            let sortDescriptors = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+            request.sortDescriptors = [sortDescriptors]
+
+            fetchedResultsController = NSFetchedResultsController<Themes>(fetchRequest: request,
+                                                                          managedObjectContext: moc,
+                                                                          sectionNameKeyPath: nil,
+                                                                          cacheName: nil)
+            fetchedResultsController?.delegate = self
+
+            do {
+                try fetchedResultsController?.performFetch()
+                setupSnapshot()
+            } catch {
+                fatalError("viewDidLoad - Failed to fetch results from the database")
             }
-
-            cell.text = theme.name!
-            cell.image = emojiImageForTheme(theme)
-
-            return cell
-        } else {
-            return UITableViewCell()
         }
+    }
+
+    /// Setup the `UITableViewDiffableDataSource` with a cell provider that sets up the default table view cell
+    private func setupTableViewDiffableDataSource() {
+        diffableDataSource = UITableViewDiffableDataSource<Sections, Themes>(tableView: tableView) { (tableView, indexPath, value) -> UITableViewCell? in
+            if let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath ) as? CustomThemeChooserCell {
+                cell.text = value.name!
+                cell.image = self.emojiImageForTheme(value)
+
+                return cell
+            } else {
+                return UITableViewCell()
+            }
+        }
+
+        setupSnapshot()
+    }
+
+    private func setupSnapshot() {
+        var diffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, Themes>()
+        diffableDataSourceSnapshot.appendSections(Sections.allCases)
+        diffableDataSourceSnapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [], toSection: .first)
+        diffableDataSource?.apply(diffableDataSourceSnapshot) // { impliment closure when the animations are complete }
+    }
+
+    /// Load the default Themes moc into CoreData and display them
+    private func loadDefaultThemes(_ themes: [Theme]) {
+        let moc = AppDelegate.viewContext
+
+        for theme in Themes.defaultThemes {
+            let mocThemes = Themes(context: moc)
+
+            mocThemes.backgroundColor  = theme.backgroundColor
+            mocThemes.emojis           = theme.emojis
+            mocThemes.faceDownColor    = theme.faceDownColor
+            mocThemes.faceUpColor      = theme.faceUpColor
+            mocThemes.name             = theme.name
+        }
+
+        AppDelegate.sharedAppDelegate.saveChangesToDisk()
+//        (UIApplication.shared.delegate as? AppDelegate)?.saveChangesToDisk()
+        setupSnapshot()
+    }
+
+    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        setupSnapshot()
     }
 
     /*
@@ -77,7 +136,6 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
         return true
     }
     */
-
     // pick emoji to display before table item label
     private func emojiImageForTheme(_ theme: Themes) -> UIImage? {
         // pick emoji to display before label
@@ -92,24 +150,6 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
         }
 
         return emoji?.textToImage(withFontSize: 44.0)
-    }
-
-    private func updateUI() {
-        if let context = container?.viewContext {
-            let request = Themes.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))]
-
-            fetchedResultsController = NSFetchedResultsController<Themes>(fetchRequest: request,
-                                                                          managedObjectContext: context,
-                                                                          sectionNameKeyPath: nil,
-                                                                          cacheName: nil)
-
-            fetchedResultsController?.delegate = self
-            try? fetchedResultsController?.performFetch()
-
-            // force table view to rearange the cell icons
-            tableView.reloadData()
-        }
     }
 
     public func pickRandomEmoji(from emojiChoices: String) -> String {
@@ -151,16 +191,10 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
             }
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        updateUI()
-    }
 }
 
 class CustomThemeChooserCell: UITableViewCell {
-    static let identifier = "ThemeChooserCell"
+    static let cellIdentifier = "ThemeChooserCell"
 
     public var text = "empty"
     public var image: UIImage? = nil

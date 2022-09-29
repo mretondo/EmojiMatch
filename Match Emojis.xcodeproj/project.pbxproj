@@ -15,7 +15,7 @@
 		279A7B4F28BEA79500ADEBFD /* MRUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 279A7B4E28BEA79500ADEBFD /* MRUtils */; };
 		27B8046C2312194D00488154 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8046B2312194D00488154 /* Score.swift */; };
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
-		27C053E42389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */; };
+		27C053E42389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift */; };
 		27C27AB123248D460091AB50 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB023248D460091AB50 /* Themes.swift */; };
 		27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */; };
 		27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */; };
@@ -36,7 +36,7 @@
 		278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorValueTransformer.swift; sourceTree = "<group>"; };
 		27B8046B2312194D00488154 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
 		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewControllerDataSource.swift; sourceTree = "<group>"; };
+		27C053E32389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeChooserTableViewController+DataSource.swift"; sourceTree = "<group>"; };
 		27C27AB023248D460091AB50 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
 		27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewController.swift; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
 				27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */,
 				27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */,
-				27C053E32389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift */,
+				27C053E32389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift */,
 				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */,
@@ -211,7 +211,7 @@
 			files = (
 				27B8046C2312194D00488154 /* Score.swift in Sources */,
 				2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */,
-				27C053E42389F6660022C88D /* ThemeChooserTableViewControllerDataSource.swift in Sources */,
+				27C053E42389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift in Sources */,
 				278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */,
 				EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */,

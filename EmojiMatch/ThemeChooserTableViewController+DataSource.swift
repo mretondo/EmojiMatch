@@ -1,5 +1,5 @@
 //
-//  ThemeChooserTableViewControllerDataSource.swift
+//  ThemeChooserTableViewController+DataSource.swift
 //  Match Emojis
 //
 //  Created by Mike Retondo on 11/23/19.
