@@ -147,7 +147,7 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
     */
     // pick emoji to display before table item label
     private func emojiImageForTheme(_ theme: Theme) -> UIImage? {
-        // pick emoji to display before label
+        // pick emoji to display before theme Name text
         // each time the table view is displayed a new set of random emojis will be choosen
         let name = theme.name!
 
@@ -193,7 +193,7 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
                                           faceUpColor: result.faceUpColor as! UIColor)
 
                     // show new random set of imojis in the table
-                    emojiImageViewCache.removeAll()
+//                    emojiImageViewCache.removeAll()
                 } else {
                     fatalError("prepare(for:sender:) - Attempt to fetched Results based on selected row failed")
                 }
@@ -207,10 +207,6 @@ class CustomThemeChooserCell: UITableViewCell {
 
     public var text = "empty"
     public var image: UIImage? = nil
-
-    // cache for the random emojis to be shown while the view
-    // table is shown, resets after a selection has been made
-    public var emojiImageViewCache: [String : String] = [:]
 
     override func updateConfiguration(using state: UICellConfigurationState) {
         super.updateConfiguration(using: state)
