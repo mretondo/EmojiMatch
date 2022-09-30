@@ -10,6 +10,8 @@ import CoreData
 
 class ThemeChooserTableViewController: FetchedResultsTableViewController
 {
+    var diffableDataSource: DiffableDataSource?
+
     // cache for the random emojis to be shown while the view
     // table is shown, resets after a selection has been made
     var emojiImageViewCache: [String : String] = [:]
@@ -29,19 +31,19 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
         
         setupTableViewDiffableDataSource()
 
-        loadDefaultThemes(Themes.defaultThemes)
+        loadDefaultThemes()
     }
 
     /// Setup the `NSFetchedResultsController`, which manages the data shown in our table view
     private func setupFetchedResultsController() {
         if let moc = container?.viewContext {
-            let request = Themes.fetchRequest()
-            //            request.fetchBatchSize = 10 // getting data over url
+            let request = Theme.fetchRequest()
+            //            request.fetchBatchSize = 10 // getting data using a url
 
             let sortDescriptors = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
             request.sortDescriptors = [sortDescriptors]
 
-            fetchedResultsController = NSFetchedResultsController<Themes>(fetchRequest: request,
+            fetchedResultsController = NSFetchedResultsController<Theme>(fetchRequest: request,
                                                                           managedObjectContext: moc,
                                                                           sectionNameKeyPath: nil,
                                                                           cacheName: nil)
@@ -58,39 +60,46 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
 
     /// Setup the `UITableViewDiffableDataSource` with a cell provider that sets up the default table view cell
     private func setupTableViewDiffableDataSource() {
-        diffableDataSource = UITableViewDiffableDataSource<Sections, Themes>(tableView: tableView) { (tableView, indexPath, value) -> UITableViewCell? in
-            if let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath ) as? CustomThemeChooserCell {
-                cell.text = value.name!
-                cell.image = self.emojiImageForTheme(value)
+        diffableDataSource = DiffableDataSource(tableView: tableView) { (tableView, indexPath, value) -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath )
 
-                return cell
-            } else {
-                return UITableViewCell()
+            let moc = AppDelegate.viewContext
+            if let theme = try? moc.existingObject(with: value.objectID) as? Theme {
+                self.configure(cell: cell, for: theme)
             }
+
+            return cell
         }
 
         setupSnapshot()
     }
 
+    func configure(cell: UITableViewCell, for theme: Theme) {
+        guard let cell = cell as? CustomThemeChooserCell else { return }
+
+        cell.text = theme.name!
+        cell.image = emojiImageForTheme(theme)
+    }
+
     private func setupSnapshot() {
-        var diffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, Themes>()
+        var diffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, Theme>()
         diffableDataSourceSnapshot.appendSections(Sections.allCases)
         diffableDataSourceSnapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [], toSection: .first)
         diffableDataSource?.apply(diffableDataSourceSnapshot) // { impliment closure when the animations are complete }
     }
 
     /// Load the default Themes moc into CoreData and display them
-    private func loadDefaultThemes(_ themes: [Theme]) {
+    private func loadDefaultThemes() {
         let moc = AppDelegate.viewContext
 
-        for theme in Themes.defaultThemes {
-            let mocThemes = Themes(context: moc)
+        for theme in Theme.defaultThemes {
+            let newTheme = Theme(context: moc)
 
-            mocThemes.backgroundColor  = theme.backgroundColor
-            mocThemes.emojis           = theme.emojis
-            mocThemes.faceDownColor    = theme.faceDownColor
-            mocThemes.faceUpColor      = theme.faceUpColor
-            mocThemes.name             = theme.name
+            newTheme.backgroundColor  = theme.backgroundColor
+            newTheme.emojis           = theme.emojis
+            newTheme.faceDownColor    = theme.faceDownColor
+            newTheme.faceUpColor      = theme.faceUpColor
+            newTheme.name             = theme.name
         }
 
         AppDelegate.sharedAppDelegate.saveChangesToDisk()
@@ -137,7 +146,7 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
     }
     */
     // pick emoji to display before table item label
-    private func emojiImageForTheme(_ theme: Themes) -> UIImage? {
+    private func emojiImageForTheme(_ theme: Theme) -> UIImage? {
         // pick emoji to display before label
         // each time the table view is displayed a new set of random emojis will be choosen
         let name = theme.name!

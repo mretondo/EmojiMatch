@@ -10,42 +10,42 @@ import CoreData
 
 class FetchedResultsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
-    private typealias DiffableDataSource = UITableViewDiffableDataSource<Sections, Themes>
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<Sections, Themes>
+    typealias DiffableDataSource = UITableViewDiffableDataSource<Sections, Theme>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Sections, Theme>
 
     enum Sections: CaseIterable {
         case first
     }
 
-    var diffableDataSource: UITableViewDiffableDataSource<Sections, Themes>?
-    var currentSnapshot: NSDiffableDataSourceSnapshot<Sections, Themes>!
+//    var currentSnapshot: Snapshot!
     //    private var themes: [Themes] = []
 
     // MARK: - Table view data source
-    var fetchedResultsController: NSFetchedResultsController<Themes>?
+    var fetchedResultsController: NSFetchedResultsController<Theme>?
 
     private func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChangeContentWith snapshot: NSDiffableDataSourceSnapshot<ThemeChooserTableViewController.Sections, Themes>) {
-        guard let dataSource = tableView?.dataSource as? UITableViewDiffableDataSource<ThemeChooserTableViewController.Sections, Themes> else {
+                    didChangeContentWith snapshot: Snapshot) {
+        
+        guard let dataSource = tableView?.dataSource as? DiffableDataSource else {
             assertionFailure("The data source has not implemented snapshot support while it should")
             return
         }
 
-        var snapshot = snapshot as NSDiffableDataSourceSnapshot<ThemeChooserTableViewController.Sections, Themes>
-        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<ThemeChooserTableViewController.Sections, Themes>
-
-        let reloadIdentifiers: [Themes] = snapshot.itemIdentifiers.compactMap { itemIdentifier in
-            guard let currentIndex = currentSnapshot.indexOfItem(itemIdentifier), let index = snapshot.indexOfItem(itemIdentifier), index == currentIndex else {
-                return nil
-            }
-            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemIdentifier.objectID), existingObject.isUpdated else { return nil }
-            return itemIdentifier
-        }
-
-        snapshot.reloadItems(reloadIdentifiers)
+        let snapshot = snapshot as NSDiffableDataSourceSnapshot<Sections, Theme>
+//        let currentSnapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<Sections, Themes>
+//
+//        let reloadIdentifiers: [Themes] = snapshot.itemIdentifiers.compactMap { itemIdentifier in
+//            guard let currentIndex = currentSnapshot.indexOfItem(itemIdentifier), let index = snapshot.indexOfItem(itemIdentifier), index == currentIndex else {
+//                return nil
+//            }
+//            guard let existingObject = try? controller.managedObjectContext.existingObject(with: itemIdentifier.objectID), existingObject.isUpdated else { return nil }
+//            return itemIdentifier
+//        }
+//
+//        snapshot.reloadItems(reloadIdentifiers)
 
         let shouldAnimate = tableView?.numberOfSections != 0
-        dataSource.apply(snapshot as NSDiffableDataSourceSnapshot<ThemeChooserTableViewController.Sections, Themes>, animatingDifferences: shouldAnimate)
+        dataSource.apply(snapshot, animatingDifferences: shouldAnimate)
     }
 
 //    public func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

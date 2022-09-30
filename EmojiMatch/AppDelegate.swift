@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
         persistentContainer.viewContext.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.viewContext.count(for: Themes.fetchRequest()) {
+            if let count = try? AppDelegate.viewContext.count(for: Theme.fetchRequest()) {
                 print ("\(count) Themes in database\n")
             } else {
                 print ("No Themes in database\n")
