@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    public static var viewContext: NSManagedObjectContext {
+    public static var moc: NSManagedObjectContext {
         return container.viewContext
     }
 
@@ -58,9 +58,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         whereIsCoreDataFileDirectory()
 
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        persistentContainer.viewContext.perform {
+        let moc = persistentContainer.viewContext
+        moc.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.viewContext.count(for: Theme.fetchRequest()) {
+            if let count = try? AppDelegate.moc.count(for: Theme.fetchRequest()) {
                 print ("\(count) Themes in database\n")
             } else {
                 print ("No Themes in database\n")
@@ -142,12 +143,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     /// Save the changes from the CoreData database held in memory to the on disk database
     func saveChangesToDisk() {
-        let context = persistentContainer.viewContext
+        let moc = persistentContainer.viewContext
 
-        guard context.hasChanges else { return }
+        guard moc.hasChanges else { return }
 
         do {
-            try context.save()
+            try moc.save()
         } catch {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

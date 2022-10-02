@@ -34,6 +34,17 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
         loadDefaultThemes()
     }
 
+    override func viewDidAppear( _ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        do {
+            try fetchedResultsController?.performFetch()
+            //            setupSnapshot()
+        } catch {
+            fatalError("viewDidLoad - Failed to fetch results from the database")
+        }
+    }
+
     /// Setup the `NSFetchedResultsController`, which manages the data shown in our table view
     private func setupFetchedResultsController() {
         if let moc = container?.viewContext {
@@ -49,29 +60,23 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
                                                                           cacheName: nil)
             fetchedResultsController?.delegate = self
 
-            do {
-                try fetchedResultsController?.performFetch()
-                setupSnapshot()
-            } catch {
-                fatalError("viewDidLoad - Failed to fetch results from the database")
-            }
         }
     }
 
     /// Setup the `UITableViewDiffableDataSource` with a cell provider that sets up the default table view cell
     private func setupTableViewDiffableDataSource() {
-        diffableDataSource = DiffableDataSource(tableView: tableView) { (tableView, indexPath, value) -> UITableViewCell? in
+        diffableDataSource = DiffableDataSource(tableView: tableView) { (tableView, indexPath, NSManagedObjectID) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath )
 
-            let moc = AppDelegate.viewContext
-            if let theme = try? moc.existingObject(with: value.objectID) as? Theme {
+            let moc = AppDelegate.moc
+            if let theme = try? moc.existingObject(with: NSManagedObjectID) as? Theme {
                 self.configure(cell: cell, for: theme)
             }
 
             return cell
         }
 
-        setupSnapshot()
+//        setupSnapshot()
     }
 
     func configure(cell: UITableViewCell, for theme: Theme) {
@@ -81,16 +86,16 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
         cell.image = emojiImageForTheme(theme)
     }
 
-    private func setupSnapshot() {
-        var diffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, Theme>()
-        diffableDataSourceSnapshot.appendSections(Sections.allCases)
-        diffableDataSourceSnapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [], toSection: .first)
-        diffableDataSource?.apply(diffableDataSourceSnapshot) // { impliment closure when the animations are complete }
-    }
+//    private func setupSnapshot() {
+//        var diffableDataSourceSnapshot = Snapshot()
+//        diffableDataSourceSnapshot.appendSections(Sections.allCases)
+//        diffableDataSourceSnapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [], toSection: .first)
+//        diffableDataSource?.apply(diffableDataSourceSnapshot) // { impliment closure when the animations are complete }
+//    }
 
     /// Load the default Themes moc into CoreData and display them
     private func loadDefaultThemes() {
-        let moc = AppDelegate.viewContext
+        let moc = AppDelegate.moc
 
         for theme in Theme.defaultThemes {
             let newTheme = Theme(context: moc)
@@ -104,11 +109,16 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
 
         AppDelegate.sharedAppDelegate.saveChangesToDisk()
 //        (UIApplication.shared.delegate as? AppDelegate)?.saveChangesToDisk()
-        setupSnapshot()
+//        setupSnapshot()
     }
 
-    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        setupSnapshot()
+//    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        setupSnapshot()
+//    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        let snapshot = snapshot as Snapshot
+        diffableDataSource?.apply(snapshot)
     }
 
     /*

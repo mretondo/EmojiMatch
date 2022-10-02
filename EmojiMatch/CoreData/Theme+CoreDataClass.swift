@@ -45,7 +45,7 @@ public class Theme: NSManagedObject {
         get {
             var themes: [ThemeProperties] = []
 
-            let moc = AppDelegate.viewContext
+            let moc = AppDelegate.moc
             let request = fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
 
@@ -72,7 +72,7 @@ public class Theme: NSManagedObject {
             // theme name, emojis
             var themeNames: [(name: String, emojis: String)] = []
 
-            let moc = AppDelegate.viewContext
+            let moc = AppDelegate.moc
             let request = fetchRequest()
             request.propertiesToFetch = ["name", "emojis"]
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -95,7 +95,7 @@ public class Theme: NSManagedObject {
     class func theme(forName name: String) -> ThemeProperties? {
         let request = fetchRequest()
         request.predicate = NSPredicate(format: "name = %@", name)
-        let moc = AppDelegate.viewContext
+        let moc = AppDelegate.moc
 
         if let results = try? moc.fetch(request) {
             if let result = results.first {
@@ -127,7 +127,7 @@ public class Theme: NSManagedObject {
     /// remove all data from themes
     ///
     class func removeAllData() throws {
-        let moc = AppDelegate.viewContext
+        let moc = AppDelegate.moc
 
         let request: NSFetchRequest<NSFetchRequestResult> = fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
@@ -148,7 +148,7 @@ public class Theme: NSManagedObject {
     /// delete themes that are no longer used
     ///
     class func deleteUnusedThemes(_ themes: [ThemeProperties]) throws {
-        let moc = AppDelegate.viewContext
+        let moc = AppDelegate.moc
 
         let request = fetchRequest()
         let results = try moc.fetch(request)
@@ -173,7 +173,7 @@ public class Theme: NSManagedObject {
     /// add themes that don't already exist in database
     ///
     class func addNewThemes(_ themes: [ThemeProperties]) throws {
-        let moc = AppDelegate.viewContext
+        let moc = AppDelegate.moc
 
         let request = fetchRequest()
 

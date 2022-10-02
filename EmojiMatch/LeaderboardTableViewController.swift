@@ -242,7 +242,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
             do {
                 // save score to Core Data
-                try AppDelegate.viewContext.save()
+                try AppDelegate.moc.save()
 
                 updateAppHighScoreTextField()
 

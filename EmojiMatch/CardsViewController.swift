@@ -151,7 +151,7 @@ class CardsViewController: UIViewController
 
         if areAllCardsMatched() {
             AppDelegate.highScore = score
-            try? AppDelegate.viewContext.save()
+            try? AppDelegate.moc.save()
         }
 
         // reset titles text to default color if changed in viewWillAppear

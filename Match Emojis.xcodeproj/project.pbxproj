@@ -11,6 +11,7 @@
 		2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
+		27689A3528E9339500922827 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27689A3428E9339500922827 /* CoreDataStack.swift */; };
 		278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */; };
 		279A7B4F28BEA79500ADEBFD /* MRUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 279A7B4E28BEA79500ADEBFD /* MRUtils */; };
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
@@ -33,6 +34,7 @@
 		2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewController.swift; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
+		27689A3428E9339500922827 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorValueTransformer.swift; sourceTree = "<group>"; };
 		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 		2713C12C25C50E590067E664 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				27689A3428E9339500922827 /* CoreDataStack.swift */,
 				27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */,
 				27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */,
 				278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */,
@@ -216,6 +219,7 @@
 				EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */,
 				2752756523C590510076EBBB /* MathHelpers.swift in Sources */,
+				27689A3528E9339500922827 /* CoreDataStack.swift in Sources */,
 				27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
 				27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */,
