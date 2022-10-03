@@ -24,7 +24,7 @@ class CoreDataStack {
         // Transformer for UIColor
         UIColorValueTransformer.register()
 
-        let container = NSPersistentContainer(name: "Model")
+        let container = NSPersistentContainer(name: name)
         container.loadPersistentStores { (storeDescription, error) in
             // Avoid duplicating objects - There's a constraint on property 'name'
             // For properties which have been changed in both the external source and in memory, the in memory changes trump the external ones
@@ -42,11 +42,11 @@ class CoreDataStack {
                 fatalError("Failed to load database: \(error), \(error.userInfo)")
             }
         }
-        
+
         return container
     }()
 
-    /// Save the changes from the CoreData database held in memory to the on disk database
+    /// Save the changes from the CoreData database held in memory to the persistent on disk database
     func saveMoc () {
         guard moc.hasChanges else { return }
 
