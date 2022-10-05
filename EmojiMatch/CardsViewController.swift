@@ -16,6 +16,10 @@ class CardsViewController: UIViewController
         didSet { updateViewFromModel(touchedCard: nil) }
     }
 
+    var coreDataStack: CoreDataStack?  {
+        didSet { updateViewFromModel(touchedCard: nil) }
+    }
+
     // sets the current theme and get ready for new game
     var theme: (name: String, emojis: String, backgroundColor: UIColor, faceDownColor: UIColor, faceUpColor: UIColor)? {
         didSet {
@@ -73,8 +77,7 @@ class CardsViewController: UIViewController
 
                 game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
                 game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
-            }
-            else {
+            } else {
                 // deduct points if 2 cards are face up and don't match
                 if indicesOfFaceUpCards.count == 2 {
                     // loose a point for each card that was seen before
