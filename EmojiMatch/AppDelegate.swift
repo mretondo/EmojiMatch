@@ -39,46 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-
-//        do {
-//            try Themes.updateDatabase(with: Themes.defaultThemes)
-//        } catch let error as NSError {
-//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//            fatalError("Couldn't update database - CoreData error \(error), \(error.userInfo)")
-//        }
-//
-//        saveChangesToDisk ()
-        printThemesTableStats()
-
         return true
 	}
-
-    func printThemesTableStats() {
-        #if DEBUG
-        whereIsCoreDataFileDirectory()
-
-        // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        let moc = persistentContainer.viewContext
-        moc.perform {
-            // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.moc.count(for: Theme.fetchRequest()) {
-                print ("\(count) Themes in database\n")
-            } else {
-                print ("No Themes in database\n")
-            }
-        }
-        #endif
-    }
-
-    func whereIsCoreDataFileDirectory() {
-        let path = NSPersistentContainer
-            .defaultDirectoryURL()
-            .absoluteString
-            .replacingOccurrences(of: "file://", with: "Core Data Dir: ")
-            .removingPercentEncoding
-
-        print(path ?? "Not found")
-    }
 
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -101,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveChangesToDisk()
+//        self.saveChangesToDisk()
     }
 
     // MARK: - Core Data stack
@@ -142,20 +104,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data Saving support
 
-    /// Save the changes from the CoreData database held in memory to the on disk database
-    func saveChangesToDisk() {
-        let moc = persistentContainer.viewContext
-
-        guard moc.hasChanges else { return }
-
-        do {
-            try moc.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved CoreData error \(nserror), \(nserror.userInfo)")
-        }
-    }
+//    /// Save the changes from the CoreData database held in memory to the on disk database
+//    func saveChangesToDisk() {
+//        let moc = persistentContainer.viewContext
+//
+//        guard moc.hasChanges else { return }
+//
+//        do {
+//            try moc.save()
+//        } catch {
+//            // Replace this implementation with code to handle the error appropriately.
+//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            let nserror = error as NSError
+//            fatalError("Unresolved CoreData error \(nserror), \(nserror.userInfo)")
+//        }
+//    }
 }
 

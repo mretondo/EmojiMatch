@@ -17,8 +17,6 @@
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
 		27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */; };
 		27BEB4DC28E77D7F00B5F867 /* Score+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */; };
-		27C053E42389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C053E32389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift */; };
-		27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */; };
 		27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */; };
 		EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13071FB861A0009590B6 /* AppDelegate.swift */; };
 		EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* CardsViewController.swift */; };
@@ -39,8 +37,6 @@
 		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+CoreDataClass.swift"; sourceTree = "<group>"; };
 		27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Score+CoreDataClass.swift"; sourceTree = "<group>"; };
-		27C053E32389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeChooserTableViewController+DataSource.swift"; sourceTree = "<group>"; };
-		27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
 		27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewController.swift; sourceTree = "<group>"; };
 		EA5F13041FB861A0009590B6 /* Match Emojis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Match Emojis.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -109,9 +105,7 @@
 			children = (
 				2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
-				27C27AB323248F320091AB50 /* FetchedResultsTableViewController.swift */,
 				27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */,
-				27C053E32389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift */,
 				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */,
@@ -213,7 +207,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */,
-				27C053E42389F6660022C88D /* ThemeChooserTableViewController+DataSource.swift in Sources */,
 				278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */,
 				27BEB4DC28E77D7F00B5F867 /* Score+CoreDataClass.swift in Sources */,
 				EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */,
@@ -222,7 +215,6 @@
 				27689A3528E9339500922827 /* CoreDataStack.swift in Sources */,
 				27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
-				27C27AB423248F320091AB50 /* FetchedResultsTableViewController.swift in Sources */,
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,
 				270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */,
 				27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */,

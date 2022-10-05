@@ -8,94 +8,70 @@
 import UIKit
 import CoreData
 
-class ThemeChooserTableViewController: FetchedResultsTableViewController
+class ThemeChooserTableViewController: UITableViewController
 {
-    var diffableDataSource: DiffableDataSource?
+    typealias DiffableDataSource = UITableViewDiffableDataSource<Sections, NSManagedObjectID>
+    typealias DiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, NSManagedObjectID>
 
-    // cache for the random emojis to be shown while the view
-    // table is shown, resets after a selection has been made
-    var emojiImageViewCache: [String : String] = [:]
-
-    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
-        didSet {  }
+    // MARK: - Properties
+    enum Sections: CaseIterable {
+        case first
     }
 
+    lazy var  coreDataStack = CoreDataStack(name: "Model")
+    var dataSource: DiffableDataSource?
+
+    lazy var fetchedResultsController: NSFetchedResultsController<Theme> = {
+        let fetchRequest: NSFetchRequest<Theme> = Theme.fetchRequest()
+        let sort = NSSortDescriptor(key: #keyPath(Theme.name), ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+
+        fetchRequest.sortDescriptors = [sort]
+
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                                  managedObjectContext: coreDataStack.moc,
+                                                                  sectionNameKeyPath: nil,
+                                                                  cacheName: nil)
+
+        fetchedResultsController.delegate = self
+        return fetchedResultsController
+    }()
+
+    // cache for the random emojis to be shown while the view
+    // table is shown, resets after restart of game
+    var emojiImageViewCache: [String : String] = [:]
+
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // need to call tableView.register() if NOT using Storyboard else
         // in the Identity Inspector set Custom Class to your Custom Cell Classname
-        //tableView.register(CustomThemeChooserCell.self, forCellReuseIdentifier: CustomThemeChooserCell.identifier)
+        //tableView.register(CustomThemeChooserCell.self, forCellReuseIdentifier: CustomThemeChooserCell.cellIdentifier)
+        //tableView.register(CustomThemeChooserCell.self, forHeaderFooterViewReuseIdentifier: CustomThemeChooserCell.cellIdentifier)
 
-        setupFetchedResultsController()
-        
-        setupTableViewDiffableDataSource()
+        dataSource = setupDataSource()
 
         loadDefaultThemes()
+
+        printThemesTableStats()
+
     }
 
     override func viewDidAppear( _ animated: Bool) {
         super.viewDidAppear(animated)
 
-        do {
-            try fetchedResultsController?.performFetch()
-            //            setupSnapshot()
-        } catch {
-            fatalError("viewDidLoad - Failed to fetch results from the database")
-        }
-    }
-
-    /// Setup the `NSFetchedResultsController`, which manages the data shown in our table view
-    private func setupFetchedResultsController() {
-        if let moc = container?.viewContext {
-            let request = Theme.fetchRequest()
-            //            request.fetchBatchSize = 10 // getting data using a url
-
-            let sortDescriptors = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
-            request.sortDescriptors = [sortDescriptors]
-
-            fetchedResultsController = NSFetchedResultsController<Theme>(fetchRequest: request,
-                                                                          managedObjectContext: moc,
-                                                                          sectionNameKeyPath: nil,
-                                                                          cacheName: nil)
-            fetchedResultsController?.delegate = self
-
-        }
-    }
-
-    /// Setup the `UITableViewDiffableDataSource` with a cell provider that sets up the default table view cell
-    private func setupTableViewDiffableDataSource() {
-        diffableDataSource = DiffableDataSource(tableView: tableView) { (tableView, indexPath, NSManagedObjectID) -> UITableViewCell? in
-            let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath )
-
-            let moc = AppDelegate.moc
-            if let theme = try? moc.existingObject(with: NSManagedObjectID) as? Theme {
-                self.configure(cell: cell, for: theme)
+        UIView.performWithoutAnimation {
+            do {
+                try fetchedResultsController.performFetch()
+            } catch let error as NSError {
+                print("viewDidLoad() - Fetching error: \(error), \(error.userInfo)")
             }
-
-            return cell
         }
-
-//        setupSnapshot()
     }
-
-    func configure(cell: UITableViewCell, for theme: Theme) {
-        guard let cell = cell as? CustomThemeChooserCell else { return }
-
-        cell.text = theme.name!
-        cell.image = emojiImageForTheme(theme)
-    }
-
-//    private func setupSnapshot() {
-//        var diffableDataSourceSnapshot = Snapshot()
-//        diffableDataSourceSnapshot.appendSections(Sections.allCases)
-//        diffableDataSourceSnapshot.appendItems(fetchedResultsController?.fetchedObjects ?? [], toSection: .first)
-//        diffableDataSource?.apply(diffableDataSourceSnapshot) // { impliment closure when the animations are complete }
-//    }
 
     /// Load the default Themes moc into CoreData and display them
     private func loadDefaultThemes() {
-        let moc = AppDelegate.moc
+        let moc = coreDataStack.moc
 
         for theme in Theme.defaultThemes {
             let newTheme = Theme(context: moc)
@@ -107,54 +83,36 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
             newTheme.name             = theme.name
         }
 
-        AppDelegate.sharedAppDelegate.saveChangesToDisk()
-//        (UIApplication.shared.delegate as? AppDelegate)?.saveChangesToDisk()
-//        setupSnapshot()
+        coreDataStack.saveMoc()
     }
 
-//    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        setupSnapshot()
-//    }
+    func printThemesTableStats() {
+#if DEBUG
+        whereIsCoreDataFileDirectory()
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        let snapshot = snapshot as Snapshot
-        diffableDataSource?.apply(snapshot)
+        // Asynchronously performs the Closure on the context’s queue, in this case the main thread
+        let moc = coreDataStack.moc
+        moc.perform {
+            // no data is retrieved, the database only retrieves the record count
+            if let count = try? self.coreDataStack.moc.count(for: Theme.fetchRequest()) {
+                print ("\(count) Themes in database\n")
+            } else {
+                print ("No Themes in database\n")
+            }
+        }
+#endif
     }
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
+    func whereIsCoreDataFileDirectory() {
+        let path = NSPersistentContainer
+            .defaultDirectoryURL()
+            .absoluteString
+            .replacingOccurrences(of: "file://", with: "Core Data Dir: ")
+            .removingPercentEncoding
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        print(path ?? "Not found")
     }
-    */
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     // pick emoji to display before table item label
     private func emojiImageForTheme(_ theme: Theme) -> UIImage? {
         // pick emoji to display before theme Name text
@@ -190,28 +148,106 @@ class ThemeChooserTableViewController: FetchedResultsTableViewController
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if let cardsViewController = segue.destination as? CardsViewController {
-            cardsViewController.container = container
+//            cardsViewController.container = container
 
             if let indexPath = tableView.indexPathForSelectedRow {
                 // fetch a theme from the database
-                if let result = fetchedResultsController?.object(at: indexPath) {
-                    let name = result.name!
-                    cardsViewController.theme = (name: name,
-                                          emojis: result.emojis!,
-                                          backgroundColor: result.backgroundColor as! UIColor,
-                                          faceDownColor: result.faceDownColor as! UIColor,
-                                          faceUpColor: result.faceUpColor as! UIColor)
-
-                    // show new random set of imojis in the table
-//                    emojiImageViewCache.removeAll()
-                } else {
-                    fatalError("prepare(for:sender:) - Attempt to fetched Results based on selected row failed")
-                }
+                let result = fetchedResultsController.object(at: indexPath)
+                let name = result.name!
+                cardsViewController.theme = (name: name,
+                                             emojis: result.emojis!,
+                                             backgroundColor: result.backgroundColor as! UIColor,
+                                             faceDownColor: result.faceDownColor as! UIColor,
+                                             faceUpColor: result.faceUpColor as! UIColor)
             }
         }
     }
 }
 
+// MARK: - Internal
+extension ThemeChooserTableViewController {
+    func setupDataSource() -> DiffableDataSource {
+        DiffableDataSource(tableView: tableView) { tableView, indexPath, managedObjectID -> UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath)
+
+            if let theme = try? self.coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
+                self.configure(cell: cell, for: theme)
+            }
+
+            return cell
+        }
+    }
+
+    func configure(cell: UITableViewCell, for theme: Theme) {
+        guard let cell = cell as? CustomThemeChooserCell else { return }
+
+        cell.text = theme.name!
+        cell.image = emojiImageForTheme(theme)
+    }
+
+//    // TODO: - these two methods need to go int a subclass of UITableViewDiffableDataSource to be called
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        true
+//    }
+//
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        guard editingStyle == .delete else { return }
+//
+//        // fetch a theme at row index from the database
+//        let theme = fetchedResultsController.object(at: indexPath)
+//        coreDataStack.moc.delete(theme)
+//
+//        if var snapshot = dataSource?.snapshot() {
+//            snapshot.deleteItems([theme.objectID])
+//            dataSource?.apply(snapshot, animatingDifferences: true)
+//        }
+//
+//        coreDataStack.saveMoc()
+//    }
+}
+
+// MARK: - UITableViewDelegate
+extension ThemeChooserTableViewController {
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let theme = fetchedResultsController.object(at: indexPath)
+//        coreDataStack.moc.delete(theme)
+//
+//        if var snapshot = dataSource?.snapshot() {
+//            snapshot.deleteItems([theme.objectID])
+//            dataSource?.apply(snapshot, animatingDifferences: true)
+//        }
+//
+//        coreDataStack.saveMoc()
+//    }
+
+//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+////        let sectionInfo = fetchedResultsController.sections?[section]
+////        let titleLabel = UILabel()
+////        titleLabel.backgroundColor = .white
+////        titleLabel.text = "Themes"//sectionInfo?.name
+//
+//        let headerView = UIView.init(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 56))
+//        let headerCell: CustomThemeChooserCell? = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier) as? CustomThemeChooserCell
+//        headerCell?.frame = headerView.bounds
+//        headerCell?.text = "Themes"//sectionInfo?.name
+//        headerView.addSubview(headerCell!)
+//        return headerView
+//    }
+//
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 44
+//    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension ThemeChooserTableViewController: NSFetchedResultsControllerDelegate {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        let snapshot = snapshot as DiffableDataSourceSnapshot
+        dataSource?.apply(snapshot, animatingDifferences: true)
+    }
+}
+
+// MARK: - Custom UITableViewCell
 class CustomThemeChooserCell: UITableViewCell {
     static let cellIdentifier = "ThemeChooserCell"
 
@@ -245,4 +281,3 @@ class CustomThemeChooserCell: UITableViewCell {
 //        backgroundConfiguration = backgroundConfig
     }
 }
-
