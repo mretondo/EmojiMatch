@@ -64,7 +64,7 @@ class ThemeChooserTableViewController: UITableViewController
             do {
                 try fetchedResultsController.performFetch()
             } catch let error as NSError {
-                print("viewDidLoad() - Fetching error: \(error), \(error.userInfo)")
+                print("viewDidAppear() - Fetching error: \(error), \(error.userInfo)")
             }
         }
     }
@@ -209,14 +209,17 @@ extension ThemeChooserTableViewController {
 // MARK: - UITableViewDelegate
 extension ThemeChooserTableViewController {
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        // delete the object
 //        let theme = fetchedResultsController.object(at: indexPath)
 //        coreDataStack.moc.delete(theme)
 //
+//        // update the UI
 //        if var snapshot = dataSource?.snapshot() {
 //            snapshot.deleteItems([theme.objectID])
 //            dataSource?.apply(snapshot, animatingDifferences: true)
 //        }
 //
+//        // save the Moc with the deleted object
 //        coreDataStack.saveMoc()
 //    }
 
