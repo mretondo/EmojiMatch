@@ -8,18 +8,60 @@
 import UIKit
 import CoreData
 
-class ThemeChooserTableViewController: UITableViewController
-{
-    typealias DiffableDataSource = UITableViewDiffableDataSource<Sections, NSManagedObjectID>
-    typealias DiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, NSManagedObjectID>
+fileprivate enum Sections: CaseIterable {
+    case first
+}
 
-    // MARK: - Properties
-    enum Sections: CaseIterable {
-        case first
+fileprivate var coreDataStack = CoreDataStack(name: "Model")
+
+fileprivate class EditEnabledDiffableDataSource: UITableViewDiffableDataSource<Sections, NSManagedObjectID> {
+    // returns false by default if not implemented and UITableViewDiffableDataSource but true if not UITableViewDiffableDataSource (bug?)
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        // if true is returned then UITableViewDelegate
+//        // tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) will be called
+//
+//        guard let managedObjectID = itemIdentifier(for: indexPath) else {return false}
+//
+//        // fetch a theme at row index from the database
+//        if let theme = try? coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
+//            if theme.name == "Christmas" {
+//                return true
+//            }
+//        }
+//
+//        return false
+//    }
+
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
 
-    lazy var  coreDataStack = CoreDataStack(name: "Model")
-    var dataSource: DiffableDataSource?
+//    var deleteClosure: ((NSManagedObjectID) -> Void)?
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        guard let managedObjectID = itemIdentifier(for: indexPath) else {return}
+
+        // fetch a theme at row index from the database
+        if let theme = try? coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
+            coreDataStack.moc.delete(theme)
+            coreDataStack.saveMoc()
+        }
+    }
+}
+
+class ThemeChooserTableViewController: UITableViewController
+{
+    fileprivate typealias DiffableDataSource = EditEnabledDiffableDataSource
+    fileprivate typealias DiffableDataSourceSnapshot = NSDiffableDataSourceSnapshot<Sections, NSManagedObjectID>
+
+    // MARK: - Properties
+//    enum Sections: CaseIterable {
+//        case first
+//    }
+
+//    lazy var coreDataStack = CoreDataStack(name: "Model")
+    fileprivate var dataSource: DiffableDataSource?
 
     lazy var fetchedResultsController: NSFetchedResultsController<Theme> = {
         let fetchRequest: NSFetchRequest<Theme> = Theme.fetchRequest()
@@ -50,6 +92,7 @@ class ThemeChooserTableViewController: UITableViewController
         //tableView.register(CustomThemeChooserCell.self, forHeaderFooterViewReuseIdentifier: CustomThemeChooserCell.cellIdentifier)
 
         dataSource = setupDataSource()
+        dataSource?.defaultRowAnimation = .left // makes all the deletions look better BUT IT'S NOT WORKING
 
         loadDefaultThemes()
 
@@ -71,10 +114,8 @@ class ThemeChooserTableViewController: UITableViewController
 
     /// Load the default Themes moc into CoreData and display them
     private func loadDefaultThemes() {
-        let moc = coreDataStack.moc
-
         for theme in Theme.defaultThemes {
-            let newTheme = Theme(context: moc)
+            let newTheme = Theme(context: coreDataStack.moc)
 
             newTheme.backgroundColor  = theme.backgroundColor
             newTheme.emojis           = theme.emojis
@@ -94,7 +135,7 @@ class ThemeChooserTableViewController: UITableViewController
         let moc = coreDataStack.moc
         moc.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? self.coreDataStack.moc.count(for: Theme.fetchRequest()) {
+            if let count = try? coreDataStack.moc.count(for: Theme.fetchRequest()) {
                 print ("\(count) Themes in database\n")
             } else {
                 print ("No Themes in database\n")
@@ -152,13 +193,13 @@ class ThemeChooserTableViewController: UITableViewController
 
             if let indexPath = tableView.indexPathForSelectedRow {
                 // fetch a theme from the database
-                let result = fetchedResultsController.object(at: indexPath)
-                let name = result.name!
+                let theme = fetchedResultsController.object(at: indexPath)
+                let name = theme.name!
                 cardsViewController.theme = (name: name,
-                                             emojis: result.emojis!,
-                                             backgroundColor: result.backgroundColor as! UIColor,
-                                             faceDownColor: result.faceDownColor as! UIColor,
-                                             faceUpColor: result.faceUpColor as! UIColor)
+                                             emojis: theme.emojis!,
+                                             backgroundColor: theme.backgroundColor as! UIColor,
+                                             faceDownColor: theme.faceDownColor as! UIColor,
+                                             faceUpColor: theme.faceUpColor as! UIColor)
             }
         }
     }
@@ -166,60 +207,67 @@ class ThemeChooserTableViewController: UITableViewController
 
 // MARK: - Internal
 extension ThemeChooserTableViewController {
-    func setupDataSource() -> DiffableDataSource {
-        DiffableDataSource(tableView: tableView) { tableView, indexPath, managedObjectID -> UITableViewCell? in
+    fileprivate func setupDataSource() -> DiffableDataSource {
+        DiffableDataSource(tableView: tableView) { [unowned self] (tableView, indexPath, managedObjectID) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath)
 
-            if let theme = try? self.coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
-                self.configure(cell: cell, for: theme)
+            if let cell = cell as? CustomThemeChooserCell {
+                if let theme = try? coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
+                    cell.text = theme.name!
+                    cell.image = self.emojiImageForTheme(theme)
+                }
             }
 
             return cell
         }
     }
-
-    func configure(cell: UITableViewCell, for theme: Theme) {
-        guard let cell = cell as? CustomThemeChooserCell else { return }
-
-        cell.text = theme.name!
-        cell.image = emojiImageForTheme(theme)
-    }
-
-//    // TODO: - these two methods need to go int a subclass of UITableViewDiffableDataSource to be called
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        true
-//    }
-//
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        guard editingStyle == .delete else { return }
-//
-//        // fetch a theme at row index from the database
-//        let theme = fetchedResultsController.object(at: indexPath)
-//        coreDataStack.moc.delete(theme)
-//
-//        if var snapshot = dataSource?.snapshot() {
-//            snapshot.deleteItems([theme.objectID])
-//            dataSource?.apply(snapshot, animatingDifferences: true)
-//        }
-//
-//        coreDataStack.saveMoc()
-//    }
 }
 
 // MARK: - UITableViewDelegate
 extension ThemeChooserTableViewController {
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        // delete the object
-//        let theme = fetchedResultsController.object(at: indexPath)
-//        coreDataStack.moc.delete(theme)
+//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        return UISwipeActionsConfiguration(actions: [makeDeleteContextualAction(forRowAt: indexPath)])
+//    }
 //
-//        // update the UI
-//        if var snapshot = dataSource?.snapshot() {
-//            snapshot.deleteItems([theme.objectID])
-//            dataSource?.apply(snapshot, animatingDifferences: true)
+//    private func makeDeleteContextualAction(forRowAt indexPath: IndexPath) -> UIContextualAction {
+//        return UIContextualAction(style: .destructive, title: "Delete") { [self] (action, swipeButtonView, completion) in
+//            // delete the object
+//            let theme = fetchedResultsController.object(at: indexPath)
+//            coreDataStack.moc.delete(theme)
+//
+//            // save the Moc with the deleted object
+//            coreDataStack.saveMoc()
+//
+//            completion(true)
 //        }
+//    }
 //
-//        // save the Moc with the deleted object
+    // Allows customization of the editingStyle for a particular cell located at 'indexPath'. If not implemented, all editable
+    // cells will have UITableViewCellEditingStyleDelete set for them when the table has editing property set to YES.
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.row == 100 {
+            // swipe-to-edit
+            return .delete
+        } else {
+            // prevent swipe-to-edit or insert
+            return .none
+        }
+    }
+
+    // NOTE: this is called AFTER prepare(for:sender:)
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        // If theme.name = Christmas then rename it to Xmas. This will re-sort the tableView so Xmas is at the bottom.
+//        // Also the save will add a new item to the database because theme was changed it thinks it's a new item.
+//        let theme = fetchedResultsController.object(at: indexPath)
+//        guard theme.name != "Christmas" else { return }
+//        theme.name = "Xmas"
+//
+//        // reloadItems() needed to be called before iOS 15 because of a bug in Swift code. This code is no longer needed.
+////        if var snapshot = dataSource?.snapshot() {
+////            snapshot.reloadItems([theme.objectID])
+////            dataSource?.apply(snapshot, animatingDifferences: false)
+////        }
+//
 //        coreDataStack.saveMoc()
 //    }
 
@@ -245,8 +293,7 @@ extension ThemeChooserTableViewController {
 // MARK: - NSFetchedResultsControllerDelegate
 extension ThemeChooserTableViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        let snapshot = snapshot as DiffableDataSourceSnapshot
-        dataSource?.apply(snapshot, animatingDifferences: true)
+        dataSource?.apply(snapshot as DiffableDataSourceSnapshot, animatingDifferences: true)
     }
 }
 
