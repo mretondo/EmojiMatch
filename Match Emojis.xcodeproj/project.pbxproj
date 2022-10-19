@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 270612F822FF7412000EAA36 /* Model.xcdatamodeld */; };
+		2723C27228FF94170050C00A /* MRUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 2723C27128FF94170050C00A /* MRUtils */; };
 		2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
 		27689A3528E9339500922827 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27689A3428E9339500922827 /* CoreDataStack.swift */; };
 		278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */; };
-		279A7B4F28BEA79500ADEBFD /* MRUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 279A7B4E28BEA79500ADEBFD /* MRUtils */; };
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
 		27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */; };
 		27BEB4DC28E77D7F00B5F867 /* Score+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */; };
@@ -54,8 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				279A7B4F28BEA79500ADEBFD /* MRUtils in Frameworks */,
 				27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */,
+				2723C27228FF94170050C00A /* MRUtils in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,7 +144,7 @@
 			);
 			name = "Match Emojis";
 			packageProductDependencies = (
-				279A7B4E28BEA79500ADEBFD /* MRUtils */,
+				2723C27128FF94170050C00A /* MRUtils */,
 			);
 			productName = Concentration;
 			productReference = EA5F13041FB861A0009590B6 /* Match Emojis.app */;
@@ -440,14 +440,14 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mretondo/MRUtils.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				kind = exactVersion;
+				version = 3.0.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		279A7B4E28BEA79500ADEBFD /* MRUtils */ = {
+		2723C27128FF94170050C00A /* MRUtils */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 279A7B4D28BEA79500ADEBFD /* XCRemoteSwiftPackageReference "MRUtils" */;
 			productName = MRUtils;

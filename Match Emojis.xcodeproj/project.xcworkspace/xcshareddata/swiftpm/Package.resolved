@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mretondo/MRUtils.git",
       "state" : {
-        "revision" : "79a805a3689a8415851792435553f8c12ce7f71a",
-        "version" : "2.0.0"
+        "revision" : "a7055c50314165cb38f243ba6aeadd3523195f72",
+        "version" : "3.0.1"
       }
     }
   ],
