@@ -276,7 +276,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     fileprivate func updateAppHighScoreTextField() {
         // update UI on main thread
         return DispatchQueue.main.async { [self] in
-            if var prompt = themeHeading.prompt, let appendIndex = themeHeading.prompt?.endIndex(of: ": ") {
+            if var prompt = themeHeading.prompt, let appendIndex = prompt.index(after: ": ") {
                 prompt = String(prompt.prefix(upTo: appendIndex))
 
                 if let highestScore = AppDelegate.highScore {
