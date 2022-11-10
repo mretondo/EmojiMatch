@@ -10,7 +10,7 @@ import UIKit
 import GameKit
 import MRUtils
 
-class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate
+class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate, UITextFieldDelegate
 {
     @IBOutlet weak var themeHeading: UINavigationItem!
     @IBOutlet weak var leaderboardStackView: UIStackView!
@@ -20,9 +20,73 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
     public static let lowestScorePosible = Int64(-100)
 
+    var alertController = UIAlertController()
+
     var gcEnabled = false // Check if the user has Game Center enabled
     var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch2" // Check the default leaderboardID
     let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch2"
+
+    @IBAction func addTheme(_ sender: UIBarButtonItem) {
+        let moc = AppDelegate.shared.coreDataStack.moc
+
+        alertController = UIAlertController(title: "Create your own Theme", message: "Must contain 10 or more Characters", preferredStyle: .alert)
+
+        alertController.addTextField { textField in
+            textField.delegate = self
+            textField.placeholder = "Name"
+            textField.addTarget(self, action: #selector(self.alertTextFieldDidChange(_:)), for: .editingChanged)
+        }
+
+//        alertController.addTextField { textField in
+//            textField.addConstraint(textField.heightAnchor.constraint(equalToConstant: 2))
+//            textField.isEnabled = false
+//        }
+
+        alertController.addTextField { textField in
+            textField.delegate = self
+            textField.placeholder = "Characters"
+            textField.addTarget(self, action: #selector(self.alertTextFieldDidChange(_:)), for: .editingChanged)
+        }
+
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [self] _ in
+            guard let nameTextField = alertController.textFields?.first,
+                  let charactersTextField = alertController.textFields?.last else { return }
+
+            let newTheme = Theme(context: moc)
+
+            newTheme.name             = nameTextField.text
+            newTheme.emojis           = charactersTextField.text
+            // use default colors
+            newTheme.backgroundColor  = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            newTheme.faceDownColor    = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+            newTheme.faceUpColor      = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+
+            AppDelegate.shared.coreDataStack.saveMoc()
+        }
+        saveAction.isEnabled = false
+        alertController.addAction(saveAction)
+
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        present(alertController, animated: true)
+//        present(alertController, animated: true, completion: {
+//            if let textField = alertController.textFields?[1] {
+//                textField.transparentBackground()
+//            }
+//        })
+    }
+
+    @objc func alertTextFieldDidChange(_ textField: UITextField) {
+        let saveAction: UIAlertAction = alertController.actions.first!
+        saveAction.isEnabled = false
+
+        if let themeName = alertController.textFields?.first?.text, themeName.count > 0 {
+            // themes must have 10 characters or more
+            if let themeCharacters = alertController.textFields?.last?.text, themeCharacters.count >= 10 {
+                saveAction.isEnabled = true
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +97,8 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+//        let views = view.subviews
 
         updateAppHighScoreTextField()
 
@@ -45,7 +111,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                           bottom: leaderboardStackView.bottomAnchor
         )
 
-        themeHeading.rightBarButtonItem?.isHidden = !self.gcEnabled
+//        themeHeading.rightBarButtonItem?.isHidden = !self.gcEnabled
     }
 
     func authenticateLocalPlayer() {
@@ -69,7 +135,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                     } else {
                         // If user deleted there local database score this will try to update
                         // it with the score from there Leaderboard score if it exists.
-                        if AppDelegate.highScore == nil {
+                        if AppDelegate.shared.highScore == nil {
                             Task {
                                 await self.updateAppScoreFromLeaderboard()
                             }
@@ -110,7 +176,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     }
 
     @IBAction func addScoreAndSubmitToGC(_ sender: Any) {
-        if let highestScore = AppDelegate.highScore {
+        if let highestScore = AppDelegate.shared.highScore {
             Task {
                 // get score from the leaderboard if one exists
                 if let leaderboardHighestScore = try await getHighScoreFromLeadboardForLocalPlayer(), leaderboardHighestScore >= highestScore {
@@ -242,7 +308,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
             do {
                 // save score to Core Data
-                try AppDelegate.moc.save()
+                try AppDelegate.shared.coreDataStack.moc.save()
 
                 updateAppHighScoreTextField()
 
@@ -260,14 +326,14 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     /// set applications high score if none yet exists or update it to a better score
     func updateAppHighScore(with score: Int64) {
         if score >= LeaderboardTableViewController.lowestScorePosible {
-            if let highScore = AppDelegate.highScore {
+            if let highScore = AppDelegate.shared.highScore {
                 // compare score to current high score
                 if score > highScore {
-                    AppDelegate.highScore = score
+                    AppDelegate.shared.highScore = score
                 }
             } else {
                 // no high score recorded yet
-                AppDelegate.highScore = score
+                AppDelegate.shared.highScore = score
             }
         }
     }
@@ -279,7 +345,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
             if var prompt = themeHeading.prompt, let appendIndex = prompt.index(after: ": ") {
                 prompt = String(prompt.prefix(upTo: appendIndex))
 
-                if let highestScore = AppDelegate.highScore {
+                if let highestScore = AppDelegate.shared.highScore {
                     prompt.append("\(highestScore)")
                 }
 
@@ -333,5 +399,16 @@ extension UIBarButtonItem {
             tintColor = newValue ? .clear : nil
             isEnabled = !newValue
         }
+    }
+}
+
+
+extension UITextField {
+    func transparentBackground() {
+        superview?.backgroundColor = .clear
+
+        let view = superview?.superview
+        view?.subviews.first?.alpha = 0
+        view?.backgroundColor = .clear
     }
 }

@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zqp-9S-yqg">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
@@ -103,9 +102,16 @@
                             <constraint firstItem="y2T-xJ-xAe" firstAttribute="bottom" secondItem="9Nt-0X-UVd" secondAttribute="bottom" id="tTT-Zc-7T5"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Emoji Themes" prompt="High Score: " id="GGA-Zj-sGT">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="bux-FD-dRT"/>
+                        <barButtonItem key="backBarButtonItem" title="Emoji Themes" id="bux-FD-dRT" userLabel="Emoji Themes"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="a7p-80-o6E">
+                            <connections>
+                                <action selector="addTheme:" destination="2n0-Eg-YwI" id="ESq-eY-DhM"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addScoreButton" destination="KbE-Ee-P5M" id="hkU-M1-Lh1"/>
                         <outlet property="leaderboardButton" destination="b51-zO-ccW" id="h50-GC-axm"/>

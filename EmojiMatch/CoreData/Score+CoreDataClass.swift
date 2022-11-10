@@ -11,11 +11,11 @@ class Score: NSManagedObject
 {
     public static var highScore: Int64? {
         get {
-            let context = AppDelegate.moc
+            let moc = AppDelegate.shared.coreDataStack.moc
             let request = fetchRequest()
 
             do {
-                let scores = try context.fetch(request)
+                let scores = try moc.fetch(request)
                 assert(scores.count <= 1, "highScore - scores count isn't <= 1")
 
                 if scores.count == 1 {
@@ -34,18 +34,18 @@ class Score: NSManagedObject
                 let highScore = highScore
 
                 if highScore == nil || newValue > highScore! {
-                    let context = AppDelegate.moc
+                    let moc = AppDelegate.shared.coreDataStack.moc
 
                     // NOTE: no data is retrieved here, the database only retrieves the Entities record count
-                    if let count = try? context.count(for: Score.fetchRequest()), count == 0 {
+                    if let count = try? moc.count(for: Score.fetchRequest()), count == 0 {
                         // set first high score into empty Entity
-                        let score = Score(context: context)
+                        let score = Score(context: moc)
                         score.highScore = newValue
                     } else {
                         // modify previous saved high score
                         let request: NSFetchRequest<Score> = Score.fetchRequest()
                         do {
-                            if let highScores = try? context.fetch(request) {
+                            if let highScores = try? moc.fetch(request) {
                                 let score = highScores[0]   // there's only one score in the Entity
                                 score.highScore = newValue
                             }
@@ -61,9 +61,9 @@ class Score: NSManagedObject
     public static func printScoreTableStats() {
         #if DEBUG
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        AppDelegate.moc.perform {
+        AppDelegate.shared.coreDataStack.moc.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.moc.count(for: fetchRequest()) {
+            if let count = try? AppDelegate.shared.coreDataStack.moc.count(for: fetchRequest()) {
                 print ("\(count) Score\n")
             } else {
                 print ("No Score\n")

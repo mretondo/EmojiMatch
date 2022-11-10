@@ -1,5 +1,5 @@
 //
-//  AppDelegate.swift
+//  AppDelegate.sharedAppDelegate.swift
 //  EmojiMatch
 //
 
@@ -11,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    public static var sharedAppDelegate: AppDelegate {
+    public static var shared: AppDelegate {
         //
         // NOTE: UIApplication.delegate must be used from main thread only
         //
@@ -24,15 +24,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    public static var moc: NSManagedObjectContext {
-        return container.viewContext
-    }
+    lazy var coreDataStack: CoreDataStack = CoreDataStack(name: "Model")
 
-    public static var container: NSPersistentContainer {
-        return sharedAppDelegate.persistentContainer
-    }
+//    public static var moc: NSManagedObjectContext {
+//        return container.viewContext
+//    }
+//
+//    public static var container: NSPersistentContainer {
+//        return sharedAppDelegate.persistentContainer
+//    }
 
-    public static var highScore: Int64? {
+    public var highScore: Int64? {
         get { return Score.highScore }
         set(newValue) { Score.highScore = newValue }
     }
@@ -68,39 +70,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data stack
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
-
-        // Register the transformer at the very beginning.
-        // Transformer for UIColor
-        UIColorValueTransformer.register()
-
-        let container = NSPersistentContainer(name: "Model")
-        container.loadPersistentStores { (storeDescription, error) in
-            // Avoid duplicating objects - There's a constraint on property 'name'
-            // For properties which have been changed in both the external source and in memory, the in memory changes trump the external ones
-            let moc = container.viewContext
-            moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-
-            if let error = error as NSError? {
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Failed to load database: \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
+//    lazy var persistentContainer: NSPersistentContainer = {
+//        /*
+//         The persistent container for the application. This implementation
+//         creates and returns a container, having loaded the store for the
+//         application to it. This property is optional since there are legitimate
+//         error conditions that could cause the creation of the store to fail.
+//         */
+//
+//        // Register the transformer at the very beginning.
+//        // Transformer for UIColor
+//        UIColorValueTransformer.register()
+//
+//        let container = NSPersistentContainer(name: "Model")
+//        container.loadPersistentStores { (storeDescription, error) in
+//            // Avoid duplicating objects - There's a constraint on property 'name'
+//            // For properties which have been changed in both the external source and in memory, the in memory changes trump the external ones
+//            let moc = container.viewContext
+//            moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+//
+//            if let error = error as NSError? {
+//                /*
+//                 Typical reasons for an error here include:
+//                 * The parent directory does not exist, cannot be created, or disallows writing.
+//                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+//                 * The device is out of space.
+//                 * The store could not be migrated to the current model version.
+//                 Check the error message to determine what the actual problem was.
+//                 */
+//                fatalError("Failed to load database: \(error), \(error.userInfo)")
+//            }
+//        }
+//        return container
+//    }()
 
     // MARK: - Core Data Saving support
 

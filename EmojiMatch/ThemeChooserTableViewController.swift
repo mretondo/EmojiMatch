@@ -18,17 +18,17 @@ class ThemeChooserTableViewController: UITableViewController
         case first
     }
 
-    lazy var coreDataStack = CoreDataStack(name: "Model")
+//    lazy var coreDataStack = CoreDataStack(name: "Model")
     var dataSource: DiffableDataSource?
 
     lazy var fetchedResultsController: NSFetchedResultsController<Theme> = {
         let fetchRequest: NSFetchRequest<Theme> = Theme.fetchRequest()
-        let sort = NSSortDescriptor(key: #keyPath(Theme.name), ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+        let nameDescriptor = NSSortDescriptor(SortDescriptor(\Theme.name, comparator: .localizedStandard))
 
-        fetchRequest.sortDescriptors = [sort]
+        fetchRequest.sortDescriptors = [nameDescriptor]
 
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                  managedObjectContext: coreDataStack.moc,
+                                                                  managedObjectContext: AppDelegate.shared.coreDataStack.moc,
                                                                   sectionNameKeyPath: nil,
                                                                   cacheName: nil)
 
@@ -73,7 +73,7 @@ class ThemeChooserTableViewController: UITableViewController
     /// Load the default Themes moc into CoreData and display them
     private func loadDefaultThemes() {
         for theme in Theme.defaultThemes {
-            let newTheme = Theme(context: coreDataStack.moc)
+            let newTheme = Theme(context: AppDelegate.shared.coreDataStack.moc)
 
             newTheme.backgroundColor  = theme.backgroundColor
             newTheme.emojis           = theme.emojis
@@ -82,21 +82,23 @@ class ThemeChooserTableViewController: UITableViewController
             newTheme.name             = theme.name
         }
 
-        coreDataStack.saveMoc()
+        AppDelegate.shared.coreDataStack.saveMoc()
     }
 
     func printThemesTableStats() {
 #if DEBUG
+        print ("\nBundle.main Dir: \(Bundle.main.resourcePath!)\n")
+
         whereIsCoreDataFileDirectory()
 
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        let moc = coreDataStack.moc
+        let moc = AppDelegate.shared.coreDataStack.moc
         moc.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? self.coreDataStack.moc.count(for: Theme.fetchRequest()) {
-                print ("\(count) Themes in database\n")
+            if let count = try? AppDelegate.shared.coreDataStack.moc.count(for: Theme.fetchRequest()) {
+                print ("\n\(count) Themes in database\n")
             } else {
-                print ("No Themes in database\n")
+                print ("\nNo Themes in database\n")
             }
         }
 #endif
@@ -209,11 +211,11 @@ class ThemeChooserTableViewController: UITableViewController
 // MARK: - Internal
 extension ThemeChooserTableViewController {
     func setupDataSource() -> DiffableDataSource {
-        DiffableDataSource(coreDataStack: coreDataStack, tableView: tableView) { [unowned self] (tableView, indexPath, managedObjectID) -> UITableViewCell? in
+        DiffableDataSource(coreDataStack: AppDelegate.shared.coreDataStack, tableView: tableView) { [unowned self] (tableView, indexPath, managedObjectID) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: CustomThemeChooserCell.cellIdentifier, for: indexPath)
 
             if let cell = cell as? CustomThemeChooserCell {
-                if let theme = try? coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
+                if let theme = try? AppDelegate.shared.coreDataStack.moc.existingObject(with: managedObjectID) as? Theme {
                     cell.text = theme.name!
                     cell.image = emojiImageForTheme(theme)
                 }

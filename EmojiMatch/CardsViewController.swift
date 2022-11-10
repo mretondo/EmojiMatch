@@ -12,7 +12,7 @@ class CardsViewController: UIViewController
     @IBOutlet private var cardButtons: [UIButton]!
     @IBOutlet private weak var gameOver: UILabel!
 
-    var container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer {
+    var container: NSPersistentContainer? = AppDelegate.shared.coreDataStack.persistentContainer {
         didSet { updateViewFromModel(touchedCard: nil) }
     }
 
@@ -153,8 +153,8 @@ class CardsViewController: UIViewController
         super.viewWillDisappear(animated)
 
         if areAllCardsMatched() {
-            AppDelegate.highScore = score
-            try? AppDelegate.moc.save()
+            AppDelegate.shared.highScore = score
+            try? AppDelegate.shared.coreDataStack.moc.save()
         }
 
         // reset titles text to default color if changed in viewWillAppear
