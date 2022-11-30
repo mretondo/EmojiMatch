@@ -18,6 +18,9 @@
 		27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */; };
 		27BEB4DC28E77D7F00B5F867 /* Score+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */; };
 		27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */; };
+		27E230012936C72E002F466F /* Model.sqlite-shm in Resources */ = {isa = PBXBuildFile; fileRef = 27E22FFE2936C72E002F466F /* Model.sqlite-shm */; };
+		27E230022936C72E002F466F /* Model.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 27E22FFF2936C72E002F466F /* Model.sqlite */; };
+		27E230032936C72E002F466F /* Model.sqlite-wal in Resources */ = {isa = PBXBuildFile; fileRef = 27E230002936C72E002F466F /* Model.sqlite-wal */; };
 		EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13071FB861A0009590B6 /* AppDelegate.swift */; };
 		EA5F130A1FB861A0009590B6 /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* CardsViewController.swift */; };
 		EA5F130D1FB861A0009590B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130B1FB861A0009590B6 /* Main.storyboard */; };
@@ -38,6 +41,9 @@
 		27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+CoreDataClass.swift"; sourceTree = "<group>"; };
 		27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Score+CoreDataClass.swift"; sourceTree = "<group>"; };
 		27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChooserTableViewController.swift; sourceTree = "<group>"; };
+		27E22FFE2936C72E002F466F /* Model.sqlite-shm */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Model.sqlite-shm"; sourceTree = "<group>"; };
+		27E22FFF2936C72E002F466F /* Model.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Model.sqlite; sourceTree = "<group>"; };
+		27E230002936C72E002F466F /* Model.sqlite-wal */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Model.sqlite-wal"; sourceTree = "<group>"; };
 		EA5F13041FB861A0009590B6 /* Match Emojis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Match Emojis.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA5F13091FB861A0009590B6 /* CardsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +75,9 @@
 				27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */,
 				27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */,
 				278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */,
+				27E22FFF2936C72E002F466F /* Model.sqlite */,
+				27E22FFE2936C72E002F466F /* Model.sqlite-shm */,
+				27E230002936C72E002F466F /* Model.sqlite-wal */,
 				270612F822FF7412000EAA36 /* Model.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -195,7 +204,10 @@
 				EA5F13121FB861A0009590B6 /* LaunchScreen.storyboard in Resources */,
 				EA5F130F1FB861A0009590B6 /* Assets.xcassets in Resources */,
 				2744374B22150D8800CBB56B /* README.md in Resources */,
+				27E230032936C72E002F466F /* Model.sqlite-wal in Resources */,
+				27E230022936C72E002F466F /* Model.sqlite in Resources */,
 				EA5F130D1FB861A0009590B6 /* Main.storyboard in Resources */,
+				27E230012936C72E002F466F /* Model.sqlite-shm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,7 +27,7 @@ class CoreDataStack {
         UIColorValueTransformer.register()
 
         let container = NSPersistentContainer(name: name)
-//        self.seedCoreDataContainerIfFirstLaunch()
+        self.seedCoreDataContainerIfFirstLaunch()
         container.loadPersistentStores { storeDescription, error in
             // Avoid duplicating objects - There's a constraint on property 'name'
             // For properties which have been changed in both the external source and in memory, the in memory changes trump the external ones
@@ -69,8 +69,24 @@ class CoreDataStack {
 private extension CoreDataStack {
     //swiftlint:disable force_unwrapping
     func seedCoreDataContainerIfFirstLaunch() {
+#if DEBUG
+        let fileName = Bundle.main.bundleIdentifier!
+        let library = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        let preferences = library.appendingPathComponent("Preferences")
+        let userDefaultsPlistURL = preferences.appendingPathComponent(fileName).appendingPathExtension("plist")
+//        print("Library directory:", userDefaultsPlistURL.path)
+//        print("Preferences directory:", userDefaultsPlistURL.path)
+        print("UserDefaults plist file:", userDefaultsPlistURL.path)
+        if FileManager.default.fileExists(atPath: userDefaultsPlistURL.path) {
+            print("UserDefaults plist file found")
+        }
+#endif
+
         let previouslyLaunched = UserDefaults.standard.bool(forKey: "previouslyLaunched")
         if !previouslyLaunched {
+            //
+            // copy sqlite template files from Bundle to CoreData directory
+            //
             UserDefaults.standard.set(true, forKey: "previouslyLaunched")
 
             // Default directory where the CoreDataStack will store its files

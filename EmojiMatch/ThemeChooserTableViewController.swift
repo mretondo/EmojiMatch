@@ -52,7 +52,8 @@ class ThemeChooserTableViewController: UITableViewController
         dataSource = setupDataSource()
         dataSource?.defaultRowAnimation = .left // makes all the deletions look better BUT IT'S NOT WORKING
 
-        loadDefaultThemes()
+        // now loaded from CoreDataStack.seedCoreDataContainerIfFirstLaunch()
+//        loadDefaultThemes()
 
         printThemesTableStats()
 
@@ -177,16 +178,19 @@ class ThemeChooserTableViewController: UITableViewController
             // if true is returned then UITableViewDelegate's
             // tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) will be called
 
-            guard let managedObjectID = itemIdentifier(for: indexPath) else {return false}
+            // all themes can be deleted
+            return true
 
-            // fetch a theme at row index from the database
-            if let theme = try? coreDataStack?.moc.existingObject(with: managedObjectID) as? Theme {
-                if theme.name == "Christmas" {
-                    return true
-                }
-            }
-
-            return false
+//            guard let managedObjectID = itemIdentifier(for: indexPath) else {return false}
+//
+//            // fetch a theme at row index from the database
+//            if let theme = try? coreDataStack?.moc.existingObject(with: managedObjectID) as? Theme {
+//                if theme.name == "Christmas" {
+//                    return true
+//                }
+//            }
+//
+//            return false
         }
 
         override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -247,17 +251,17 @@ extension ThemeChooserTableViewController {
 //
     // Allows customization of the editingStyle for a particular cell located at 'indexPath'. If not implemented, all editable
     // cells will have UITableViewCellEditingStyleDelete set for them when the table has editing property set to YES.
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        // Change row number from 100 to row number you want to delete
-        // This is just test code to play with deleting rows e.g. 1 with deleted Christmas row
-        if indexPath.row == 100 {
-            // swipe-to-edit
-            return .delete
-        } else {
-            // prevent swipe-to-edit or insert
-            return .none
-        }
-    }
+//    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//        // Change row number from 100 to row number you want to delete
+//        // This is just test code to play with deleting rows e.g. 1 with deleted Christmas row
+//        if indexPath.row == 100 {
+//            // swipe-to-edit
+//            return .delete
+//        } else {
+//            // prevent swipe-to-edit or insert
+//            return .none
+//        }
+//    }
 
     // NOTE: this is called AFTER prepare(for:sender:)
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
