@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "mrutils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mretondo/MRUtils.git",
+      "state" : {
+        "revision" : "a7055c50314165cb38f243ba6aeadd3523195f72",
+        "version" : "3.0.1"
+      }
+    }
+  ],
+  "version" : 2
+}
