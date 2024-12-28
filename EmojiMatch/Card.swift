@@ -36,7 +36,7 @@ struct Card: Hashable
 
     private var identifier: Int
     
-    private static var identifierFactory = 0
+    nonisolated(unsafe) private static var identifierFactory = 0
     
     private static func getUniqueIdentifier() -> Int {
         let uniqueIdentifier = identifierFactory

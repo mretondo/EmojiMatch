@@ -19,6 +19,20 @@ struct EmojiMatchModel
 //        }
     }
 
+    func otherTwinCard(matching index: Int) -> Card {
+        var otherIndex = -1
+
+        for i in cards.indices {
+            // card matches but is NOT the same card
+            if cards[i] == cards[index] && i != index {
+                otherIndex = i
+                break
+            }
+        }
+
+        return cards[otherIndex]
+    }
+
     func indicesOfCard(_ card: Card) -> (Int?, Int?) {
         var first: Int?
         var second: Int?
@@ -96,10 +110,10 @@ struct EmojiMatchModel
         assert(cards.indices.contains(index), "EmojiMatch(at \(index)): chosen index not in cards")
 
 		if !cards[index].isMatched {
-            if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
+            if let indexOfOneAndOnlyFaceUpCard = indexOfOneAndOnlyFaceUpCard, indexOfOneAndOnlyFaceUpCard != index {
                 // check if cards match
-                if cards[matchIndex] == cards[index] {
-                    cards[matchIndex].isMatched = true
+                if cards[indexOfOneAndOnlyFaceUpCard] == cards[index] {
+                    cards[indexOfOneAndOnlyFaceUpCard].isMatched = true
                     cards[index].isMatched = true
                 }
 //                cards[index].isTransitioningToFaceUp = true

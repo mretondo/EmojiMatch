@@ -31,77 +31,76 @@ class CardsViewController: UIViewController
     }
 
     private(set) var score: Int64 = 0 { didSet { updateScoreLabel() } }
-    private var flipCompleted = false
+    private var secondCardFlipCompleted = false
     private var emojiChoices = ""
     private var emoji: [Card : String] = [:]
     private var seenCards: [Card : Bool] = [:]
     private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+    private var firstFlipedCardButtonIndex: Int?
 
     @IBAction private func touchCard(_ sender: UIButton) {
         // ignore touches after game is over
         guard self.gameOver.isHidden else { return }
 
-        guard let cardNumber = cardButtons.firstIndex(of: sender) else {
+        guard let cardButtonIndex = cardButtons.firstIndex(of: sender) else {
             #if DEBUG
             print("touchCard(_:) - choosen card was not in cardButtons")
             #endif
             return
         }
 
-        let card = game.cards[cardNumber]
-        guard !card.isFaceUp && !card.isTransitioningToFaceUp else { return } // ignore touches on Transitioning/face up cards
+        let touchedCard = game.cards[cardButtonIndex]
+        guard !touchedCard.isFaceUp && !touchedCard.isTransitioningToFaceUp else { return } // ignore touches on Transitioning/face up cards
 
-        // if two cards have not finished flipping back down then wait for them to finish before processing new touched card
-        if flipCompleted {
-            flipCompleted = false
-        } else if game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards.count == 2 {
-            // async alows previous cards flipping animation to
-            // complete before starting animation of third card.
-            DispatchQueue.main.async {
-                self.touchCard(sender)
-            }
+        if game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards.count == 1 {
+            self.view.isUserInteractionEnabled = false
+        }
 
-            return  // consume event
+        // if two cards have not finished flipping back down then ignore new touched card
+        if secondCardFlipCompleted {
+            secondCardFlipCompleted = false
         }
 
         // if card isMatched then it can't be pressed
-        if !card.isMatched {
-            game.chooseCard(at: cardNumber)
+        if !touchedCard.isMatched {
+            game.chooseCard(at: cardButtonIndex)
 
             // get union of arrarys
             let indicesOfFaceUpCards = game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards
 
-            if game.cards[cardNumber].isMatched {
-                // Congradulations! you found matching cards and get 2 points
-                score += 2
+            if indicesOfFaceUpCards.count == 2 {
+                if game.cards[cardButtonIndex].isMatched {
+                    // Congradulations! you found matching cards and get 1 point
+                    score += 1
+                } else {
+                    // deduct points if cards don't match
 
-                game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
-                game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
-            } else {
-                // deduct points if 2 cards are face up and don't match
-                if indicesOfFaceUpCards.count == 2 {
-                    // loose a point for each card that was seen before
-                    if game.cards[indicesOfFaceUpCards[0]].hasBeenSeen {
+                    if game.cards[cardButtonIndex].hasBeenSeen {
+                        // you allready saw this card and should've known it wasn't a match to the first flipped card
                         score -= 1
-                    } else {
-                        game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
                     }
 
-                    if game.cards[indicesOfFaceUpCards[1]].hasBeenSeen {
+                    if game.otherTwinCard(matching: firstFlipedCardButtonIndex!).hasBeenSeen {
+                        // you allready saw the matching card to the first flipped card and forgot it
                         score -= 1
-                    } else {
-                        game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
                     }
 
                     // cap lowest score to -100
                     if score < LeaderboardTableViewController.lowestScorePosible {
                         score = LeaderboardTableViewController.lowestScorePosible
                     }
-                }
-            }
 
-            updateViewFromModel(touchedCard: cardNumber)
+                    firstFlipedCardButtonIndex = nil
+                }
+
+                game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
+                game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
+            } else {
+                firstFlipedCardButtonIndex = cardButtonIndex
+            }
         }
+
+        updateViewFromModel(touchedCard: cardButtonIndex)
     }
 
     override func viewDidLoad() {
@@ -170,16 +169,18 @@ class CardsViewController: UIViewController
     }
 
     @IBAction func newGame(_ sender: UIBarButtonItem) {
-        // scale all cards to zero size so we can zoom cards back out
-        for index in cardButtons.indices {
-            cardButtons[index].transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-            cardButtons[index].alpha = 0.0
-            cardButtons[index].isOpaque = false
-        }
+        if secondCardFlipCompleted {
+            // scale all cards to zero size so we can zoom cards back out
+            for index in cardButtons.indices {
+                cardButtons[index].transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+                cardButtons[index].alpha = 0.0
+                cardButtons[index].isOpaque = false
+            }
 
-        UIView.animate(withDuration: 0.6, delay: 0.2, options: [.curveEaseOut]) { [self] in
-            setupNewGame()
-            updateViewFromModel(touchedCard: nil)
+            UIView.animate(withDuration: 0.6, delay: 0.2, options: [.curveEaseOut]) { [self] in
+                setupNewGame()
+                updateViewFromModel(touchedCard: nil)
+            }
         }
     }
 
@@ -213,11 +214,13 @@ class CardsViewController: UIViewController
         setupButtonsDefaults()
 
         score = 0
-        flipCompleted = false
+        secondCardFlipCompleted = false
+        self.view.isUserInteractionEnabled = true
         emojiChoices = theme?.emojis ?? ""
         emoji = [:]
         seenCards = [:]
         game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        firstFlipedCardButtonIndex = nil
     }
 
     private func updateScoreLabel() {
@@ -365,11 +368,13 @@ class CardsViewController: UIViewController
                                                 self.animateHideCard(at: firstIndex, self.cardButtons[firstIndex])
                                                 self.animateHideCard(at: secondIndex, self.cardButtons[secondIndex])
 
-                                                self.flipCompleted = true
+                                                self.secondCardFlipCompleted = true
+                                                self.view.isUserInteractionEnabled = true
                                             }
                                         )
                                     } else {
-                                        self.flipCompleted = true
+                                        self.secondCardFlipCompleted = true
+                                        self.view.isUserInteractionEnabled = true
                                     }
                                 } else {
                                     // 4 - count number of face up cards
@@ -423,7 +428,8 @@ class CardsViewController: UIViewController
                                                         // update model so cards are now back to being face down
                                                         self.game.cards[faceUpCards[1]].isFaceUp = false
 
-                                                        self.flipCompleted = true
+                                                        self.secondCardFlipCompleted = true
+                                                        self.view.isUserInteractionEnabled = true
                                                     }
                                                 )
                                             }
@@ -581,8 +587,15 @@ extension UIColor {
 
 extension UIButton {
     func copy() throws -> UIButton? {
-        let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
-        return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? UIButton
+        let archivedData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+        return try NSKeyedUnarchiver.unarchivedObject(ofClasses: [UIButton.self], from: archivedData) as? UIButton
+    }
+}
+
+extension NSObject {
+    func copyObject<T:NSObject>() throws -> T? {
+        let archivedData = try NSKeyedArchiver.archivedData(withRootObject: T.self, requiringSecureCoding: false)
+        return try NSKeyedUnarchiver.unarchivedObject(ofClasses: [T.self], from: archivedData) as? T
     }
 }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import GameKit
+@preconcurrency import GameKit
 import MRUtils
 
 class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDelegate, UITextFieldDelegate
@@ -23,8 +23,8 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     var alertController = UIAlertController()
 
     var gcEnabled = false // Check if the user has Game Center enabled
-    var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch2" // Check the default leaderboardID
-    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch2"
+    var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch3" // Check the default leaderboardID
+    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch3"
 
     @IBAction func addTheme(_ sender: UIBarButtonItem) {
         let moc = AppDelegate.shared.coreDataStack.moc
