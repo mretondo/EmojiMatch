@@ -120,8 +120,8 @@
 				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */,
-				EAB24F441FB8622400FD5E4D /* Supporting Files */,
 				2713C12C25C50E590067E664 /* CoreData */,
+				EAB24F441FB8622400FD5E4D /* Supporting Files */,
 				EA5F13131FB861A0009590B6 /* Info.plist */,
 			);
 			path = EmojiMatch;

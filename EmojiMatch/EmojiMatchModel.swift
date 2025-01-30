@@ -19,18 +19,32 @@ struct EmojiMatchModel
 //        }
     }
 
-    func otherTwinCard(matching index: Int) -> Card {
-        var otherIndex = -1
+    func twinCard(of index: Int) -> Card? {
+        var twinCard: Card?
 
         for i in cards.indices {
             // card matches but is NOT the same card
             if cards[i] == cards[index] && i != index {
-                otherIndex = i
+                twinCard = cards[i]
                 break
             }
         }
 
-        return cards[otherIndex]
+        return twinCard
+    }
+
+    func twinCardIndex(of index: Int) -> Int? {
+        var twinCardIndex: Int?
+
+        for i in cards.indices {
+            // card matches but is NOT the same card
+            if cards[i] == cards[index] && i != index {
+                twinCardIndex = i
+                break
+            }
+        }
+
+        return twinCardIndex
     }
 
     func indicesOfCard(_ card: Card) -> (Int?, Int?) {

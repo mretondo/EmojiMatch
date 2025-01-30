@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>top-level-items</key>
+	<array>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>81</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>79</string>
+					<key>Timestamp</key>
+					<string>759726421.1084141</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/CardsViewController.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>                    // deduct 2 points if have you seen both cards before
+                    //
+</string>
+				<key>leading</key>
+				<string>                } else {
+                    //
+</string>
+				<key>trailing</key>
+				<string>                    if game.cards[firstTouchedCardIndex!].hasBeenSeen &amp;&amp; game.cards[touchedCardIndex].hasBeenSeen {
+                        score -= 2
+                    }
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>150</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>149</string>
+					<key>Timestamp</key>
+					<string>759806350.6127011</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/EmojiMatchModel.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>        cards.shuffle()
+</string>
+				<key>leading</key>
+				<string>
+        // cards are now in order like (1-1, 2-2, 3-3,...) and need to be suffled
+</string>
+				<key>trailing</key>
+				<string>	}
+	
+}
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>229</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>229</string>
+					<key>Timestamp</key>
+					<string>759726625.353833</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/CardsViewController.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string></string>
+				<key>leading</key>
+				<string>        game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        firstTouchedCardIndex = nil
+</string>
+				<key>trailing</key>
+				<string>    }
+
+    private func updateScoreLabel() {
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>519</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>518</string>
+					<key>Timestamp</key>
+					<string>759726591.5832551</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/CardsViewController.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>    private func emoji(for card: Card) -&gt; String {
+</string>
+				<key>leading</key>
+				<string>    }
+    
+</string>
+				<key>trailing</key>
+				<string>        if emoji[card] == nil &amp;&amp; emojiChoices.count &gt; 0 {
+            let offset = emojiChoices.count.random
+            let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: offset)
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>229</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>229</string>
+					<key>Timestamp</key>
+					<string>759726625.353811</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/CardsViewController.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string></string>
+				<key>leading</key>
+				<string>        game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        firstTouchedCardIndex = nil
+</string>
+				<key>trailing</key>
+				<string>    }
+
+    private func updateScoreLabel() {
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>146</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>145</string>
+					<key>Timestamp</key>
+					<string>759806334.764002</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/EmojiMatchModel.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>			cards += [card, card]   // Note: two cards that are equal (but not the same) are added to the array i.e. pass by value
+</string>
+				<key>leading</key>
+				<string>		for _ in 1...numberOfPairsOfCards {
+			let card = Card()
+</string>
+				<key>trailing</key>
+				<string>		}
+
+        // cards are now in order like (1-1, 2-2, 3-3,...) and need to be suffled
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>7</string>
+					<key>EndingLineNumber</key>
+					<string>25</string>
+					<key>StartingColumnNumber</key>
+					<string>7</string>
+					<key>StartingLineNumber</key>
+					<string>25</string>
+					<key>Timestamp</key>
+					<string>759809362.327251</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>EmojiMatch/LeaderboardTableViewController.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string></string>
+				<key>leading</key>
+				<string>
+    var gcEnabled = false // Check if the user has Game Center enabled
+    var</string>
+				<key>trailing</key>
+				<string> gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch3" // Check the default leaderboardID
+    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch3"
+
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+	</array>
+</dict>
+</plist>

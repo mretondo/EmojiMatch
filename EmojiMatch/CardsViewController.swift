@@ -36,20 +36,20 @@ class CardsViewController: UIViewController
     private var emoji: [Card : String] = [:]
     private var seenCards: [Card : Bool] = [:]
     private lazy var game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-    private var firstFlipedCardButtonIndex: Int?
+    private var firstTouchedCardIndex: Int?
 
     @IBAction private func touchCard(_ sender: UIButton) {
         // ignore touches after game is over
         guard self.gameOver.isHidden else { return }
 
-        guard let cardButtonIndex = cardButtons.firstIndex(of: sender) else {
+        guard let touchedCardIndex = cardButtons.firstIndex(of: sender) else {
             #if DEBUG
             print("touchCard(_:) - choosen card was not in cardButtons")
             #endif
             return
         }
 
-        let touchedCard = game.cards[cardButtonIndex]
+        let touchedCard = game.cards[touchedCardIndex]
         guard !touchedCard.isFaceUp && !touchedCard.isTransitioningToFaceUp else { return } // ignore touches on Transitioning/face up cards
 
         if game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards.count == 1 {
@@ -63,25 +63,31 @@ class CardsViewController: UIViewController
 
         // if card isMatched then it can't be pressed
         if !touchedCard.isMatched {
-            game.chooseCard(at: cardButtonIndex)
+            game.chooseCard(at: touchedCardIndex)
 
-            // get union of arrarys
             let indicesOfFaceUpCards = game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards
 
             if indicesOfFaceUpCards.count == 2 {
-                if game.cards[cardButtonIndex].isMatched {
+                //
+                // at this point touchedCardIndex is pointing to the second touched card
+                //
+
+                if game.cards[touchedCardIndex].isMatched {
                     // Congradulations! you found matching cards and get 1 point
                     score += 1
                 } else {
-                    // deduct points if cards don't match
-
-                    if game.cards[cardButtonIndex].hasBeenSeen {
-                        // you allready saw this card and should've known it wasn't a match to the first flipped card
-                        score -= 1
+                    //
+                    // deduct 2 points if have you seen both cards before
+                    //
+                    if game.cards[firstTouchedCardIndex!].hasBeenSeen && game.cards[touchedCardIndex].hasBeenSeen {
+                        score -= 2
                     }
 
-                    if game.otherTwinCard(matching: firstFlipedCardButtonIndex!).hasBeenSeen {
-                        // you allready saw the matching card to the first flipped card and forgot it
+                    //
+                    // deduct 1 point if have you seen the second card but not the first card
+                    // because you should have known the second card wasn't a match
+                    //
+                    if game.cards[touchedCardIndex].hasBeenSeen && !game.cards[firstTouchedCardIndex!].hasBeenSeen {
                         score -= 1
                     }
 
@@ -90,17 +96,17 @@ class CardsViewController: UIViewController
                         score = LeaderboardTableViewController.lowestScorePosible
                     }
 
-                    firstFlipedCardButtonIndex = nil
+                    firstTouchedCardIndex = nil
                 }
 
                 game.cards[indicesOfFaceUpCards[0]].hasBeenSeen = true
                 game.cards[indicesOfFaceUpCards[1]].hasBeenSeen = true
             } else {
-                firstFlipedCardButtonIndex = cardButtonIndex
+                firstTouchedCardIndex = touchedCardIndex
             }
         }
 
-        updateViewFromModel(touchedCard: cardButtonIndex)
+        updateViewFromModel(touchedCard: touchedCardIndex)
     }
 
     override func viewDidLoad() {
@@ -220,7 +226,7 @@ class CardsViewController: UIViewController
         emoji = [:]
         seenCards = [:]
         game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-        firstFlipedCardButtonIndex = nil
+        firstTouchedCardIndex = nil
     }
 
     private func updateScoreLabel() {
