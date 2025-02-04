@@ -77,17 +77,26 @@ class CardsViewController: UIViewController
                     score += 1
                 } else {
                     //
-                    // deduct 2 points if have you seen both cards before
+                    // Deduct 2 points if you've seen both cards before
                     //
-                    if game.cards[firstTouchedCardIndex!].hasBeenSeen && game.cards[touchedCardIndex].hasBeenSeen {
+                    if game.hasCardBeenSeen(at: firstTouchedCardIndex!) && game.hasCardBeenSeen(at: touchedCardIndex) {
                         score -= 2
                     }
 
                     //
-                    // deduct 1 point if have you seen the second card but not the first card
-                    // because you should have known the second card wasn't a match
+                    // Deduct 1 point if you've seen the second card but not the first card
+                    // You should have known the second card wasn't a match
                     //
-                    if game.cards[touchedCardIndex].hasBeenSeen && !game.cards[firstTouchedCardIndex!].hasBeenSeen {
+                    if game.hasCardBeenSeen(at: touchedCardIndex) && !game.hasCardBeenSeen(at: firstTouchedCardIndex!) {
+                        score -= 1
+                    }
+
+                    //
+                    // Deduct 1 point if you've seen first card and also seen its twin card
+                    // You should have remembered where the first cards' match was located
+                    //
+                    let twinCardIndex: Int = game.twinCardIndex(of: firstTouchedCardIndex!)!
+                    if game.hasCardBeenSeen(at: firstTouchedCardIndex!) && game.hasCardBeenSeen(at: twinCardIndex) {
                         score -= 1
                     }
 
