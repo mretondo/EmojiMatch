@@ -34,6 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        return sharedAppDelegate.persistentContainer
 //    }
 
+    static func main() {
+        // Your custom app initialization logic here
+        UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, nil, NSStringFromClass(AppDelegate.self))
+    }
+
     public var highScore: Int64? {
         get { return Score.highScore }
         set(newValue) { Score.highScore = newValue }

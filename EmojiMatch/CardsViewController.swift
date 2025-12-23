@@ -77,30 +77,23 @@ class CardsViewController: UIViewController
                     score += 1
                 } else {
                     //
-                    // Deduct 2 points if you've seen both cards before
-                    //
-                    if game.hasCardBeenSeen(at: firstTouchedCardIndex!) && game.hasCardBeenSeen(at: touchedCardIndex) {
-                        score -= 2
-                    }
-
-                    //
-                    // Deduct 1 point if you've seen the second card but not the first card
-                    // You should have known the second card wasn't a match
-                    //
-                    if game.hasCardBeenSeen(at: touchedCardIndex) && !game.hasCardBeenSeen(at: firstTouchedCardIndex!) {
-                        score -= 1
-                    }
-
-                    //
-                    // Deduct 1 point if you've seen first card and also seen its twin card
+                    // Deduct 2 point if you've seen first card's twin card
                     // You should have remembered where the first cards' match was located
                     //
                     let twinCardIndex: Int = game.twinCardIndex(of: firstTouchedCardIndex!)!
-                    if game.hasCardBeenSeen(at: firstTouchedCardIndex!) && game.hasCardBeenSeen(at: twinCardIndex) {
-                        score -= 1
+                    if game.hasCardBeenSeen(at: twinCardIndex) {
+                        score -= 2
+                    } else {
+                        // Deduct 1 point if you've seen the second card
+                        // You should have known the second card wasn't a match
+                        if game.hasCardBeenSeen(at: touchedCardIndex) {
+                            score -= 1
+                        }
                     }
 
+                    //
                     // cap lowest score to -100
+                    //
                     if score < LeaderboardTableViewController.lowestScorePosible {
                         score = LeaderboardTableViewController.lowestScorePosible
                     }
@@ -141,23 +134,21 @@ class CardsViewController: UIViewController
         super.viewWillAppear(animated)
         
         // change the titles text color for Christmas and Halloween
-        if title == "Christmas" || title == "Halloween", let theme = theme {
-            if #available(iOS 13.0, *) {
-//                let appearance = UINavigationBarAppearance(idiom: .phone)
-//                appearance.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
-//                appearance.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
-//
-//                navigationItem.standardAppearance = appearance
+        if title == "Christmas" || title == "Halloween", let theme = theme, let navigationBar = navigationController?.navigationBar {
+            // change the titles text color for Christmas and Halloween
+            navigationBar.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
+            navigationBar.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
 
-                navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
-                navigationController?.navigationBar.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
-                navigationController?.navigationBar.barStyle = .black
+            if #available(iOS 26.0, *) {
             } else {
-                // Fallback on earlier versions
-                if let navigationBar = navigationController?.navigationBar {
-                    // change the titles text color for Christmas and Halloween
-                    navigationBar.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
-                    navigationBar.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
+                if #available(iOS 13.0, *) {
+                    //                    let appearance = UINavigationBarAppearance(idiom: .phone)
+                    //                    appearance.largeTitleTextAttributes = [.foregroundColor : theme.faceDownColor]
+                    //                    appearance.titleTextAttributes = [.foregroundColor : theme.faceDownColor]
+                    //
+                    //                    navigationItem.standardAppearance = appearance
+
+                    navigationBar.barStyle = .black // white text, I know, weird
                 }
             }
         }
@@ -172,11 +163,17 @@ class CardsViewController: UIViewController
         }
 
         // reset titles text to default color if changed in viewWillAppear
-//        navigationController?.navigationBar.largeTitleTextAttributes = nil
-//        navigationController?.navigationBar.titleTextAttributes = nil
-        navigationController?.navigationBar.largeTitleTextAttributes = [:]
-        navigationController?.navigationBar.titleTextAttributes = [:]
-        navigationController?.navigationBar.barStyle = .default
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.largeTitleTextAttributes = [:]
+            navigationBar.titleTextAttributes = [:]
+
+            if #available(iOS 26.0, *) {
+            } else {
+                if #available(iOS 13.0, *) {
+                    navigationController?.navigationBar.barStyle = .default
+                }
+            }
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -184,18 +181,26 @@ class CardsViewController: UIViewController
     }
 
     @IBAction func newGame(_ sender: UIBarButtonItem) {
-        if secondCardFlipCompleted {
-            // scale all cards to zero size so we can zoom cards back out
-            for index in cardButtons.indices {
-                cardButtons[index].transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-                cardButtons[index].alpha = 0.0
-                cardButtons[index].isOpaque = false
-            }
+        if areAllCardsMatched() {
+            AppDelegate.shared.highScore = score
+            try? AppDelegate.shared.coreDataStack.moc.save()
+        }
 
-            UIView.animate(withDuration: 0.6, delay: 0.2, options: [.curveEaseOut]) { [self] in
-                setupNewGame()
-                updateViewFromModel(touchedCard: nil)
-            }
+        for index in cardButtons.indices {
+            cardButtons[index].layer.removeAllAnimations()
+        }
+
+        // setup cards to scale to zero size so we can zoom cards back out
+        for index in cardButtons.indices {
+            cardButtons[index].transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+            cardButtons[index].alpha = 0.0
+            cardButtons[index].isOpaque = false
+        }
+
+        UIView.animate(withDuration: 0.6, delay: 0.2, options: [.curveEaseOut]) { [self] in
+            setupNewGame()
+
+            updateViewFromModel(touchedCard: nil)
         }
     }
 
@@ -223,10 +228,22 @@ class CardsViewController: UIViewController
         }
     }
 
+    fileprivate func setupCardsDefaults() {
+        // setup Cards to start of game defaults
+        for index in cardButtons.indices {
+            game.cards[index].hasBeenSeen = false
+            game.cards[index].isTransitioningToFaceUp = false
+            game.cards[index].isFaceUp = false
+            game.cards[index].isMatched = false
+        }
+    }
+
     private func setupNewGame() {
         setupGameOverLabel()
 
         setupButtonsDefaults()
+
+        setupCardsDefaults()
 
         score = 0
         secondCardFlipCompleted = false
@@ -337,124 +354,152 @@ class CardsViewController: UIViewController
             options: [.curveEaseIn],
             animations: { button.transform = CGAffineTransform(scaleX: 1.15, y: 1.15) },
             completion: { finished in
-                // after card is lifted then change the title and background - this will be the FlipTo side
-                button.setTitle(self.emoji(for: card), for: .normal)
-                button.backgroundColor = self.theme?.faceUpColor
+                if (finished) {
+                    // after card is lifted then change the title and background - this will be the FlipTo side
+                    button.setTitle(self.emoji(for: card), for: .normal)
+                    button.backgroundColor = self.theme?.faceUpColor
 
-                // 2 - flip the card
-                #if DEBUG
-                print("flip the card 2")
-                #endif
-                UIView.transition(
-                    with: button,
-                    duration: 0.6,
-                    options: [.transitionFlipFromLeft, .curveEaseInOut],
-                    animations: nil,
-                    completion: { finished in
-                        // 3 - set card back down
-                        #if DEBUG
-                        print("lower the card 3")
-                        #endif
-                        UIView.animate(
-                            withDuration: 0.2,
-                            delay: 0,
-                            options: .curveEaseOut,
-                            animations: { button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) },
-                            completion: { finished in
-                                if let index = self.cardButtons.firstIndex(of: button) {
-                                    self.game.cards[index].isTransitioningToFaceUp = false
-                                    self.game.cards[index].isFaceUp = true
-                                }
-
-                                // hide cards if matched
-                                if card.isMatched {
-                                    let indicesOfCards = self.game.indicesOfCard(card)
-
-                                    if let firstIndex = indicesOfCards.0, let secondIndex = indicesOfCards.1 {
-                                        UIView.animate(
-                                            withDuration: 0.0,
-                                            delay: 0.3,
-                                            options: [.curveLinear],
-                                            animations: {
-                                                self.cardButtons[firstIndex].transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-                                                self.cardButtons[secondIndex].transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-                                            },
-                                            completion: { finished in
-                                                self.animateHideCard(at: firstIndex, self.cardButtons[firstIndex])
-                                                self.animateHideCard(at: secondIndex, self.cardButtons[secondIndex])
-
-                                                self.secondCardFlipCompleted = true
-                                                self.view.isUserInteractionEnabled = true
+                    // 2 - flip the card
+#if DEBUG
+                    print("flip the card 2")
+#endif
+                    UIView.transition(
+                        with: button,
+                        duration: 0.6,
+                        options: [.transitionFlipFromLeft, .curveEaseInOut],
+                        animations: nil,
+                        completion: { finished in
+                            if (finished) {
+                                // 3 - set card back down
+#if DEBUG
+                                print("lower the card 3")
+#endif
+                                UIView.animate(
+                                    withDuration: 0.2,
+                                    delay: 0,
+                                    options: .curveEaseOut,
+                                    animations: { button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0) },
+                                    completion: { finished in
+                                        if (finished) {
+                                            if let index = self.cardButtons.firstIndex(of: button) {
+                                                self.game.cards[index].isTransitioningToFaceUp = false
+                                                self.game.cards[index].isFaceUp = true
                                             }
-                                        )
-                                    } else {
-                                        self.secondCardFlipCompleted = true
-                                        self.view.isUserInteractionEnabled = true
-                                    }
-                                } else {
-                                    // 4 - count number of face up cards
-                                    #if DEBUG
-                                    print("count number of face up cards 4")
-                                    #endif
-                                    let faceUpCards = self.game.cards.indices.filter { self.game.cards[$0].isFaceUp }
 
-                                    if faceUpCards.count == 2 {
-                                        // 5 - there are two face up cards
-                                        #if DEBUG
-                                        print("there are two face up cards 5\n")
-                                        #endif
-                                        //
-                                        // Delay flipping cards back over by wrapping UIView.transition in a UIView.animate with a delay paramater.
-                                        // Putting a CGAffineTransform in the animations allows the 'delay' to work (it can't be empty).
-                                        // I reset the button.transform back to its default within setupButtonsDefaults()
-                                        //
-                                        UIView.animate(
-                                            withDuration: 0.0,
-                                            delay: 0.8,
-                                            options: [],
-                                            animations: {
-                                                // hack to make 'delay' work
-                                                button.transform = CGAffineTransform(scaleX: 1.00000001, y: 1.00)
-                                            },
-                                            completion: { finished in
-                                                self.cardButtons[faceUpCards[0]].setTitle("", for: .normal)
-                                                self.cardButtons[faceUpCards[0]].backgroundColor = self.theme?.faceDownColor
+                                            // hide cards if matched
+                                            if card.isMatched {
+                                                let indicesOfCards = self.game.indicesOfCard(card)
 
-                                                UIView.transition(
-                                                    with: self.cardButtons[faceUpCards[0]],
-                                                    duration: 0.5,
-                                                    options: [.transitionFlipFromRight, .curveEaseInOut],
-                                                    animations: nil,
-                                                    completion: { finished in
-                                                        // update model so cards are now back to being face down
-                                                        self.game.cards[faceUpCards[0]].isFaceUp = false
-                                                    }
-                                                )
+                                                if let firstIndex = indicesOfCards.0, let secondIndex = indicesOfCards.1 {
+                                                    UIView.animate(
+                                                        withDuration: 0.0,
+                                                        delay: 0.3,
+                                                        options: [.curveLinear],
+                                                        animations: {
+                                                            self.cardButtons[firstIndex].transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                                                            self.cardButtons[secondIndex].transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                                                        },
+                                                        completion: { finished in
+                                                            if (finished) {
+                                                                self.animateHideCard(at: firstIndex, self.cardButtons[firstIndex])
+                                                                self.animateHideCard(at: secondIndex, self.cardButtons[secondIndex])
 
-                                                self.cardButtons[faceUpCards[1]].setTitle("", for: .normal)
-                                                self.cardButtons[faceUpCards[1]].backgroundColor = self.theme?.faceDownColor
+                                                                self.secondCardFlipCompleted = true
+                                                                self.view.isUserInteractionEnabled = true
+                                                            } else {
+                                                                print("Cancel Animation 1")
+                                                            }
+                                                        }
+                                                    )
+                                                } else {
+                                                    self.secondCardFlipCompleted = true
+                                                    self.view.isUserInteractionEnabled = true
+                                                }
+                                            } else {
+                                                // 4 - count number of face up cards
+#if DEBUG
+                                                print("count number of face up cards 4")
+#endif
+                                                let faceUpCards = self.game.cards.indices.filter { self.game.cards[$0].isFaceUp }
 
-                                                UIView.transition(
-                                                    with: self.cardButtons[faceUpCards[1]],
-                                                    duration: 0.5,
-                                                    options: [.transitionFlipFromRight, .curveEaseInOut],
-                                                    animations: nil,
-                                                    completion: { finished in
-                                                        // update model so cards are now back to being face down
-                                                        self.game.cards[faceUpCards[1]].isFaceUp = false
+                                                if faceUpCards.count == 2 {
+                                                    // 5 - there are two face up cards
+#if DEBUG
+                                                    print("there are two face up cards 5\n")
+#endif
+                                                    //
+                                                    // Delay flipping cards back over by wrapping UIView.transition in a UIView.animate with a delay paramater.
+                                                    // Putting a CGAffineTransform in the animations allows the 'delay' to work (it can't be empty).
+                                                    // I reset the button.transform back to its default within setupButtonsDefaults()
+                                                    //
+                                                    UIView.animate(
+                                                        withDuration: 0.0,
+                                                        delay: 0.8,
+                                                        options: [],
+                                                        animations: {
+                                                            // hack to make 'delay' work
+                                                            button.transform = CGAffineTransform(scaleX: 1.00000001, y: 1.00)
+                                                        },
+                                                        completion: { finished in
+                                                            if (finished) {
+                                                                self.cardButtons[faceUpCards[0]].setTitle("", for: .normal)
+                                                                self.cardButtons[faceUpCards[0]].backgroundColor = self.theme?.faceDownColor
 
-                                                        self.secondCardFlipCompleted = true
-                                                        self.view.isUserInteractionEnabled = true
-                                                    }
-                                                )
+                                                                UIView.transition(
+                                                                    with: self.cardButtons[faceUpCards[0]],
+                                                                    duration: 0.5,
+                                                                    options: [.transitionFlipFromRight, .curveEaseInOut],
+                                                                    animations: nil,
+                                                                    completion: { finished in
+                                                                        if (finished) {
+                                                                            // update model so cards are now back to being face down
+                                                                            self.game.cards[faceUpCards[0]].isFaceUp = false
+                                                                        } else {
+                                                                            print("Cancel Animation 2")
+                                                                        }
+                                                                    }
+                                                                )
+
+                                                                self.cardButtons[faceUpCards[1]].setTitle("", for: .normal)
+                                                                self.cardButtons[faceUpCards[1]].backgroundColor = self.theme?.faceDownColor
+
+                                                                UIView.transition(
+                                                                    with: self.cardButtons[faceUpCards[1]],
+                                                                    duration: 0.5,
+                                                                    options: [.transitionFlipFromRight, .curveEaseInOut],
+                                                                    animations: nil,
+                                                                    completion: { finished in
+                                                                        if (finished) {
+                                                                            // update model so cards are now back to being face down
+                                                                            self.game.cards[faceUpCards[1]].isFaceUp = false
+
+                                                                            self.secondCardFlipCompleted = true
+                                                                            self.view.isUserInteractionEnabled = true
+                                                                        } else {
+                                                                            print("Cancel Animation 3")
+                                                                        }
+                                                                    }
+                                                                )
+                                                            } else {
+                                                                print("Cancel Animation 4")
+                                                            }
+                                                        }
+                                                    )
+                                                }
                                             }
-                                        )
+                                        } else {
+                                            print("Cancel Animation 5")
+                                        }
                                     }
-                                }
+                                )
+                            } else {
+                                print("Cancel Animation 6")
                             }
-                        )
-                    }
-                )
+                        }
+                    )
+                } else {
+                    print("Cancel Animation 7")
+                }
             }
         )
     }
@@ -484,32 +529,42 @@ class CardsViewController: UIViewController
             options: [.curveEaseIn],
             animations: { button.transform = CGAffineTransform(scaleX: 0.1, y: 0.1) },
             completion: { finished in
-                button.alpha = 0.0
-                button.isOpaque = false
+                if (finished) {
+                    button.alpha = 0.0
+                    button.isOpaque = false
 
-                // update model so cards are not face up
-                self.game.cards[cardIndex].isFaceUp = false
+                    // update model so cards are not face up
+                    self.game.cards[cardIndex].isFaceUp = false
 
-                if self.gameOver.isHidden && self.game.areAllCardsMatched() {
-                    // make game over label visible
-                    self.gameOver.isHidden = false
+                    if self.gameOver.isHidden && self.game.areAllCardsMatched() {
+                        // make game over label visible
+                        self.gameOver.isHidden = false
 
-                    // zoom out gameOver label 4X
-                    UIView.animate(
-                        withDuration: 2.0,
-                        delay: 0.0,
-                        usingSpringWithDamping: 0.4,
-                        initialSpringVelocity: 0.4,
-                        animations: {
-                            // zoom out and rotate gameOver label to normal size
-                            let scale = CGAffineTransform(scaleX: 1, y: 1)
-                            let rotationAngle = CGAffineTransform(rotationAngle: 0.0)
+                        // zoom out gameOver label 4X
+                        UIView.animate(
+                            withDuration: 2.0,
+                            delay: 0.0,
+                            usingSpringWithDamping: 0.4,
+                            initialSpringVelocity: 0.4,
+                            animations: {
+                                // zoom out and rotate gameOver label to normal size
+                                let scale = CGAffineTransform(scaleX: 1, y: 1)
+                                let rotationAngle = CGAffineTransform(rotationAngle: 0.0)
 
-                            let transform = scale.concatenating(rotationAngle)
+                                let transform = scale.concatenating(rotationAngle)
 
-                            self.gameOver.transform = transform
-                        }
-                    )
+                                self.gameOver.transform = transform
+                            },
+                            completion: { finished in
+                                if (finished) {
+                                } else {
+                                    print("Cancel Animation8")
+                                }
+                            }
+                        )
+                    }
+                } else {
+                    print("Cancel Animation 9")
                 }
             }
         )

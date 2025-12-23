@@ -109,10 +109,9 @@ class ThemeChooserTableViewController: UITableViewController
         let path = NSPersistentContainer
             .defaultDirectoryURL()
             .absoluteString
-            .replacingOccurrences(of: "file://", with: "Core Data Dir: ")
-            .removingPercentEncoding
+            .replacing("file://", with: "Core Data Dir: ")
 
-        print(path ?? "Not found")
+        print(path + "\n")
     }
 
     // pick emoji to display before table item label

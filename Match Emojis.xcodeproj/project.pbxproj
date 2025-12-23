@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -59,12 +59,10 @@
 /* Begin PBXFrameworksBuildPhase section */
 		EA5F13011FB861A0009590B6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */,
 				2723C27228FF94170050C00A /* MRUtils in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -151,8 +149,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = "Match Emojis";
 			packageProductDependencies = (
 				2723C27128FF94170050C00A /* MRUtils */,
@@ -189,7 +185,7 @@
 			packageReferences = (
 				279A7B4D28BEA79500ADEBFD /* XCRemoteSwiftPackageReference "MRUtils" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = EA5F13051FB861A0009590B6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -202,7 +198,6 @@
 /* Begin PBXResourcesBuildPhase section */
 		EA5F13021FB861A0009590B6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				EA5F13121FB861A0009590B6 /* LaunchScreen.storyboard in Resources */,
 				EA5F130F1FB861A0009590B6 /* Assets.xcassets in Resources */,
@@ -212,14 +207,12 @@
 				EA5F130D1FB861A0009590B6 /* Main.storyboard in Resources */,
 				27E230012936C72E002F466F /* Model.sqlite-shm in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EA5F13001FB861A0009590B6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */,
 				278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */,
@@ -234,7 +227,6 @@
 				270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */,
 				27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -258,7 +250,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		EA5F13141FB861A0009590B6 /* Debug */ = {
+		EA5F13141FB861A0009590B6 /* Debug configuration for PBXProject "Match Emojis" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -311,7 +303,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -322,7 +314,7 @@
 			};
 			name = Debug;
 		};
-		EA5F13151FB861A0009590B6 /* Release */ = {
+		EA5F13151FB861A0009590B6 /* Release configuration for PBXProject "Match Emojis" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -369,7 +361,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
@@ -380,7 +372,7 @@
 			};
 			name = Release;
 		};
-		EA5F13171FB861A0009590B6 /* Debug */ = {
+		EA5F13171FB861A0009590B6 /* Debug configuration for PBXNativeTarget "Match Emojis" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -389,30 +381,32 @@
 				CODE_SIGN_ENTITLEMENTS = "Match Emojis.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7.0.0;
+				CURRENT_PROJECT_VERSION = 6;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 58ZACZB2L8;
 				INFOPLIST_FILE = EmojiMatch/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 7.0.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 7.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mretondo.EmojiMatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-		EA5F13181FB861A0009590B6 /* Release */ = {
+		EA5F13181FB861A0009590B6 /* Release configuration for PBXNativeTarget "Match Emojis" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -421,17 +415,17 @@
 				CODE_SIGN_ENTITLEMENTS = "Match Emojis.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7.0.0;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 58ZACZB2L8;
 				INFOPLIST_FILE = EmojiMatch/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 7.0.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 7.0.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mretondo.EmojiMatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -439,6 +433,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -450,19 +445,17 @@
 		EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Match Emojis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EA5F13141FB861A0009590B6 /* Debug */,
-				EA5F13151FB861A0009590B6 /* Release */,
+				EA5F13141FB861A0009590B6 /* Debug configuration for PBXProject "Match Emojis" */,
+				EA5F13151FB861A0009590B6 /* Release configuration for PBXProject "Match Emojis" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Match Emojis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EA5F13171FB861A0009590B6 /* Debug */,
-				EA5F13181FB861A0009590B6 /* Release */,
+				EA5F13171FB861A0009590B6 /* Debug configuration for PBXNativeTarget "Match Emojis" */,
+				EA5F13181FB861A0009590B6 /* Release configuration for PBXNativeTarget "Match Emojis" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

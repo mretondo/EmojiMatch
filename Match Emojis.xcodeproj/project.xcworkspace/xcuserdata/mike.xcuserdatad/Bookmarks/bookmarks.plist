@@ -10,15 +10,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>0</string>
+					<string>16</string>
 					<key>EndingLineNumber</key>
-					<string>81</string>
+					<string>74</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>79</string>
+					<string>74</string>
 					<key>Timestamp</key>
-					<string>759726421.1084141</string>
+					<string>787881446.393392</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,286 +34,15 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>                    // Deduct 2 points if you've seen both cards before
-                    //
-</string>
+				<string>                </string>
 				<key>leading</key>
-				<string>                } else {
-                    //
-</string>
-				<key>trailing</key>
-				<string>                    if game.hasCardBeenSeen(at: firstTouchedCardIndex!) &amp;&amp; game.hasCardBeenSeen(at: touchedCardIndex) {
-                        score -= 2
-                    }
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>150</string>
-					<key>StartingColumnNumber</key>
-					<string>0</string>
-					<key>StartingLineNumber</key>
-					<string>149</string>
-					<key>Timestamp</key>
-					<string>759806350.6127011</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>EmojiMatch/EmojiMatchModel.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>        cards.shuffle()
-</string>
-				<key>leading</key>
-				<string>
-        // cards are now in order like (1-1, 2-2, 3-3,...) and need to be suffled
-</string>
-				<key>trailing</key>
-				<string>	}
-	
-}
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>239</string>
-					<key>StartingColumnNumber</key>
-					<string>0</string>
-					<key>StartingLineNumber</key>
-					<string>238</string>
-					<key>Timestamp</key>
-					<string>760324361.938223</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>EmojiMatch/CardsViewController.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>    }
-</string>
-				<key>leading</key>
-				<string>        game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-        firstTouchedCardIndex = nil
-</string>
-				<key>trailing</key>
-				<string>
-    private func updateScoreLabel() {
-        if let theme = theme {
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>528</string>
-					<key>StartingColumnNumber</key>
-					<string>0</string>
-					<key>StartingLineNumber</key>
-					<string>527</string>
-					<key>Timestamp</key>
-					<string>760324361.938236</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>EmojiMatch/CardsViewController.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>    private func emoji(for card: Card) -&gt; String {
-</string>
-				<key>leading</key>
-				<string>    }
-    
-</string>
-				<key>trailing</key>
-				<string>        if emoji[card] == nil &amp;&amp; emojiChoices.count &gt; 0 {
-            let offset = emojiChoices.count.random
-            let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: offset)
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>239</string>
-					<key>StartingColumnNumber</key>
-					<string>0</string>
-					<key>StartingLineNumber</key>
-					<string>238</string>
-					<key>Timestamp</key>
-					<string>760324361.9382</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>EmojiMatch/CardsViewController.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>    }
-</string>
-				<key>leading</key>
-				<string>        game = EmojiMatchModel(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
-        firstTouchedCardIndex = nil
-</string>
-				<key>trailing</key>
-				<string>
-    private func updateScoreLabel() {
-        if let theme = theme {
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>146</string>
-					<key>StartingColumnNumber</key>
-					<string>0</string>
-					<key>StartingLineNumber</key>
-					<string>145</string>
-					<key>Timestamp</key>
-					<string>759806334.764002</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>EmojiMatch/EmojiMatchModel.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>			cards += [card, card]   // Note: two cards that are equal (but not the same) are added to the array i.e. pass by value
-</string>
-				<key>leading</key>
-				<string>		for _ in 1...numberOfPairsOfCards {
-			let card = Card()
-</string>
-				<key>trailing</key>
-				<string>		}
+				<string>                //
 
-        // cards are now in order like (1-1, 2-2, 3-3,...) and need to be suffled
 </string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>7</string>
-					<key>EndingLineNumber</key>
-					<string>25</string>
-					<key>StartingColumnNumber</key>
-					<string>7</string>
-					<key>StartingLineNumber</key>
-					<string>25</string>
-					<key>Timestamp</key>
-					<string>759809362.327251</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>EmojiMatch/LeaderboardTableViewController.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string></string>
-				<key>leading</key>
-				<string>
-    var gcEnabled = false // Check if the user has Game Center enabled
-    var</string>
 				<key>trailing</key>
-				<string> gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch3" // Check the default leaderboardID
-    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch3"
-
+				<string>if game.cards[touchedCardIndex].isMatched {
+                    // Congradulations! you found matching cards and get 1 point
+                    score += 1
 </string>
 			</dict>
 			<key>type</key>

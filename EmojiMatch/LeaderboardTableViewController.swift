@@ -23,8 +23,8 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     var alertController = UIAlertController()
 
     var gcEnabled = false // Check if the user has Game Center enabled
-    var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch3" // Check the default leaderboardID
-    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch3"
+    var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch26" // Check the default leaderboardID
+    let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch26"
 
     @IBAction func addTheme(_ sender: UIBarButtonItem) {
         let moc = AppDelegate.shared.coreDataStack.moc
@@ -86,6 +86,44 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
                 saveAction.isEnabled = true
             }
         }
+    }
+
+    // Note: this function gets called with only a single char most of the time but can contain more if text is pasted
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // only check the second field in the dialog which is ment to contain the characters for the Cards
+        if textField == alertController.textFields?.last {
+            // Get the current text, or an empty string if it's nil
+            let currentText = textField.text ?? ""
+
+            // Attempt to create a Swift Range from the NSRange
+            guard Range(range, in: currentText) != nil else {
+                return false // If range is invalid, prevent change
+            }
+
+            // If user delected text the string will be empty
+            if string.isEmpty {
+                return true
+            }
+
+            // Smart Punctuation on iOS can add a space to the front and back of
+            // the pasted string so I only allow 1 character.
+            if string.count > 1 {
+                return false
+            }
+
+            // Check if string contains any whitespace
+            if string.rangeOfCharacter(from: .whitespaces) != nil {
+                // the string contains at least one character from the whitespaces set
+                return false
+            }
+
+            // prevent duplicate characters
+            if let text = textField.text, text.contains(string) {
+                return false
+            }
+        }
+
+        return true
     }
 
     override func viewDidLoad() {

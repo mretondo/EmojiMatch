@@ -74,8 +74,8 @@ private extension CoreDataStack {
         let library = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
         let preferences = library.appendingPathComponent("Preferences")
         let userDefaultsPlistURL = preferences.appendingPathComponent(fileName).appendingPathExtension("plist")
-//        print("Library directory:", userDefaultsPlistURL.path)
-//        print("Preferences directory:", userDefaultsPlistURL.path)
+        print("Library directory:", userDefaultsPlistURL.path)
+        print("Preferences directory:", userDefaultsPlistURL.path)
         print("UserDefaults plist file:", userDefaultsPlistURL.path)
         if FileManager.default.fileExists(atPath: userDefaultsPlistURL.path) {
             print("UserDefaults plist file found")
