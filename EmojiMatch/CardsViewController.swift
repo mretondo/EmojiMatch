@@ -76,18 +76,21 @@ class CardsViewController: UIViewController
                     // Congradulations! you found matching cards and get 1 point
                     score += 1
                 } else {
-                    //
-                    // Deduct 2 point if you've seen first card's twin card
-                    // You should have remembered where the first cards' match was located
-                    //
-                    let twinCardIndex: Int = game.twinCardIndex(of: firstTouchedCardIndex!)!
-                    if game.hasCardBeenSeen(at: twinCardIndex) {
-                        score -= 2
-                    } else {
-                        // Deduct 1 point if you've seen the second card
-                        // You should have known the second card wasn't a match
-                        if game.hasCardBeenSeen(at: touchedCardIndex) {
-                            score -= 1
+                    // we don't deduct points in ease mode
+                    if !LeaderboardTableViewController.easyScoringMode {
+                        //
+                        // Deduct 2 point if you've seen first card's twin card
+                        // You should have remembered where the first cards' match was located
+                        //
+                        let twinCardIndex: Int = game.twinCardIndex(of: firstTouchedCardIndex!)!
+                        if game.hasCardBeenSeen(at: twinCardIndex) {
+                            score -= 2
+                        } else {
+                            // Deduct 1 point if you've seen the second card
+                            // You should have known the second card wasn't a match
+                            if game.hasCardBeenSeen(at: touchedCardIndex) {
+                                score -= 1
+                            }
                         }
                     }
 

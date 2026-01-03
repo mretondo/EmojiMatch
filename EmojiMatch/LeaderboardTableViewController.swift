@@ -26,6 +26,36 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch26" // Check the default leaderboardID
     let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch26"
 
+    public static var easyScoringMode = false
+
+    func configureEasyScoringSwitchBarItem() {
+        // 1. Create the label
+        let easyScoringLabel = UILabel()
+        easyScoringLabel.text = "Easy Scoring"
+        easyScoringLabel.textColor = .label // works with light/dark modes
+
+        // 2. Create the switch
+        let easyScoringSwitch = UISwitch()
+        easyScoringSwitch.isOn = LeaderboardTableViewController.easyScoringMode
+        easyScoringSwitch.addAction(UIAction(handler: { _ in
+            LeaderboardTableViewController.easyScoringMode = easyScoringSwitch.isOn
+        }), for: .valueChanged)
+
+        // 3. Create a horizontal stack view to hold both
+        let stackView = UIStackView(arrangedSubviews: [easyScoringLabel, easyScoringSwitch])
+        stackView.distribution = .fill
+        stackView.axis = .horizontal
+        stackView.spacing = 8 // Adjust spacing as needed
+        stackView.alignment = .center // vertical center
+
+        // 4. Wrap the UIStackView in a UIBarButtonItem using the customView parameter
+        let stackBarButtonItem = UIBarButtonItem(customView: stackView)
+
+        // 5. Add the stack view to the leftBarButtonItem view
+        navigationItem.leftBarButtonItem = stackBarButtonItem
+        navigationItem.leftBarButtonItem?.hidesSharedBackground = true  // prevent stackview from animating
+    }
+
     @IBAction func addTheme(_ sender: UIBarButtonItem) {
         let moc = AppDelegate.shared.coreDataStack.moc
 
@@ -128,6 +158,13 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let previouslyLaunched = UserDefaults.standard.bool(forKey: "previouslyLaunched")
+        if previouslyLaunched {
+            LeaderboardTableViewController.easyScoringMode = UserDefaults.standard.bool(forKey: "easyScoringMode")
+        }
+
+        configureEasyScoringSwitchBarItem()
 
         // Call the GC authentication controller
         authenticateLocalPlayer()
@@ -450,3 +487,4 @@ extension UITextField {
         view?.backgroundColor = .clear
     }
 }
+
