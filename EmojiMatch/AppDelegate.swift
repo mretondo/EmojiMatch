@@ -39,6 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, nil, NSStringFromClass(AppDelegate.self))
     }
 
+    public static var easyScoringMode = false
+
     public var highScore: Int64? {
         get { return Score.highScore }
         set(newValue) { Score.highScore = newValue }
@@ -70,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        UserDefaults.standard.set(LeaderboardTableViewController.easyScoringMode, forKey: "easyScoringMode")
+        UserDefaults.standard.set(AppDelegate.easyScoringMode, forKey: "easyScoringMode")
 //        self.saveChangesToDisk()
     }
 

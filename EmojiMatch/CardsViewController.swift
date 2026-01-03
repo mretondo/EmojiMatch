@@ -77,7 +77,7 @@ class CardsViewController: UIViewController
                     score += 1
                 } else {
                     // we don't deduct points in ease mode
-                    if !LeaderboardTableViewController.easyScoringMode {
+                    if !AppDelegate.easyScoringMode {
                         //
                         // Deduct 2 point if you've seen first card's twin card
                         // You should have remembered where the first cards' match was located

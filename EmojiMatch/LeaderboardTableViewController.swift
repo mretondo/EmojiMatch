@@ -26,8 +26,6 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
     var gcDefaultLeaderboardIdentifier = "com.mretondo.EmojiMatch26" // Check the default leaderboardID
     let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch26"
 
-    public static var easyScoringMode = false
-
     func configureEasyScoringSwitchBarItem() {
         // 1. Create the label
         let easyScoringLabel = UILabel()
@@ -36,9 +34,9 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
         // 2. Create the switch
         let easyScoringSwitch = UISwitch()
-        easyScoringSwitch.isOn = LeaderboardTableViewController.easyScoringMode
+        easyScoringSwitch.isOn = AppDelegate.easyScoringMode
         easyScoringSwitch.addAction(UIAction(handler: { _ in
-            LeaderboardTableViewController.easyScoringMode = easyScoringSwitch.isOn
+            AppDelegate.easyScoringMode = easyScoringSwitch.isOn
         }), for: .valueChanged)
 
         // 3. Create a horizontal stack view to hold both
@@ -161,7 +159,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
         let previouslyLaunched = UserDefaults.standard.bool(forKey: "previouslyLaunched")
         if previouslyLaunched {
-            LeaderboardTableViewController.easyScoringMode = UserDefaults.standard.bool(forKey: "easyScoringMode")
+            AppDelegate.easyScoringMode = UserDefaults.standard.bool(forKey: "easyScoringMode")
         }
 
         configureEasyScoringSwitchBarItem()
