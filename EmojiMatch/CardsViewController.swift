@@ -123,6 +123,14 @@ class CardsViewController: UIViewController
         setButtonsFontSize()
 
         setupNewGame()
+
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitVerticalSizeClass.self]) { [weak self] (controller: UIViewController, previousTraitCollection: UITraitCollection) in
+                guard let self = self else { return }
+                self.updateScoreLabel()
+                self.setButtonsFontSize()
+            }
+        }
     }
 
 //    override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -278,18 +286,13 @@ class CardsViewController: UIViewController
         }
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        updateScoreLabel()
-    }
-
     private func setButtonsFontSize() {
         if cardButtons != nil {
             for index in cardButtons.indices {
                 let button = cardButtons[index]
                 
                 if var font = button.titleLabel?.font {
-                    let defaultFontSize: CGFloat = 46.0
+                    let defaultFontSize: Double = 46.0
 
 //                    let deviceType = "\(UIDevice().type)"
 //                    if  deviceType.starts(with: "iPhone3") ||
@@ -609,7 +612,7 @@ extension UIView {
     func rotate360Degrees(duration: CFTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
         let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotateAnimation.fromValue = 0.0
-        rotateAnimation.toValue = CGFloat(.pi * 2.0)
+        rotateAnimation.toValue = .pi * 2.0
         rotateAnimation.duration = duration
 
         if let delegate: AnyObject = completionDelegate {
@@ -636,16 +639,16 @@ extension UIView {
 //}
 
 extension UIColor {
-    func lighter(by percentage: CGFloat=30.0) -> UIColor? {
+    func lighter(by percentage: Double = 30.0) -> UIColor? {
         return self.adjust(by: abs(percentage) )
     }
 
-    func darker(by percentage: CGFloat=30.0) -> UIColor? {
+    func darker(by percentage: Double = 30.0) -> UIColor? {
         return self.adjust(by: -1 * abs(percentage) )
     }
 
-    func adjust(by percentage: CGFloat=30.0) -> UIColor? {
-        var r: CGFloat=0, g: CGFloat=0, b: CGFloat=0, a: CGFloat=0;
+    func adjust(by percentage: Double = 30.0) -> UIColor? {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
 
         if(self.getRed(&r, green: &g, blue: &b, alpha: &a)) {
             return UIColor(red:   min(r + percentage/100, 1.0),
@@ -700,6 +703,10 @@ extension NSObject {
 //        return buttonDuplicate
 //    }
 //}
+
+
+
+
 
 
 

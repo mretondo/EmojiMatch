@@ -293,7 +293,7 @@ extension ThemeChooserTableViewController {
 //        return headerView
 //    }
 //
-//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> Double {
 //        return 44
 //    }
 }
@@ -318,7 +318,7 @@ class CustomThemeChooserCell: UITableViewCell {
         var contentConfig = defaultContentConfiguration().updated(for: state)
 
         // increase 'text' default font size
-        let fontSize = CGFloat(44.0)
+        let fontSize = 44.0
         contentConfig.textProperties.font = contentConfig.textProperties.font.withSize(fontSize)
         contentConfig.text = text
 
