@@ -31,13 +31,15 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         let easyScoringLabel = UILabel()
         easyScoringLabel.text = "Easy Scoring"
         easyScoringLabel.textColor = .label // works with light/dark modes
+//        easyScoringLabel.translatesAutoresizingMaskIntoConstraints = false // Use Auto Layout
 
         // 2. Create the switch
         let easyScoringSwitch = UISwitch()
-        easyScoringSwitch.isOn = AppDelegate.easyScoringMode
+        easyScoringSwitch.isOn = AppEnvironment.shared.easyScoringMode
         easyScoringSwitch.addAction(UIAction(handler: { _ in
-            AppDelegate.easyScoringMode = easyScoringSwitch.isOn
+            AppEnvironment.shared.easyScoringMode = easyScoringSwitch.isOn
         }), for: .valueChanged)
+//        easyScoringSwitch.translatesAutoresizingMaskIntoConstraints = false // Use Auto Layout
 
         // 3. Create a horizontal stack view to hold both
         let stackView = UIStackView(arrangedSubviews: [easyScoringLabel, easyScoringSwitch])
@@ -45,6 +47,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         stackView.axis = .horizontal
         stackView.spacing = 8 // Adjust spacing as needed
         stackView.alignment = .center // vertical center
+//        stackView.translatesAutoresizingMaskIntoConstraints = false // Use Auto Layout
 
         // 4. Wrap the UIStackView in a UIBarButtonItem using the customView parameter
         let stackBarButtonItem = UIBarButtonItem(customView: stackView)
@@ -159,7 +162,7 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
 
         let previouslyLaunched = UserDefaults.standard.bool(forKey: "previouslyLaunched")
         if previouslyLaunched {
-            AppDelegate.easyScoringMode = UserDefaults.standard.bool(forKey: "easyScoringMode")
+            AppEnvironment.shared.easyScoringMode = UserDefaults.standard.bool(forKey: "easyScoringMode")
         }
 
         configureEasyScoringSwitchBarItem()

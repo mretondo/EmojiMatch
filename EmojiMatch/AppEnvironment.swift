@@ -7,7 +7,9 @@
 
 
 class AppEnvironment {
-    static let shared = AppEnvironment() // Singleton instance
-    var sharedDataValue: String?
     private init() {} // Prevents others from creating an instance
+
+    static let shared = AppEnvironment() // Singleton instance
+    
+    var easyScoringMode = false
 }
