@@ -127,8 +127,8 @@ class CardsViewController: UIViewController
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitVerticalSizeClass.self]) { [weak self] (controller: UIViewController, previousTraitCollection: UITraitCollection) in
                 guard let self = self else { return }
-                self.updateScoreLabel()
-                self.setButtonsFontSize()
+                updateScoreLabel()
+                setButtonsFontSize()
             }
         }
     }
