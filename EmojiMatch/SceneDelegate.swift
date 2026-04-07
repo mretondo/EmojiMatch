@@ -1,5 +1,5 @@
 //
-//  SceneDelegete.swift
+//  SceneDelegate.swift
 //  Match Emojis
 //
 //  Created by Mike Retondo on 3/1/26.
@@ -16,7 +16,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        // Saves changes in the application's managed object context before the application terminates.
         UserDefaults.standard.set(AppEnvironment.shared.easyScoringMode, forKey: "easyScoringMode")
+        
+        // Saves changes in the application's managed object context before the application terminates.
+        AppEnvironment.shared.coreDataStack.saveMoc()
     }
 }

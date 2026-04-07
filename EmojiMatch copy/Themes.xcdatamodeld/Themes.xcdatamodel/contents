@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Themes" representedClassName=".Themes" syncable="YES" codeGenerationType="category">
+        <attribute name="backgroundColor" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="emojis" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="faceDownColor" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="faceUpColor" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="themeName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Themes" positionX="46.66796875" positionY="-385.30078125" width="128" height="128"/>
+    </elements>
+</model>

@@ -24,15 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    lazy var coreDataStack: CoreDataStack = CoreDataStack(name: "Model")
-
-//    public static var moc: NSManagedObjectContext {
-//        return container.viewContext
-//    }
-//
-//    public static var container: NSPersistentContainer {
-//        return sharedAppDelegate.persistentContainer
-//    }
+//    lazy var coreDataStack: CoreDataStack = CoreDataStack(name: "Model")
 
     static func main() {
         // Your custom app initialization logic here

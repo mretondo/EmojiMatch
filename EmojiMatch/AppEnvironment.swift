@@ -10,6 +10,10 @@ class AppEnvironment {
     private init() {} // Prevents others from creating an instance
 
     static let shared = AppEnvironment() // Singleton instance
-    
+
     var easyScoringMode = false
+
+    lazy var coreDataStack: CoreDataStack = CoreDataStack(name: "Model")
+
+    weak var themeChooserTableViewController: ThemeChooserTableViewController?
 }

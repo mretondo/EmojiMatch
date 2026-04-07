@@ -11,7 +11,7 @@ class Score: NSManagedObject
 {
     public static var highScore: Int64? {
         get {
-            let moc = AppDelegate.shared.coreDataStack.moc
+            let moc = AppEnvironment.shared.coreDataStack.moc
             let request = fetchRequest()
 
             do {
@@ -34,7 +34,7 @@ class Score: NSManagedObject
                 let highScore = highScore
 
                 if highScore == nil || newValue > highScore! {
-                    let moc = AppDelegate.shared.coreDataStack.moc
+                    let moc = AppEnvironment.shared.coreDataStack.moc
 
                     // NOTE: no data is retrieved here, the database only retrieves the Entities record count
                     if let count = try? moc.count(for: Score.fetchRequest()), count == 0 {
@@ -61,9 +61,9 @@ class Score: NSManagedObject
     public static func printScoreTableStats() {
         #if DEBUG
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        AppDelegate.shared.coreDataStack.moc.perform {
+        AppEnvironment.shared.coreDataStack.moc.perform {
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppDelegate.shared.coreDataStack.moc.count(for: fetchRequest()) {
+            if let count = try? AppEnvironment.shared.coreDataStack.moc.count(for: fetchRequest()) {
                 print ("\(count) Score\n")
             } else {
                 print ("No Score\n")
