@@ -240,6 +240,16 @@ class LeaderboardTableViewController: UIViewController, GKGameCenterControllerDe
         }
     }
 
+    @IBAction private func checkGCLeaderboard(_ sender: Any) {
+        let gcVC = GKGameCenterViewController(state: .leaderboards)
+        gcVC.leaderboardIdentifier = gcLeaderboardIdentifier
+        gcVC.gameCenterDelegate = self
+        
+        present(gcVC, animated: true)
+    }
+    
+    // MARK: - GKGameCenterControllerDelegate
+    
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
         gameCenterViewController.dismiss(animated: true)
     }
