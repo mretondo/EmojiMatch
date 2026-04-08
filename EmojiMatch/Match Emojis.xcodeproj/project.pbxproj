@@ -10,12 +10,13 @@
 		270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 270612F822FF7412000EAA36 /* Model.xcdatamodeld */; };
 		2723C27228FF94170050C00A /* MRUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 2723C27128FF94170050C00A /* MRUtils */; };
 		2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */; };
-		27311B762F8714F3006413FF /* FirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27311B752F8714F3006413FF /* FirstResponder.swift */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
 		275C674D2F09E46C00D19A71 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C674C2F09E46C00D19A71 /* AppEnvironment.swift */; };
 		27689A3528E9339500922827 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27689A3428E9339500922827 /* CoreDataStack.swift */; };
 		278EC0FF25C510F700B25F87 /* UIColorValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */; };
+		27A131DB2F36C1BC000DD15B /* FirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A131DA2F36C1BC000DD15B /* FirstResponder.swift */; };
+		27A97FCE2F54EDDE008D7E7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A97FCD2F54EDDE008D7E7E /* SceneDelegate.swift */; };
 		27BBDDB723ED0A8300F1901C /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BBDDB623ED0A8300F1901C /* GameKit.framework */; };
 		27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */; };
 		27BEB4DC28E77D7F00B5F867 /* Score+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */; };
@@ -36,12 +37,13 @@
 		270612F922FF7412000EAA36 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		270D19902ABE7BDB009B0A72 /* Match Emojis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Match Emojis.entitlements"; sourceTree = "<group>"; };
 		2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewController.swift; sourceTree = "<group>"; };
-		27311B752F8714F3006413FF /* FirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstResponder.swift; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
 		275C674C2F09E46C00D19A71 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		27689A3428E9339500922827 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		278EC0FE25C510F700B25F87 /* UIColorValueTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorValueTransformer.swift; sourceTree = "<group>"; };
+		27A131DA2F36C1BC000DD15B /* FirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstResponder.swift; sourceTree = "<group>"; };
+		27A97FCD2F54EDDE008D7E7E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		27BBDDB623ED0A8300F1901C /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		27BEB4D728E771C600B5F867 /* Theme+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme+CoreDataClass.swift"; sourceTree = "<group>"; };
 		27BEB4DB28E77D7F00B5F867 /* Score+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Score+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -116,14 +118,15 @@
 		EA5F13061FB861A0009590B6 /* EmojiMatch */ = {
 			isa = PBXGroup;
 			children = (
-				27311B752F8714F3006413FF /* FirstResponder.swift */,
 				275C674C2F09E46C00D19A71 /* AppEnvironment.swift */,
 				2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
+				27A97FCD2F54EDDE008D7E7E /* SceneDelegate.swift */,
 				27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */,
 				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */,
+				27A131DA2F36C1BC000DD15B /* FirstResponder.swift */,
 				2713C12C25C50E590067E664 /* CoreData */,
 				EAB24F441FB8622400FD5E4D /* Supporting Files */,
 				EA5F13131FB861A0009590B6 /* Info.plist */,
@@ -176,7 +179,7 @@
 				TargetAttributes = {
 					EA5F13031FB861A0009590B6 = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 2630;
 					};
 				};
 			};
@@ -227,7 +230,8 @@
 				EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */,
 				2752756523C590510076EBBB /* MathHelpers.swift in Sources */,
 				27689A3528E9339500922827 /* CoreDataStack.swift in Sources */,
-				27311B762F8714F3006413FF /* FirstResponder.swift in Sources */,
+				27A97FCE2F54EDDE008D7E7E /* SceneDelegate.swift in Sources */,
+				27A131DB2F36C1BC000DD15B /* FirstResponder.swift in Sources */,
 				275C674D2F09E46C00D19A71 /* AppEnvironment.swift in Sources */,
 				27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
@@ -389,6 +393,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "Match Emojis.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -412,6 +417,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -422,6 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "Match Emojis.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";

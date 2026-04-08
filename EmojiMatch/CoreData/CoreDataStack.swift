@@ -22,7 +22,9 @@ class CoreDataStack {
          error conditions that could cause the creation of the store to fail.
          */
 
+        //
         // Register the transformers at the very beginning.
+        //
         // Transformer for UIColor
         UIColorValueTransformer.register()
 
@@ -49,6 +51,22 @@ class CoreDataStack {
         return container
     }()
 
+    //
+    // To insert\add an item into a TableView, you primarily interact with your Core Data NSManagedObjectContext.
+    // The NSFetchedResultsController's delegate methods will handle the TableView update automatically.
+    //
+    func insertTheme(from themeItem: ThemeItem) {
+        let newTheme = Theme(context: moc)
+
+        newTheme.name             = themeItem.name
+        newTheme.emojis           = themeItem.emojis
+        newTheme.backgroundColor  = themeItem.backgroundColor
+        newTheme.faceDownColor    = themeItem.faceDownColor
+        newTheme.faceUpColor      = themeItem.faceUpColor
+
+        saveMoc()
+    }
+
     /// Save the changes from the CoreData database held in memory to the persistent on disk database
     func saveMoc () {
         guard moc.hasChanges else { return }
@@ -67,7 +85,6 @@ class CoreDataStack {
 
 // MARK: Private
 private extension CoreDataStack {
-    //swiftlint:disable force_unwrapping
     func seedCoreDataContainerIfFirstLaunch() {
 #if DEBUG
         let fileName = Bundle.main.bundleIdentifier!
@@ -125,5 +142,4 @@ private extension CoreDataStack {
             print("Seeded Core Data")
         }
     }
-    //swiftlint:enable force_unwrapping
 }

@@ -130,9 +130,6 @@ struct EmojiMatchModel
                     cards[indexOfOneAndOnlyFaceUpCard].isMatched = true
                     cards[index].isMatched = true
                 }
-//                cards[index].isTransitioningToFaceUp = true
-//            } else {
-//                indexOfOneAndOnlyFaceUpCard = index
             }
 
             cards[index].isTransitioningToFaceUp = true
