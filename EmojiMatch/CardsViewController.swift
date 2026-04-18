@@ -6,6 +6,7 @@ import UIKit
 import Foundation
 import CoreData
 
+@MainActor
 class CardsViewController: UIViewController
 {
     @IBOutlet private weak var scoreLabel: UILabel! { didSet { updateScoreLabel() } }
@@ -357,7 +358,7 @@ class CardsViewController: UIViewController
     }
 
     fileprivate func animateFlippingCardUp(_ card: Card, _ button: UIButton) {
-        Task { @MainActor in
+        Task {
             let flipUpFinished = await runFlipUpAnimation(for: card, on: button)
             guard flipUpFinished else {
                 #if DEBUG
@@ -399,7 +400,6 @@ class CardsViewController: UIViewController
     //
     // ​MARK: - ​Animation ​Helpers
     //
-    @MainActor
     fileprivate func runFlipUpAnimation(for card: Card, on button: UIButton) async -> Bool {
         let liftFinished = await liftCardUp(button)
         guard liftFinished else {
@@ -431,33 +431,28 @@ class CardsViewController: UIViewController
         return true
     }
 
-    @MainActor
     fileprivate func liftCardUp(_ button: UIButton) async -> Bool {
         return await UIView.animate(withDuration: 0.2, options: [.curveEaseIn]) {
             button.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
         }
     }
 
-    @MainActor
     fileprivate func flipCardOver(_ button: UIButton) async -> Bool {
         return await UIView.transition(with: button, duration: 0.6, options: [.transitionFlipFromLeft, .curveEaseInOut])
     }
 
-    @MainActor
     fileprivate func lowerCardDown(_ button: UIButton) async -> Bool {
         return await UIView.animate(withDuration: 0.2, options: .curveEaseOut) {
             button.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
         }
     }
 
-    @MainActor
     fileprivate func applyFlipToSide(for card: Card, on button: UIButton) {
         // after card is lifted then change the title and background - this will be the FlipTo side
         button.setTitle(self.emoji(for: card), for: .normal)
         button.backgroundColor = self.theme?.faceUpColor
     }
 
-    @MainActor
     fileprivate func showGameOver() async {
         self.gameOver.isHidden = false
 
@@ -479,7 +474,6 @@ class CardsViewController: UIViewController
         }
     }
 
-    @MainActor
     fileprivate func flipBothCardsDown(faceUpCards: [Int]) async {
         await self.delay(seconds: 0.8)
 
@@ -582,9 +576,9 @@ class CardsViewController: UIViewController
     }
 }
 
+@MainActor
 extension UIView {
     /// Performs an animation and returns when it completes using async/await
-    @MainActor
     static func animate(withDuration duration: TimeInterval, delay: TimeInterval = 0, options: UIView.AnimationOptions = [], animations: @escaping () -> Void) async -> Bool {
         await withCheckedContinuation { continuation in
             UIView.animate(withDuration: duration, delay: delay, options: options, animations: animations) { finished in
@@ -594,7 +588,6 @@ extension UIView {
     }
     
     /// Performs a spring animation and returns when it completes using async/await
-    @MainActor
     static func animate(withDuration duration: TimeInterval, delay: TimeInterval = 0, usingSpringWithDamping dampingRatio: CGFloat, initialSpringVelocity velocity: CGFloat, options: UIView.AnimationOptions = [], animations: @escaping () -> Void) async -> Bool {
         await withCheckedContinuation { continuation in
             UIView.animate(withDuration: duration, delay: delay, usingSpringWithDamping: dampingRatio, initialSpringVelocity: velocity, options: options, animations: animations) { finished in
@@ -604,7 +597,6 @@ extension UIView {
     }
     
     /// Performs a transition animation and returns when it completes using async/await
-    @MainActor
     static func transition(with view: UIView, duration: TimeInterval, options: UIView.AnimationOptions = [], animations: (() -> Void)? = nil) async -> Bool {
         await withCheckedContinuation { continuation in
             UIView.transition(with: view, duration: duration, options: options, animations: animations) { finished in
