@@ -548,9 +548,13 @@ class CardsViewController: UIViewController
     
     private func saveHighScore() async {
         AppDelegate.shared.highScore = score
+        
+        // Capture the managed object context reference on the main actor
+        let moc = AppEnvironment.shared.coreDataStack.moc
+        
         do {
-            try await AppEnvironment.shared.coreDataStack.moc.perform {
-                try AppEnvironment.shared.coreDataStack.moc.save()
+            try await moc.perform {
+                try moc.save()
             }
         } catch {
             #if DEBUG

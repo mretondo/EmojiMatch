@@ -6,6 +6,7 @@
 //
 
 
+@MainActor
 class AppEnvironment {
     private init() {} // Prevents others from creating an instance
 

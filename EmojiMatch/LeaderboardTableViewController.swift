@@ -286,18 +286,13 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
     }
 
     private func loadLeaderboards() async -> [GKLeaderboard]? {
-        // since it's an async function, we are allowed to use await
-        await withCheckedContinuation { continuation in
-            GKLeaderboard.loadLeaderboards(IDs: [gcLeaderboardIdentifier]) { leaderboards, error in
-                if error != nil {
-                    #if DEBUG
-                    print("loadLeaderboards() - GKLeaderboard.loadLeaderboards() - " + error.debugDescription)
-                    #endif
-                }
-
-                // resume the awaiting call to withCheckedContinuation
-                continuation.resume(returning: leaderboards)
-            }
+        do {
+            return try await GKLeaderboard.loadLeaderboards(IDs: [gcLeaderboardIdentifier])
+        } catch {
+            #if DEBUG
+            print("loadLeaderboards() - GKLeaderboard.loadLeaderboards() - " + String(describing: error))
+            #endif
+            return nil
         }
     }
 

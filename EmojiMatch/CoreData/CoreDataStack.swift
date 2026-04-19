@@ -33,7 +33,7 @@ class CoreDataStack {
         container.loadPersistentStores { storeDescription, error in
             // Avoid duplicating objects - There's a constraint on property 'name'
             // For properties which have been changed in both the external source and in memory, the in memory changes trump the external ones
-            container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
 
             if let error = error as NSError? {
                 /*

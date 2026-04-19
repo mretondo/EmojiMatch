@@ -7,6 +7,7 @@
 
 import CoreData
 
+@MainActor
 class Score: NSManagedObject
 {
     public static var highScore: Int64? {
@@ -61,9 +62,12 @@ class Score: NSManagedObject
     public static func printScoreTableStats() {
         #if DEBUG
         // Asynchronously performs the Closure on the context’s queue, in this case the main thread
-        AppEnvironment.shared.coreDataStack.moc.perform {
+        let moc = AppEnvironment.shared.coreDataStack.moc
+
+        moc.perform {
+            let request = NSFetchRequest<Score>(entityName: "Score")
             // no data is retrieved, the database only retrieves the record count
-            if let count = try? AppEnvironment.shared.coreDataStack.moc.count(for: fetchRequest()) {
+            if let count = try? moc.count(for: request) {
                 print ("\(count) Score\n")
             } else {
                 print ("No Score\n")

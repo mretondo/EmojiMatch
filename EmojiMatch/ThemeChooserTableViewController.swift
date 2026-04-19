@@ -248,7 +248,7 @@ extension ThemeChooserTableViewController {
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
-extension ThemeChooserTableViewController: NSFetchedResultsControllerDelegate {
+extension ThemeChooserTableViewController: @preconcurrency NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Build a fresh snapshot from the current FRC data
         var snapshot = DiffableDataSourceSnapshot()
