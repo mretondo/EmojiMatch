@@ -12,6 +12,7 @@
 		2730628323F8D771001BD19E /* LeaderboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */; };
 		27311B762F8714F3006413FF /* FirstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27311B752F8714F3006413FF /* FirstResponder.swift */; };
 		2744374B22150D8800CBB56B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2744374A22150D8800CBB56B /* README.md */; };
+		274E22662F955A42006B93C2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274E22652F955A42006B93C2 /* SceneDelegate.swift */; };
 		2752756523C590510076EBBB /* MathHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752756423C590510076EBBB /* MathHelpers.swift */; };
 		275C674D2F09E46C00D19A71 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275C674C2F09E46C00D19A71 /* AppEnvironment.swift */; };
 		27689A3528E9339500922827 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27689A3428E9339500922827 /* CoreDataStack.swift */; };
@@ -38,6 +39,7 @@
 		2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardTableViewController.swift; sourceTree = "<group>"; };
 		27311B752F8714F3006413FF /* FirstResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstResponder.swift; sourceTree = "<group>"; };
 		2744374A22150D8800CBB56B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		274E22652F955A42006B93C2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2752756423C590510076EBBB /* MathHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathHelpers.swift; sourceTree = "<group>"; };
 		275C674C2F09E46C00D19A71 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		27689A3428E9339500922827 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				275C674C2F09E46C00D19A71 /* AppEnvironment.swift */,
 				2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
+				274E22652F955A42006B93C2 /* SceneDelegate.swift */,
 				27D6CDE721F69B4B0047A3DB /* ThemeChooserTableViewController.swift */,
 				EA5F13091FB861A0009590B6 /* CardsViewController.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
@@ -232,6 +235,7 @@
 				27D6CDE821F69B4B0047A3DB /* ThemeChooserTableViewController.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,
+				274E22662F955A42006B93C2 /* SceneDelegate.swift in Sources */,
 				270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */,
 				27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */,
 			);
@@ -403,7 +407,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 7.1.0;
+				MARKETING_VERSION = 7.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mretondo.EmojiMatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -435,7 +439,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 7.1.0;
+				MARKETING_VERSION = 7.1.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mretondo.EmojiMatch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
