@@ -89,9 +89,8 @@ private extension CoreDataStack {
     func seedCoreDataContainerIfFirstLaunch() {
 #if DEBUG
         let fileName = Bundle.main.bundleIdentifier!
-        let library = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
-        let preferences = library.appendingPathComponent("Preferences")
-        let userDefaultsPlistURL = preferences.appendingPathComponent(fileName).appendingPathExtension("plist")
+        let preferences = URL.libraryDirectory.appending(path: "Preferences")
+        let userDefaultsPlistURL = preferences.appending(path: fileName).appendingPathExtension("plist")
         print("Library directory:", userDefaultsPlistURL.path)
         print("Preferences directory:", userDefaultsPlistURL.path)
         print("UserDefaults plist file:", userDefaultsPlistURL.path)
@@ -109,7 +108,7 @@ private extension CoreDataStack {
 
             // Default directory where the CoreDataStack will store its files
             let directory = NSPersistentContainer.defaultDirectoryURL()
-            let url = directory.appendingPathComponent(name + ".sqlite")
+            let url = directory.appending(path: name + ".sqlite")
 
             // Copying the SQLite file
             let seededDatabaseURL = Bundle.main.url(forResource: name, withExtension: "sqlite")!
@@ -122,7 +121,7 @@ private extension CoreDataStack {
 
             // Copying the SHM file
             let seededSHMURL = Bundle.main.url(forResource: name, withExtension: "sqlite-shm")!
-            let shmURL = directory.appendingPathComponent(name + ".sqlite-shm")
+            let shmURL = directory.appending(path: name + ".sqlite-shm")
             _ = try? FileManager.default.removeItem(at: shmURL)
             do {
                 try FileManager.default.copyItem(at: seededSHMURL, to: shmURL)
@@ -132,7 +131,7 @@ private extension CoreDataStack {
 
             // Copying the WAL file
             let seededWALURL = Bundle.main.url(forResource: name, withExtension: "sqlite-wal")!
-            let walURL = directory.appendingPathComponent(name + ".sqlite-wal")
+            let walURL = directory.appending(path: name + ".sqlite-wal")
             _ = try? FileManager.default.removeItem(at: walURL)
             do {
                 try FileManager.default.copyItem(at: seededWALURL, to: walURL)

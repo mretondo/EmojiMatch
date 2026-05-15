@@ -10,7 +10,7 @@ struct EmojiMatchModel
     var cards = [Card]()
 
     private var indexOfOneAndOnlyFaceUpCard: Int? {
-        get { return cards.indices.filter { cards[$0].isFaceUp || cards[$0].isTransitioningToFaceUp}.oneAndOnly }
+        cards.indices.filter { cards[$0].isFaceUp || cards[$0].isTransitioningToFaceUp }.oneAndOnly
 
 //        set {
 //            for i in cards.indices {
@@ -70,16 +70,15 @@ struct EmojiMatchModel
     }
 
     func areAllCardsMatched() -> Bool {
-        let notMatchedCards = cards.indices.filter { !cards[$0].isMatched }
-        return notMatchedCards.count == 0
+        cards.allSatisfy { $0.isMatched }
     }
 
     var faceUpCards: [Card] {
-        get { return cards.filter { $0.isFaceUp } }
+        cards.filter { $0.isFaceUp }
     }
 
     var transitioningToFaceUpCards: [Card] {
-        get { return cards.filter { $0.isTransitioningToFaceUp } }
+        cards.filter { $0.isTransitioningToFaceUp }
     }
 
     var indicesOfFaceUpCards: [Int] {
@@ -146,18 +145,9 @@ struct EmojiMatchModel
         // cards are now in order like (1-1, 2-2, 3-3,...) and need to be suffled
         cards.shuffle()
 	}
-	
+
 }
 
-extension Sequence {
-    /// Returns an array with the contents of this sequence, shuffled.
-    func shuffled() -> [Element] {
-        var result = Array(self)
-        result.shuffle()
-        return result
-    }
-}
-		
 extension Collection {
     var oneAndOnly: Element? {
         return count == 1 ? first : nil

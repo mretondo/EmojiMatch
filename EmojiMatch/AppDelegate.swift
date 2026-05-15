@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     public var highScore: Int64? {
-        get { return Score.highScore }
+        get { Score.highScore }
         set(newValue) { Score.highScore = newValue }
     }
 

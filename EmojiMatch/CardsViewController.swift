@@ -108,7 +108,7 @@ class CardsViewController: UIViewController
 
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitVerticalSizeClass.self]) { [weak self] (controller: UIViewController, previousTraitCollection: UITraitCollection) in
-                guard let self = self else { return }
+                guard let self else { return }
                 updateScoreLabel()
                 setButtonsFontSize()
             }
@@ -170,6 +170,7 @@ class CardsViewController: UIViewController
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         setButtonsFontSize()
     }
 
@@ -368,6 +369,10 @@ class CardsViewController: UIViewController
             secondCardFlipCompleted = true
             view.isUserInteractionEnabled = true
         } else {
+            // failure paths need to re-enable interaction — otherwise a cancelled animation (e.g. from tapping New Game mid-flip) leaves the game stuck
+            secondCardFlipCompleted = true
+            view.isUserInteractionEnabled = true
+
             #if DEBUG
             print("hideCards - scale didn't finish")
             #endif
@@ -531,6 +536,10 @@ class CardsViewController: UIViewController
             self.secondCardFlipCompleted = true
             self.view.isUserInteractionEnabled = true
         } else {
+            // failure paths need to re-enable interaction — otherwise a cancelled animation (e.g. from tapping New Game mid-flip) leaves the game stuck
+            self.secondCardFlipCompleted = true
+            self.view.isUserInteractionEnabled = true
+
             #if DEBUG
             print("flip1 FAILED")
             #endif
@@ -556,13 +565,7 @@ class CardsViewController: UIViewController
     }
 
     private func areAllCardsMatched() -> Bool {
-        for card in game.cards {
-            if !card.isMatched {
-                return false
-            }
-        }
-
-        return true
+        game.cards.allSatisfy { $0.isMatched }
     }
     
     private func saveHighScore() async {
@@ -583,7 +586,7 @@ class CardsViewController: UIViewController
     }
     
     private func emoji(for card: Card) -> String {
-        if emoji[card] == nil && emojiChoices.count > 0 {
+        if emoji[card] == nil && !emojiChoices.isEmpty {
             let offset = emojiChoices.count.random
             let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: offset)
 
@@ -595,7 +598,7 @@ class CardsViewController: UIViewController
     }
 
     func delay(seconds: TimeInterval) async {
-        try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+        try? await Task.sleep(for: .seconds(seconds))
     }
 }
 
@@ -634,9 +637,8 @@ extension UIView {
         rotateAnimation.toValue = .pi * 2.0
         rotateAnimation.duration = duration
 
-        if let delegate: AnyObject = completionDelegate {
-            rotateAnimation.delegate = (delegate as! CAAnimationDelegate)
-        }
+        rotateAnimation.delegate = completionDelegate as? CAAnimationDelegate
+        
         self.layer.add(rotateAnimation, forKey: nil)
     }
 }
@@ -693,7 +695,7 @@ extension UIButton {
 
 extension NSObject {
     func copyObject<T:NSObject>() throws -> T? {
-        let archivedData = try NSKeyedArchiver.archivedData(withRootObject: T.self, requiringSecureCoding: false)
+        let archivedData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
         return try NSKeyedUnarchiver.unarchivedObject(ofClasses: [T.self], from: archivedData) as? T
     }
 }

@@ -144,7 +144,7 @@ class ThemeChooserTableViewController: UITableViewController
     public func pickRandomEmoji(from emojiChoices: String) -> String {
         var emoji = "?"
 
-        if emojiChoices.count > 0 {
+        if !emojiChoices.isEmpty {
             let offset = emojiChoices.count.random
             let index = emojiChoices.index(emojiChoices.startIndex, offsetBy: offset)
             emoji = String(emojiChoices[index])

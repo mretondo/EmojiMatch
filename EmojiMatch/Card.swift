@@ -59,8 +59,8 @@ struct Card: Hashable
 
     // how long this card has ever been face up
     private var faceUpTime: TimeInterval {
-        if let lastFaceUpDate = lastFaceUpDate {
-            return pastFaceUpTime + Date().timeIntervalSince(lastFaceUpDate)
+        if let lastFaceUpDate {
+            return pastFaceUpTime + Date.now.timeIntervalSince(lastFaceUpDate)
         } else {
             return pastFaceUpTime
         }
@@ -96,7 +96,7 @@ struct Card: Hashable
     // called when the card transitions to face up state
     private mutating func startUsingBonusTime() {
         if isConsumingBonusTime, lastFaceUpDate == nil {
-            lastFaceUpDate = Date()
+            lastFaceUpDate = Date.now
         }
     }
 

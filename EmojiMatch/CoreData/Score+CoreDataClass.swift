@@ -30,7 +30,7 @@ class Score: NSManagedObject
         }
 
         set(newValue) {
-            if let newValue = newValue {
+            if let newValue {
                 // get current high score from this Entity
                 let currentHighScore = Self.highScore
 
