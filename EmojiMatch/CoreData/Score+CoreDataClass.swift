@@ -31,10 +31,10 @@ class Score: NSManagedObject
 
         set(newValue) {
             if let newValue = newValue {
-                // get high score from this Entity
-                let highScore = highScore
+                // get current high score from this Entity
+                let currentHighScore = Self.highScore
 
-                if highScore == nil || newValue > highScore! {
+                if currentHighScore == nil || newValue > currentHighScore! {
                     let moc = AppEnvironment.shared.coreDataStack.moc
 
                     // NOTE: no data is retrieved here, the database only retrieves the Entities record count
@@ -45,13 +45,14 @@ class Score: NSManagedObject
                     } else {
                         // modify previous saved high score
                         let request: NSFetchRequest<Score> = Score.fetchRequest()
-                        do {
-                            if let highScores = try? moc.fetch(request) {
-                                let score = highScores[0]   // there's only one score in the Entity
-                                score.highScore = newValue
-                            }
+                        if let highScores = try? moc.fetch(request), !highScores.isEmpty {
+                            let score = highScores[0]   // there's only one score in the Entity
+                            score.highScore = newValue
                         }
                     }
+                    
+                    // Save the changes to disk
+                    AppEnvironment.shared.coreDataStack.saveMoc()
                 }
             }
 

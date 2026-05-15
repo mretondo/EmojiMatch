@@ -15,6 +15,4 @@ class AppEnvironment {
     var easyScoringMode = false
 
     lazy var coreDataStack: CoreDataStack = CoreDataStack(name: "Model")
-
-    weak var themeChooserTableViewController: ThemeChooserTableViewController?
 }

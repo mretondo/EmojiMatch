@@ -309,21 +309,17 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
     private func updateAppScoreFromLeaderboard() async {
         if let leaderboardHighestScore = try? await getHighScoreFromLeaderboardForLocalPlayer() {
             updateAppHighScore(with: Int64(leaderboardHighestScore))
+            
+            // Note: Score.highScore setter automatically saves to Core Data
+            updateAppHighScoreTextField()
 
-            do {
-                // save score to Core Data
-                try AppEnvironment.shared.coreDataStack.moc.save()
-
-                updateAppHighScoreTextField()
-
-                #if DEBUG
-                print("Best score from Game Center: \(leaderboardHighestScore)")
-                #endif
-            } catch {
-                print("updateScoreFromLeaderboard() - Couldn't save viewContext")
-            }
+            #if DEBUG
+            print("Best score from Game Center: \(leaderboardHighestScore)")
+            #endif
         } else {
+            #if DEBUG
             print("updateScoreFromLeaderboard() - Couldn't getHighScoreFromLeaderboardForLocalPlayer")
+            #endif
         }
     }
 

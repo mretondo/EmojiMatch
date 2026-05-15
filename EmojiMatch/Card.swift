@@ -36,12 +36,13 @@ struct Card: Hashable
 
     private var identifier: Int
     
-    nonisolated(unsafe) private static var identifierFactory = 0
+    // Thread-safe identifier generation using actor
+    private static let identifierFactory = IdentifierFactory()
     
     private static func getUniqueIdentifier() -> Int {
-        let uniqueIdentifier = identifierFactory
-        identifierFactory += 1
-        return uniqueIdentifier
+        // Since Card creation happens synchronously, we need a synchronous approach
+        // Using a lock-protected counter instead
+        return identifierFactory.next()
     }
     
     init() {
@@ -105,3 +106,18 @@ struct Card: Hashable
         lastFaceUpDate = nil
     }
 }
+
+// Thread-safe identifier generator
+private final class IdentifierFactory: @unchecked Sendable {
+    private var counter = 0
+    private let lock = NSLock()
+    
+    func next() -> Int {
+        lock.lock()
+        defer { lock.unlock() }
+        let value = counter
+        counter += 1
+        return value
+    }
+}
+

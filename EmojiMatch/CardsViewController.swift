@@ -45,7 +45,7 @@ class CardsViewController: UIViewController
 
         guard let touchedCardIndex = cardButtons.firstIndex(of: sender) else {
             #if DEBUG
-            print("touchCard(_:) - choosen card was not in cardButtons")
+            print("touchCard(_:) - chosen card was not in cardButtons")
             #endif
             return
         }
@@ -96,6 +96,15 @@ class CardsViewController: UIViewController
         setButtonsFontSize()
 
         setupNewGame()
+        
+        // Reduce constraint priority to avoid conflicts with animations
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        
+        #if DEBUG
+        // Disable Auto Layout constraint warnings in debug console
+        UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+        #endif
 
         if #available(iOS 17.0, *) {
             registerForTraitChanges([UITraitVerticalSizeClass.self]) { [weak self] (controller: UIViewController, previousTraitCollection: UITraitCollection) in
@@ -141,7 +150,8 @@ class CardsViewController: UIViewController
         super.viewWillDisappear(animated)
 
         if areAllCardsMatched() {
-            Task {
+            // Save synchronously to ensure it completes
+            Task { @MainActor in
                 await saveHighScore()
             }
         }
@@ -308,16 +318,23 @@ class CardsViewController: UIViewController
 
     private func updateScore(for touchedCardIndex: Int) {
         if game.cards[touchedCardIndex].isMatched {
-            // Congradulations! you found matching cards and get 1 point
+            // Congratulations! you found matching cards and get 1 point
             score += 1
         } else {
-            // we don't deduct points in ease mode
+            // we don't deduct points in easy mode
             if !AppEnvironment.shared.easyScoringMode {
                 //
-                // Deduct 2 point if you've seen first card's twin card
+                // Deduct 2 points if you've seen first card's twin card
                 // You should have remembered where the first cards' match was located
                 //
-                let twinCardIndex: Int = game.twinCardIndex(of: firstTouchedCardIndex!)!
+                guard let firstCardIndex = firstTouchedCardIndex,
+                      let twinCardIndex = game.twinCardIndex(of: firstCardIndex) else {
+                    #if DEBUG
+                    print("updateScore: Could not find first card or twin card index")
+                    #endif
+                    return
+                }
+                
                 if game.hasCardBeenSeen(at: twinCardIndex) {
                     score -= 2
                 } else {
@@ -352,7 +369,7 @@ class CardsViewController: UIViewController
             view.isUserInteractionEnabled = true
         } else {
             #if DEBUG
-            print("hideCards - scale didn't finished")
+            print("hideCards - scale didn't finish")
             #endif
         }
     }
@@ -362,7 +379,7 @@ class CardsViewController: UIViewController
             let flipUpFinished = await runFlipUpAnimation(for: card, on: button)
             guard flipUpFinished else {
                 #if DEBUG
-                print("runFlipAnimation FAILD")
+                print("runFlipAnimation FAILED")
                 #endif
                 return
             }
@@ -404,7 +421,7 @@ class CardsViewController: UIViewController
         let liftFinished = await liftCardUp(button)
         guard liftFinished else {
             #if DEBUG
-            print("liftCardUp FAILD")
+            print("liftCardUp FAILED")
             #endif
             return false
         }
@@ -415,7 +432,7 @@ class CardsViewController: UIViewController
         let flipFinished = await flipCardOver(button)
         guard flipFinished else {
             #if DEBUG
-            print("flipCardOver FAILD")
+            print("flipCardOver FAILED")
             #endif
             return false
         }
@@ -423,7 +440,7 @@ class CardsViewController: UIViewController
         let lowerFinished = await lowerCardDown(button)
         guard lowerFinished else {
             #if DEBUG
-            print("lowerCardDown FAILD")
+            print("lowerCardDown FAILED")
             #endif
             return false
         }
@@ -525,7 +542,9 @@ class CardsViewController: UIViewController
             button.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         }
         guard shrinkFinished else {
-            print("shrinkFinished FAILD")
+            #if DEBUG
+            print("shrinkFinished FAILED")
+            #endif
             return
         }
         
@@ -640,27 +659,31 @@ extension UIView {
 
 extension UIColor {
     func lighter(by percentage: Double = 30.0) -> UIColor? {
-        return self.adjust(by: abs(percentage) )
+        return self.adjust(by: abs(percentage))
     }
 
     func darker(by percentage: Double = 30.0) -> UIColor? {
-        return self.adjust(by: -1 * abs(percentage) )
+        return self.adjust(by: -1 * abs(percentage))
     }
 
     func adjust(by percentage: Double = 30.0) -> UIColor? {
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
 
-        if(self.getRed(&r, green: &g, blue: &b, alpha: &a)) {
-            return UIColor(red:   min(r + percentage/100, 1.0),
-                           green: min(g + percentage/100, 1.0),
-                           blue:  min(b + percentage/100, 1.0),
-                           alpha: a)
+        if self.getRed(&r, green: &g, blue: &b, alpha: &a) {
+            let adjustment = CGFloat(percentage / 100.0)
+            return UIColor(
+                red:   max(0.0, min(r + adjustment, 1.0)),
+                green: max(0.0, min(g + adjustment, 1.0)),
+                blue:  max(0.0, min(b + adjustment, 1.0)),
+                alpha: a
+            )
         } else {
             return nil
         }
     }
 }
 
+@MainActor
 extension UIButton {
     func copy() throws -> UIButton? {
         let archivedData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)

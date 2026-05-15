@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+@MainActor
 class CoreDataStack {
     // MARK: Properties
     private let name: String
