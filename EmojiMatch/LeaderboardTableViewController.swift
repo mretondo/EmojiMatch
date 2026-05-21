@@ -25,12 +25,12 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
     private let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch26"
 
     private func configureEasyScoringSwitchBarItem() {
-        // 1. Create the label
+        // Create the label
         let easyScoringLabel = UILabel()
         easyScoringLabel.text = "Easy Scoring"
         easyScoringLabel.textColor = .label // works with light/dark modes
 
-        // 2. Create the switch with action closure
+        // Create the switch with an action
         let easyScoringSwitch = UISwitch()
         easyScoringSwitch.isOn = AppEnvironment.shared.easyScoringMode
         easyScoringSwitch.addAction(
@@ -40,16 +40,23 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
             for: .valueChanged
         )
 
-        // 3. Create a horizontal stack view to hold both
+        // Create a horizontal stack view to hold both
         let stackView = UIStackView(arrangedSubviews: [easyScoringLabel, easyScoringSwitch])
-        stackView.distribution = .fill
         stackView.axis = .horizontal
         stackView.spacing = 8
-        stackView.alignment = .center
+        // Fix to prevent right edge of the switch from getting truncated which removes rounded look
+        stackView.isLayoutMarginsRelativeArrangement = true
 
-        // 4. Add to navigation item
+        // Add to navigation item
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: stackView)
-        // navigationItem.leftBarButtonItem?.hidesSharedBackground = true // May not be available in all iOS versions
+    }
+
+    // A custom SwitchContainerView to override insets so Switch is not truncated a few pixels short on right side
+    class LeftBarButtonItemSwitchContainerView: UIView {
+        override var alignmentRectInsets: UIEdgeInsets {
+            // fixes the right edge of the switch from getting truncated which removes rounded look
+            return .init(top: 0.0, left: 0.0, bottom: 0.0, right: 3.0)
+        }
     }
 
     @IBAction private func addTheme(_ sender: UIBarButtonItem) {
