@@ -123,7 +123,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
             AppEnvironment.shared.easyScoringMode = UserDefaults.standard.bool(forKey: "easyScoringMode")
         }
 
-        configureEasyScoringSwitchBarItem()
+        addEasyScoringSwitchBarItem()
 
         // Call the GC authentication controller
         authenticateLocalPlayer()
@@ -361,7 +361,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
     }
     */
 
-    private func configureEasyScoringSwitchBarItem() {
+    private func addEasyScoringSwitchBarItem() {
         let switchView = LabeledSwitchView(labelText: "Easy Scoring", isOn: AppEnvironment.shared.easyScoringMode) { isOn in
             AppEnvironment.shared.easyScoringMode = isOn
         }
