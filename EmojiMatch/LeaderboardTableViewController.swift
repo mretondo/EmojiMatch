@@ -24,41 +24,6 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
 
     private let gcLeaderboardIdentifier = "com.mretondo.EmojiMatch26"
 
-    private func configureEasyScoringSwitchBarItem() {
-        // Create the label
-        let easyScoringLabel = UILabel()
-        easyScoringLabel.text = "Easy Scoring"
-        easyScoringLabel.textColor = .label // works with light/dark modes
-
-        // Create the switch with an action
-        let easyScoringSwitch = UISwitch()
-        easyScoringSwitch.isOn = AppEnvironment.shared.easyScoringMode
-        easyScoringSwitch.addAction(
-            UIAction { _ in
-                AppEnvironment.shared.easyScoringMode = easyScoringSwitch.isOn
-            },
-            for: .valueChanged
-        )
-
-        // Create a horizontal stack view to hold both
-        let stackView = UIStackView(arrangedSubviews: [easyScoringLabel, easyScoringSwitch])
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        // Fix to prevent right edge of the switch from getting truncated which removes rounded look
-        stackView.isLayoutMarginsRelativeArrangement = true
-
-        // Add to navigation item
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: stackView)
-    }
-
-    // A custom SwitchContainerView to override insets so Switch is not truncated a few pixels short on right side
-    class LeftBarButtonItemSwitchContainerView: UIView {
-        override var alignmentRectInsets: UIEdgeInsets {
-            // fixes the right edge of the switch from getting truncated which removes rounded look
-            return .init(top: 0.0, left: 0.0, bottom: 0.0, right: 3.0)
-        }
-    }
-
     @IBAction private func addTheme(_ sender: UIBarButtonItem) {
         alertController = UIAlertController(
             title: "Create your own Theme",
@@ -92,7 +57,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
 
             coreDataStack.insertTheme(from: themeItem)
         }
-        
+
         saveAction.isEnabled = false
         alertController.addAction(saveAction)
 
@@ -103,7 +68,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
 
     @objc private func alertTextFieldDidChange(_ textField: UITextField) {
         guard let saveAction = alertController.actions.first else { return }
-        
+
         saveAction.isEnabled = false
 
         if let themeName = alertController.textFields?.first?.text, !themeName.isEmpty,
@@ -185,7 +150,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
 
         localPlayer.authenticateHandler = { [weak self] viewController, error in
             guard let self else { return }
-            
+
             if let viewController {
                 // Show login if player is not logged in
                 self.present(viewController, animated: true)
@@ -196,7 +161,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
                 Task {
                     do {
                         _ = try await localPlayer.loadDefaultLeaderboardIdentifier()
-                        
+
                         // If user deleted their local database score, update it from the leaderboard
                         if AppDelegate.shared.highScore == nil {
                             await self.updateAppScoreFromLeaderboard()
@@ -232,7 +197,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
     }
 
     // MARK: - GKGameCenterControllerDelegate
-    
+
     nonisolated func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
         Task { @MainActor in
             gameCenterViewController.dismiss(animated: true)
@@ -242,7 +207,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
 
     @IBAction private func addScoreAndSubmitToGC(_ sender: Any) {
         guard let highestScore = AppDelegate.shared.highScore else { return }
-        
+
         Task {
             do {
                 // Get score from the leaderboard if one exists
@@ -257,7 +222,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
                         player: GKLocalPlayer.local,
                         leaderboardIDs: [gcLeaderboardIdentifier]
                     )
-                    
+
                     showOkAlert(title: "Success", message: "Your score was added to the Leaderboard.")
                 }
             } catch {
@@ -276,19 +241,19 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
             #endif
             return nil
         }
-        
+
         guard let leaderboards = await loadLeaderboards() else {
             #if DEBUG
             print("getHighScoreFromLeaderboardForLocalPlayer() - Can't loadLeaderboards")
             #endif
             return nil
         }
-        
+
         let (localPlayer, _) = try await leaderboards[0].loadEntries(
             for: [GKLocalPlayer.local],
             timeScope: .allTime
         )
-        
+
         return localPlayer?.score
     }
 
@@ -316,7 +281,7 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
     private func updateAppScoreFromLeaderboard() async {
         if let leaderboardHighestScore = try? await getHighScoreFromLeaderboardForLocalPlayer() {
             updateAppHighScore(with: Int64(leaderboardHighestScore))
-            
+
             // Note: Score.highScore setter automatically saves to Core Data
             updateAppHighScoreTextField()
 
@@ -395,5 +360,75 @@ final class LeaderboardTableViewController: UIViewController, UITextFieldDelegat
         // Pass the selected object to the new view controller.
     }
     */
+
+    private func configureEasyScoringSwitchBarItem() {
+        let switchView = LabeledSwitchView(labelText: "Easy Scoring", isOn: AppEnvironment.shared.easyScoringMode) { isOn in
+            AppEnvironment.shared.easyScoringMode = isOn
+        }
+
+        // Add to navigation item
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: switchView)
+    }
 }
 
+// MARK: - LabeledSwitchView
+
+/// A reusable view that contains a label and switch in a horizontal stack
+final class LabeledSwitchView: UIStackView {
+    private let label = UILabel()
+    private let toggleSwitch = UISwitch()
+    private var onValueChanged: ((Bool) -> Void)?
+
+    /// Creates a labeled switch view with a closure-based action handler
+    /// - Parameters:
+    ///   - labelText: The text to display in the label
+    ///   - isOn: The initial state of the switch
+    ///   - spacing: The spacing between the label and switch (default: 8)
+    ///   - onValueChanged: Closure called when the switch value changes
+    init(labelText: String, isOn: Bool, spacing: CGFloat = 8, onValueChanged: @escaping (Bool) -> Void) {
+        self.onValueChanged = onValueChanged
+        super.init(frame: .zero)
+
+        setupView(labelText: labelText, isOn: isOn, spacing: spacing)
+    }
+
+    required init(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView(labelText: "", isOn: false, spacing: 8)
+    }
+
+    private func setupView(labelText: String, isOn: Bool, spacing: CGFloat) {
+        // Configure label
+        label.text = labelText
+        label.textColor = .label // works with light/dark modes
+
+        // Configure switch
+        toggleSwitch.isOn = isOn
+        toggleSwitch.addAction(
+            UIAction { [weak self] _ in
+                guard let self else { return }
+                self.onValueChanged?(self.toggleSwitch.isOn)
+            },
+            for: .valueChanged
+        )
+
+        // Configure stack view
+        axis = .horizontal
+        self.spacing = spacing
+        addArrangedSubview(label)
+        addArrangedSubview(toggleSwitch)
+
+        // Fix to prevent right edge of the switch from getting truncated which removes rounded look
+        isLayoutMarginsRelativeArrangement = true
+    }
+
+    /// Updates the switch state programmatically
+    func setOn(_ isOn: Bool, animated: Bool = false) {
+        toggleSwitch.setOn(isOn, animated: animated)
+    }
+
+    /// The current state of the switch
+    var isOn: Bool {
+        toggleSwitch.isOn
+    }
+}
