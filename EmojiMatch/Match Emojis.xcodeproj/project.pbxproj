@@ -31,6 +31,12 @@
 		EA5F13121FB861A0009590B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */; };
 		EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE61FB9AB1000EF2C53 /* Card.swift */; };
 		EAFC4CE91FB9AC8600EF2C53 /* EmojiMatchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */; };
+		AA000001AA000001AA000001 /* EmojiMatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001AA000001AA000000 /* EmojiMatchApp.swift */; };
+		AA000002AA000002AA000002 /* CardGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000000 /* CardGameViewModel.swift */; };
+		AA000003AA000003AA000003 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000003AA000003AA000000 /* CardView.swift */; };
+		AA000004AA000004AA000004 /* CardGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004AA000004AA000000 /* CardGameView.swift */; };
+		AA000005AA000005AA000005 /* EmojiThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000005AA000005AA000000 /* EmojiThemesView.swift */; };
+		AA000006AA000006AA000006 /* GameCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000006AA000006AA000000 /* GameCenterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +66,12 @@
 		EA5F13131FB861A0009590B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EAFC4CE61FB9AB1000EF2C53 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		EAFC4CE81FB9AC8600EF2C53 /* EmojiMatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchModel.swift; sourceTree = "<group>"; };
+		AA000001AA000001AA000000 /* EmojiMatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMatchApp.swift; sourceTree = "<group>"; };
+		AA000002AA000002AA000000 /* CardGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGameViewModel.swift; sourceTree = "<group>"; };
+		AA000003AA000003AA000000 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		AA000004AA000004AA000000 /* CardGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGameView.swift; sourceTree = "<group>"; };
+		AA000005AA000005AA000000 /* EmojiThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiThemesView.swift; sourceTree = "<group>"; };
+		AA000006AA000006AA000000 /* GameCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +130,12 @@
 		EA5F13061FB861A0009590B6 /* EmojiMatch */ = {
 			isa = PBXGroup;
 			children = (
+				AA000001AA000001AA000000 /* EmojiMatchApp.swift */,
+				AA000005AA000005AA000000 /* EmojiThemesView.swift */,
+				AA000004AA000004AA000000 /* CardGameView.swift */,
+				AA000002AA000002AA000000 /* CardGameViewModel.swift */,
+				AA000003AA000003AA000000 /* CardView.swift */,
+				AA000006AA000006AA000000 /* GameCenterView.swift */,
 				275C674C2F09E46C00D19A71 /* AppEnvironment.swift */,
 				2730628223F8D771001BD19E /* LeaderboardTableViewController.swift */,
 				EA5F13071FB861A0009590B6 /* AppDelegate.swift */,
@@ -238,6 +256,12 @@
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,
 				270612FA22FF7412000EAA36 /* Model.xcdatamodeld in Sources */,
 				27BEB4D928E771C600B5F867 /* Theme+CoreDataClass.swift in Sources */,
+				AA000001AA000001AA000001 /* EmojiMatchApp.swift in Sources */,
+				AA000002AA000002AA000002 /* CardGameViewModel.swift in Sources */,
+				AA000003AA000003AA000003 /* CardView.swift in Sources */,
+				AA000004AA000004AA000004 /* CardGameView.swift in Sources */,
+				AA000005AA000005AA000005 /* EmojiThemesView.swift in Sources */,
+				AA000006AA000006AA000006 /* GameCenterView.swift in Sources */,
 			);
 		};
 /* End PBXSourcesBuildPhase section */

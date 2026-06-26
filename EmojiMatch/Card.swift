@@ -14,6 +14,8 @@ struct Card: Hashable
         return lhs.identifier == rhs.identifier
     }
     
+    var isFaceUp = false
+/*
     var isFaceUp = false {
         didSet {
             if isFaceUp {
@@ -23,14 +25,16 @@ struct Card: Hashable
             }
         }
     }
+*/
 
     var isTransitioningToFaceUp = false
 
-    var isMatched = false {
-        didSet {
-            stopUsingBonusTime()
-        }
-    }
+    var isMatched = false
+//    var isMatched = false {
+//        didSet {
+//            stopUsingBonusTime()
+//        }
+//    }
 
     var hasBeenSeen = false
 
@@ -49,6 +53,7 @@ struct Card: Hashable
         self.identifier = Card.getUniqueIdentifier()
     }
 
+/*
     // MARK: - Bonus Time
 
     // this could give matching bonus points if the user matches the card
@@ -105,6 +110,7 @@ struct Card: Hashable
         pastFaceUpTime = faceUpTime
         lastFaceUpDate = nil
     }
+*/
 }
 
 // Thread-safe identifier generator

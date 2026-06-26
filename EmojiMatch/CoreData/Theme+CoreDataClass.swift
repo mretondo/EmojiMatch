@@ -26,6 +26,18 @@ struct ThemeItem: Hashable {
     }
 }
 
+extension ThemeItem {
+    init?(from theme: Theme) {
+        guard let name = theme.name,
+              let emojis = theme.emojis,
+              let bg  = theme.backgroundColor as? UIColor,
+              let fd  = theme.faceDownColor   as? UIColor,
+              let fu  = theme.faceUpColor     as? UIColor
+        else { return nil }
+        self.init(name: name, emojis: emojis, backgroundColor: bg, faceDownColor: fd, faceUpColor: fu)
+    }
+}
+
 public class Theme: NSManagedObject {
     static let defaultThemes = [
         // name, emojis, backgroundColor, faceDownColor, faceUpColor

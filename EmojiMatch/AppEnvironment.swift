@@ -1,18 +1,25 @@
 //
 //  AppEnvironment.swift
-//  Match Emojis
-//
-//  Created by Mike Retondo on 1/3/26.
 //
 
+import Foundation
+import Observation
 
+@Observable
 @MainActor
-class AppEnvironment {
-    private init() {} // Prevents others from creating an instance
+final class AppEnvironment {
+    static let shared = AppEnvironment()
 
-    static let shared = AppEnvironment() // Singleton instance
+    var easyScoringMode: Bool {
+        didSet { UserDefaults.standard.set(easyScoringMode, forKey: "easyScoringMode") }
+    }
 
-    var easyScoringMode = false
+    @ObservationIgnored lazy var coreDataStack = CoreDataStack(name: "Model")
 
-    lazy var coreDataStack: CoreDataStack = CoreDataStack(name: "Model")
+    private init() {
+        let previouslyLaunched = UserDefaults.standard.bool(forKey: "previouslyLaunched")
+        easyScoringMode = previouslyLaunched
+            ? UserDefaults.standard.bool(forKey: "easyScoringMode")
+            : false
+    }
 }
