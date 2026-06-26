@@ -20,7 +20,6 @@ struct EmojiThemesView: View {
 
     @State private var showAddTheme = false
     @State private var isGCAuthenticated = false
-    @State private var showLeaderboard = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     @State private var showAlert = false
@@ -83,7 +82,11 @@ struct EmojiThemesView: View {
             .safeAreaInset(edge: .bottom) {
                 GlassEffectContainer {
                     HStack {
-                        Button("Leaderboard") { showLeaderboard = true }
+                        Button("Leaderboard") {
+                            GKAccessPoint.shared.trigger(leaderboardID: "com.mretondo.EmojiMatch26",
+                                                         playerScope: .global,
+                                                         timeScope: .allTime) {}
+                        }
                             .disabled(!isGCAuthenticated)
                             .padding(.horizontal, 20)
                             .padding(.vertical, 10)
@@ -100,9 +103,7 @@ struct EmojiThemesView: View {
                 }
 //                .padding(.bottom, 8)
             }
-            .sheet(isPresented: $showLeaderboard) {
-                GameCenterView()
-            }
+
             .sheet(isPresented: $showAddTheme) {
                 AddThemeSheet()
             }
