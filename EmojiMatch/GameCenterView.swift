@@ -23,9 +23,9 @@ struct GameCenterView: UIViewControllerRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
-    final class Coordinator: NSObject, GKGameCenterControllerDelegate {
+    final class Coordinator: NSObject, @preconcurrency GKGameCenterControllerDelegate {
         func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-            gameCenterViewController.dismiss(animated: true, completion: nil)
+            gameCenterViewController.dismiss(animated: true)
         }
     }
 }

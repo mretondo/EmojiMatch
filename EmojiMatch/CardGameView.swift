@@ -113,12 +113,19 @@ struct CardGameView: View {
     // MARK: - Layout helpers
 
     private func cardHeight(gridWidth: CGFloat, gridHeight: CGFloat) -> CGFloat {
+        // NOTE: GeometryReader always fires an initial layout pass with a zero size before it knows its real bounds.
+
+        // check for invalid frame dimension on first GeometryReader pass
+        guard gridWidth > 0, gridHeight > 0 else { return 1 }
+
         let spacing: CGFloat = 8
         let cols: CGFloat = 4
         let rows: CGFloat = 5
         let cardWidth      = (gridWidth  - spacing * (cols + 1)) / cols
         let heightByAspect = cardWidth * 3 / 4
         let heightBySpace  = (gridHeight - spacing * (rows + 1)) / rows
-        return min(heightByAspect, heightBySpace)
+
+        // the max(1, ...) ensures the frame height is always a valid positive value during the first pass
+        return max(1, min(heightByAspect, heightBySpace))
     }
 }
