@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import UIKit
 
 @MainActor
 class CoreDataStack {
@@ -48,6 +49,13 @@ class CoreDataStack {
                 fatalError("Failed to load database: \(error), \(error.userInfo)")
             }
         }
+
+        // Seed database may contain archived UIColors with component values outside
+        // 0–1 (e.g. extended-sRGB P3). NSKeyedUnarchiver creates the UIColor as-is,
+        // triggering UIKit's "far outside expected range" warning every session.
+        // This one-time migration re-archives each color with clamped components so
+        // the stored data is clean on all future launches.
+        self.reseedDefaultThemesIfNeeded(in: container.viewContext)
 
         return container
     }()
@@ -141,5 +149,34 @@ private extension CoreDataStack {
 
             print("Seeded Core Data")
         }
+    }
+
+    // Runs once. Re-inserts all default themes from the hardcoded Theme.defaultThemes
+    // array, replacing the seed-database copies whose archived UIColors may have
+    // component values outside 0–1. We delete the old rows without ever reading
+    // their UIColor attributes, so NSKeyedUnarchiver is never called on the bad
+    // data and the "far outside expected range" warning never fires.
+    func reseedDefaultThemesIfNeeded(in context: NSManagedObjectContext) {
+        let migrationKey = "colorComponentsMigrationV2"
+        guard !UserDefaults.standard.bool(forKey: migrationKey) else { return }
+
+        let defaultNames = Set(Theme.defaultThemes.map { $0.name })
+        let fetchRequest: NSFetchRequest<Theme> = Theme.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name IN %@", defaultNames)
+        guard let existing = try? context.fetch(fetchRequest) else { return }
+
+        existing.forEach { context.delete($0) }
+
+        for item in Theme.defaultThemes {
+            let theme = Theme(context: context)
+            theme.name            = item.name
+            theme.emojis          = item.emojis
+            theme.backgroundColor = item.backgroundColor
+            theme.faceDownColor   = item.faceDownColor
+            theme.faceUpColor     = item.faceUpColor
+        }
+
+        if context.hasChanges { try? context.save() }
+        UserDefaults.standard.set(true, forKey: migrationKey)
     }
 }

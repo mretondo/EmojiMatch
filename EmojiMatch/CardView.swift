@@ -11,35 +11,54 @@ struct CardView: View {
     let faceUpColor: Color
     let isHidden: Bool
 
+    // Avoid exactly ±90° — rotation3DEffect produces a singular projection matrix at 90°,
+    // which logs "ignoring singular matrix" warnings on every flip.
     @State private var backRotation  = 0.0
-    @State private var frontRotation = -90.0
+    @State private var frontRotation = -89.9
+
+    // Keeps the front face invisible while it sits at -89.9°, preventing the
+    // sub-pixel-wide rectangle that anti-aliasing renders as a visible line.
+    @State private var frontVisible  = false
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(faceDownColor)
-                .rotation3DEffect(.degrees(backRotation), axis: (x: 0, y: 1, z: 0))
+                // perspective: 0 = orthographic projection; avoids the foreshortening
+                // artifact that made the near-90° sliver bright/visible.
+                .rotation3DEffect(.degrees(backRotation), axis: (x: 0, y: 1, z: 0), perspective: 0)
 
             ZStack {
                 RoundedRectangle(cornerRadius: 10).fill(faceUpColor)
                 Text(emoji).font(.system(size: 40))
             }
-            .rotation3DEffect(.degrees(frontRotation), axis: (x: 0, y: 1, z: 0))
+            .opacity(frontVisible ? 1 : 0)
+            .rotation3DEffect(.degrees(frontRotation), axis: (x: 0, y: 1, z: 0), perspective: 0)
         }
         .scaleEffect(isHidden ? 0.1 : 1.0)
         .opacity(isHidden ? 0 : 1)
         .animation(.easeIn(duration: 0.2), value: isHidden)
         .onChange(of: isFaceUp) { _, newValue in
             if newValue {
+                // Phase 1: rotate back face to near-90° (easeIn)
                 withAnimation(.easeIn(duration: 0.3), completionCriteria: .logicallyComplete) {
-                    backRotation = 90
+                    backRotation = 89.9
                 } completion: {
+                    // Phase 2: make front face visible and rotate it into view (easeOut).
+                    // Reset frontRotation first (no animation) so it starts at -89.9°,
+                    // then reveal it the instant the outward rotation begins.
+                    frontRotation = -89.9
+                    frontVisible = true
                     withAnimation(.easeOut(duration: 0.3)) { frontRotation = 0 }
                 }
             } else {
+                // Phase 1: rotate front face back to near-90° (easeIn)
                 withAnimation(.easeIn(duration: 0.3), completionCriteria: .logicallyComplete) {
-                    frontRotation = -90
+                    frontRotation = -89.9
                 } completion: {
+                    // Phase 2: hide front face before rotating back face into view,
+                    // so the invisible face never shows the anti-aliased line.
+                    frontVisible = false
                     withAnimation(.easeOut(duration: 0.3)) { backRotation = 0 }
                 }
             }

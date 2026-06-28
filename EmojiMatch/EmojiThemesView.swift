@@ -78,30 +78,46 @@ struct EmojiThemesView: View {
                     }
                 }
             }
+
             // needed to stop runtime error message: Adding 'UIKitToolbar' as a subview of UIHostingController.view is not supported...
             .safeAreaInset(edge: .bottom) {
                 GlassEffectContainer {
-                    HStack {
-                        Button("Leaderboard") {
+                    HStack(spacing: 0) {
+                        Button {
                             GKAccessPoint.shared.trigger(leaderboardID: "com.mretondo.EmojiMatch26",
                                                          playerScope: .global,
                                                          timeScope: .allTime) {}
+                        } label: {
+                            VStack(spacing: 2) {
+                                Image(systemName: "list.number")
+                                Text("Leaderboard")
+                                    .font(.caption2)
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
                         }
-                            .disabled(!isGCAuthenticated)
-                            .padding(.horizontal, 20)
+                        .disabled(!isGCAuthenticated)
+
+                        Divider()
+                            .frame(height: 30)
+
+                        Button { submitScore() } label: {
+                            VStack(spacing: 2) {
+                                Image("trophy.badge.arrow.up")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 22, height: 22)
+                                Text("Score")
+                                    .font(.caption2)
+                            }
+                            .padding(.horizontal, 24)
                             .padding(.vertical, 10)
-                            .glassEffect(in: .capsule)
-//                        Spacer()
-                        Button("Submit Score") { submitScore() }
-                            .disabled(!isGCAuthenticated)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .glassEffect(in: .capsule)
+                        }
+                        .disabled(!isGCAuthenticated)
                     }
-//                    .padding(.horizontal, 16)
+                    .glassEffect(in: .capsule)
                     .tint(.primary)
                 }
-//                .padding(.bottom, 8)
             }
 
             .sheet(isPresented: $showAddTheme) {
@@ -138,7 +154,7 @@ struct EmojiThemesView: View {
 
     private func submitScore() {
         guard let highestScore = highScore else { return }
-        Task {
+        Task { @MainActor in
             do {
                 let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch26"])
                 if let leaderboard = leaderboards.first {
@@ -160,6 +176,7 @@ struct EmojiThemesView: View {
         }
     }
 
+    @MainActor
     private func updateScoreFromLeaderboard() async {
         guard GKLocalPlayer.local.isAuthenticated else { return }
         do {

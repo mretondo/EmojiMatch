@@ -11,9 +11,12 @@ struct CardGameView: View {
         _viewModel = StateObject(wrappedValue: CardGameViewModel(theme: theme))
     }
 
+    @Environment(\.colorScheme) private var colorScheme
+
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
     private var bgColor:     Color { Color(uiColor: viewModel.theme.backgroundColor) }
     private var accentColor: Color { Color(uiColor: viewModel.theme.faceDownColor) }
+    private var navBarColor: Color { colorScheme == .dark ? Color(UIColor.systemBackground) : bgColor }
 
     var body: some View {
         // Capture observed properties here so @Observable registers them as
@@ -54,16 +57,19 @@ struct CardGameView: View {
             }
 
             if viewModel.isGameOver {
-                Text("Game Over!")
-                    .font(.largeTitle).bold()
-                    .foregroundStyle(accentColor)
-                    .transition(.scale(scale: 0.25).combined(with: .opacity))
+                ZStack {
+                    SparklesView(themeName: viewModel.theme.name)
+                    Text("Game Over!")
+                        .font(.largeTitle).bold()
+                        .foregroundStyle(accentColor)
+                }
+                .transition(.scale(scale: 0.25).combined(with: .opacity))
             }
         }
         .animation(.spring(dampingFraction: 0.4), value: viewModel.isGameOver)
         .navigationTitle(viewModel.theme.name)
         .navigationBarTitleDisplayMode(.large)
-        .toolbarBackground(bgColor, for: .navigationBar)
+        .toolbarBackground(navBarColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -73,9 +79,9 @@ struct CardGameView: View {
                 .foregroundStyle(accentColor)
             }
         }
-        .onDisappear {
-            if viewModel.cards.allSatisfy({ $0.isMatched }) {
-                Score.highScore = viewModel.score
+        .onChange(of: viewModel.score) { oldScore, newScore in
+            if newScore > oldScore {
+                Score.highScore = newScore
             }
         }
     }
@@ -127,5 +133,47 @@ struct CardGameView: View {
 
         // the max(1, ...) ensures the frame height is always a valid positive value during the first pass
         return max(1, min(heightByAspect, heightBySpace))
+    }
+}
+
+// MARK: - Sparkles
+
+private struct SparklesView: View {
+    let themeName: String
+//    @Environment(\.colorScheme) private var colorScheme
+
+    private var sparkleColor: Color {
+        let lower = themeName.lowercased()
+        if lower.contains("christmas") || lower.contains("halloween") {
+            return Color.white.opacity(0.85)
+        }
+        return Color.yellow.opacity(0.85)
+    }
+
+    private let angles:  [Double] = stride(from: 0, to: 360, by: 30).map { $0 }
+    private let radii:   [Double] = [80, 110, 70, 95, 120, 65, 100, 75, 115, 85, 105, 90]
+    private let sizes:   [CGFloat] = [16, 12, 20, 14, 10, 18, 15, 22, 11, 17, 13, 19]
+    private let periods: [Double] = [1.2, 0.9, 1.4, 1.0, 1.3, 0.8, 1.1, 1.5, 0.95, 1.25, 1.05, 0.85]
+    private let offsets: [Double] = [0.0, 0.3, 0.6, 0.9, 0.12, 0.45, 0.78, 0.21, 0.54, 0.87, 0.15, 0.48]
+
+    var body: some View {
+        TimelineView(.animation) { timeline in
+            let t = timeline.date.timeIntervalSinceReferenceDate
+            ZStack {
+                ForEach(0..<12, id: \.self) { i in
+                    let phase = ((t / periods[i]) + offsets[i]).truncatingRemainder(dividingBy: 1)
+                    let intensity = sin(phase * .pi)
+                    Image(systemName: "sparkle")
+                        .font(.system(size: sizes[i]))
+                        .foregroundStyle(sparkleColor)
+                        .scaleEffect(max(0.05, intensity))
+                        .opacity(max(0, intensity))
+                        .offset(
+                            x: cos(angles[i] * .pi / 180) * radii[i],
+                            y: sin(angles[i] * .pi / 180) * radii[i]
+                        )
+                }
+            }
+        }
     }
 }

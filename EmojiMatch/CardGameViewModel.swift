@@ -58,6 +58,9 @@ final class CardGameViewModel: ObservableObject {
             let matched = game.cards[index].isMatched
 
             if matched {
+                // Congratulations! you found matching cards and get 1 point
+                score += 1
+
                 try? await Task.sleep(for: .milliseconds(800))
                 withAnimation(.easeIn(duration: 0.2)) {
                     hiddenCardIndices.insert(faceUpIndices[0])
@@ -66,19 +69,16 @@ final class CardGameViewModel: ObservableObject {
                 try? await Task.sleep(for: .milliseconds(250))
                 resetFaceUp(at: faceUpIndices)
 
-                // Congratulations! you found matching cards and get 1 point
-                score += 1
-
                 if game.areAllCardsMatched() {
                     isGameOver = true
                 }
             } else {
+                applyPenalty(for: index)
                 try? await Task.sleep(for: .milliseconds(800))
                 withAnimation(.easeInOut(duration: 0.5)) {
                     resetFaceUp(at: faceUpIndices)
                 }
                 try? await Task.sleep(for: .milliseconds(550))
-                applyPenalty(for: index)
                 firstTouchedCardIndex = nil
             }
 
