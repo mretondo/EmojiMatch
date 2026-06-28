@@ -6,6 +6,7 @@ This is a simple Concentration style game. I created it as a tool to learn Swift
 If cards don't match and you've seen the second card before so you know it's not a match you lose 1 point, you also can lose 2 points.
 You can't touch more than two cards at a time. You have to wait for animations to complete before touching new card.
 The app now uses Leaderboard (High Score - With Penalties)
+3. Easy Scoring mode doesn't go below 0 and oly penalies 1 point. This doesn't discurate young kids or people with disabilities.
 
 ### User privacy policy
 This application gathers NO user personal data at all, period!  
