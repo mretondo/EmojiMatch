@@ -5,6 +5,7 @@
 import SwiftUI
 
 @main
+@MainActor
 struct EmojiMatchApp: App {
     var body: some Scene {
         WindowGroup {

@@ -84,9 +84,11 @@ struct EmojiThemesView: View {
                 GlassEffectContainer {
                     HStack(spacing: 0) {
                         Button {
-                            GKAccessPoint.shared.trigger(leaderboardID: "com.mretondo.EmojiMatch26",
-                                                         playerScope: .global,
-                                                         timeScope: .allTime) {}
+                            DispatchQueue.main.async {
+                                GKAccessPoint.shared.trigger(leaderboardID: "com.mretondo.EmojiMatch27",
+                                                             playerScope: .global,
+                                                             timeScope: .allTime) {}
+                            }
                         } label: {
                             VStack(spacing: 2) {
                                 Image(systemName: "list.number")
@@ -156,7 +158,7 @@ struct EmojiThemesView: View {
         guard let highestScore = highScore else { return }
         Task { @MainActor in
             do {
-                let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch26"])
+                let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch27"])
                 if let leaderboard = leaderboards.first {
                     let (entry, _) = try await leaderboard.loadEntries(for: [GKLocalPlayer.local], timeScope: .allTime)
                     if let existing = entry?.score, existing >= Int(highestScore) {
@@ -167,7 +169,7 @@ struct EmojiThemesView: View {
                 try await GKLeaderboard.submitScore(
                     Int(highestScore), context: 0,
                     player: GKLocalPlayer.local,
-                    leaderboardIDs: ["com.mretondo.EmojiMatch26"]
+                    leaderboardIDs: ["com.mretondo.EmojiMatch27"]
                 )
                 show(title: "Success", message: "Your score was added to the Leaderboard.")
             } catch {
@@ -180,7 +182,7 @@ struct EmojiThemesView: View {
     private func updateScoreFromLeaderboard() async {
         guard GKLocalPlayer.local.isAuthenticated else { return }
         do {
-            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch26"])
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch27"])
             if let leaderboard = leaderboards.first {
                 let (entry, _) = try await leaderboard.loadEntries(for: [GKLocalPlayer.local], timeScope: .allTime)
                 if let gcScore = entry?.score {
