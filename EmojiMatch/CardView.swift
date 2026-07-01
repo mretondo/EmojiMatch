@@ -30,7 +30,7 @@ struct CardView: View {
 
             ZStack {
                 RoundedRectangle(cornerRadius: 10).fill(faceUpColor)
-                Text(emoji).font(.system(size: 40))
+                Text(emoji).font(.system(size: 47))
             }
             .opacity(frontVisible ? 1 : 0)
             .rotation3DEffect(.degrees(frontRotation), axis: (x: 0, y: 1, z: 0), perspective: 0)
