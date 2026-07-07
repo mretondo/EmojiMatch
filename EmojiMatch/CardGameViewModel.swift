@@ -52,8 +52,8 @@ final class CardGameViewModel: ObservableObject {
         }
 
         Task {
-            // Wait for the flip-up animation (0.3s easeIn + 0.3s easeOut = 0.6s total)
-            try? await Task.sleep(for: .milliseconds(650))
+            // Wait for the flip-up animation (0.2s lift + 0.3s easeIn + 0.3s easeOut + 0.2s lower = 1.0s total)
+            try? await Task.sleep(for: .milliseconds(1000))
 
             let matched = game.cards[index].isMatched
 

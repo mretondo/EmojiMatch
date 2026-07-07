@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xcodebuild -project \"/Users/mike/Documents/Development/EmojiMatch/Match Emojis.xcodeproj\" -scheme \"EmojiMatch\" -destination \"generic/platform=iOS\" build)"
+      "Bash(xcodebuild -project \"/Users/mike/Documents/Development/EmojiMatch/Match Emojis.xcodeproj\" -scheme \"EmojiMatch\" -destination \"generic/platform=iOS\" build)",
+      "Bash(git -C /Users/mike/Documents/Development/EmojiMatch rev-parse --show-toplevel)"
     ]
   }
 }
