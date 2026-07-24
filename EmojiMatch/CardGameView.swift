@@ -79,9 +79,9 @@ struct CardGameView: View {
                 .foregroundStyle(accentColor)
             }
         }
-        .onChange(of: viewModel.score) { oldScore, newScore in
-            if newScore > oldScore {
-                Score.highScore = newScore
+        .onChange(of: viewModel.isGameOver) { _, isGameOver in
+            if isGameOver {
+                Score.highScore = viewModel.score
             }
         }
     }

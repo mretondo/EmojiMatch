@@ -7,6 +7,8 @@ import UIKit
 import CoreData
 import GameKit
 
+private let leaderboardID = "com.mretondo.EmojiMatch27_V1"
+
 struct EmojiThemesView: View {
     @Environment(\.managedObjectContext) private var moc
     @Environment(AppEnvironment.self) private var appEnvironment
@@ -25,7 +27,9 @@ struct EmojiThemesView: View {
     @State private var showAlert = false
     @State private var emojiCache: [String: String] = [:]
 
-    private var highScore: Int64? { scores.first?.highScore }
+    private var highScore: Int64? {
+        scores.first?.highScore
+    }
 
     var body: some View {
         @Bindable var appEnvironment = appEnvironment
@@ -84,11 +88,9 @@ struct EmojiThemesView: View {
                 GlassEffectContainer {
                     HStack(spacing: 0) {
                         Button {
-                            DispatchQueue.main.async {
-                                GKAccessPoint.shared.trigger(leaderboardID: "com.mretondo.EmojiMatch27",
-                                                             playerScope: .global,
-                                                             timeScope: .allTime) {}
-                            }
+                            GKAccessPoint.shared.trigger(leaderboardID: leaderboardID,
+                                                         playerScope: .global,
+                                                         timeScope: .allTime) {}
                         } label: {
                             VStack(spacing: 2) {
                                 Image(systemName: "list.number")
@@ -158,7 +160,7 @@ struct EmojiThemesView: View {
         guard let highestScore = highScore else { return }
         Task { @MainActor in
             do {
-                let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch27"])
+                let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID])
                 if let leaderboard = leaderboards.first {
                     let (entry, _) = try await leaderboard.loadEntries(for: [GKLocalPlayer.local], timeScope: .allTime)
                     if let existing = entry?.score, existing >= Int(highestScore) {
@@ -169,7 +171,7 @@ struct EmojiThemesView: View {
                 try await GKLeaderboard.submitScore(
                     Int(highestScore), context: 0,
                     player: GKLocalPlayer.local,
-                    leaderboardIDs: ["com.mretondo.EmojiMatch27"]
+                    leaderboardIDs: [leaderboardID]
                 )
                 show(title: "Success", message: "Your score was added to the Leaderboard.")
             } catch {
@@ -182,14 +184,16 @@ struct EmojiThemesView: View {
     private func updateScoreFromLeaderboard() async {
         guard GKLocalPlayer.local.isAuthenticated else { return }
         do {
-            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: ["com.mretondo.EmojiMatch27"])
+            let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID])
             if let leaderboard = leaderboards.first {
                 let (entry, _) = try await leaderboard.loadEntries(for: [GKLocalPlayer.local], timeScope: .allTime)
                 if let gcScore = entry?.score {
                     Score.highScore = Int64(gcScore)
                 }
             }
-        } catch {}
+        } catch {
+            print("catch error leaderboard.loadEntries")
+        }
     }
 
     private func show(title: String, message: String) {
