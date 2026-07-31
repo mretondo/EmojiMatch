@@ -7,6 +7,7 @@ If cards don't match and you've seen the second card before so you know it's not
 You can't touch more than two cards at a time. You have to wait for animations to complete before touching new card.
 The app now uses Leaderboard (High Score - With Penalties_V1)
 3. Easy Scoring mode doesn't go below 0 and only penalies 1 point. This is to not discourage young kids or people with disabilities.
+4. New application icon (no longer in "squircle jail")
 
 ### User privacy policy
 This application gathers NO user personal data at all, period!  
