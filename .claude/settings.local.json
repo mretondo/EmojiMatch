@@ -13,7 +13,9 @@
       "Bash(uuidgen)",
       "Bash(plutil -lint \"Match Emojis.xcodeproj/project.pbxproj\")",
       "Bash(plutil -lint \"EmojiMatch/PrivacyInfo.xcprivacy\")",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(xcodebuild -project \"Match Emojis.xcodeproj\" -scheme \"EmojiMatch Release\" -configuration Release -destination 'generic/platform=iOS' -archivePath \"build/EmojiMatch.xcarchive\" archive)",
+      "Bash(security find-identity *)"
     ]
   }
 }
