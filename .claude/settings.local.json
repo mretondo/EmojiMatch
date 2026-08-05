@@ -5,7 +5,15 @@
       "Bash(git -C /Users/mike/Documents/Development/EmojiMatch rev-parse --show-toplevel)",
       "Bash(xcrun devicectl *)",
       "WebSearch",
-      "WebFetch(domain:forums.swift.org)"
+      "WebFetch(domain:forums.swift.org)",
+      "Bash(xcodebuild -project \"Match Emojis.xcodeproj\" -scheme \"EmojiMatch Release\" -configuration Release -destination 'generic/platform=iOS' clean build)",
+      "Bash(git commit -m ' *)",
+      "Bash(xcodebuild -project \"Match Emojis.xcodeproj\" -scheme \"EmojiMatch Release\" -configuration Release -destination 'generic/platform=iOS' build)",
+      "Bash(git add *)",
+      "Bash(uuidgen)",
+      "Bash(plutil -lint \"Match Emojis.xcodeproj/project.pbxproj\")",
+      "Bash(plutil -lint \"EmojiMatch/PrivacyInfo.xcprivacy\")",
+      "Bash(git push *)"
     ]
   }
 }
