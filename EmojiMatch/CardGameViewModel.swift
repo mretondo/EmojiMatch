@@ -75,10 +75,10 @@ final class CardGameViewModel: ObservableObject {
             } else {
                 applyPenalty(for: index)
                 try? await Task.sleep(for: .milliseconds(800))
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    resetFaceUp(at: faceUpIndices)
-                }
-                try? await Task.sleep(for: .milliseconds(550))
+                resetFaceUp(at: faceUpIndices)
+                // Wait for the flip-down animation to finish (1.0s total, see above)
+                // before re-enabling interaction.
+                try? await Task.sleep(for: .milliseconds(1000))
                 firstTouchedCardIndex = nil
             }
 
