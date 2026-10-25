@@ -2,16 +2,19 @@
 //  CardGameViewModel.swift
 //
 
-import Combine
+import Observation
 import SwiftUI
 
-final class CardGameViewModel: ObservableObject {
-    @Published var cards: [Card] = []
-    @Published var score: Int64 = 0
-    @Published var isGameOver = false
-    @Published var isInteractionDisabled = false
-    @Published var hiddenCardIndices: Set<Int> = []
-    @Published var gameID = UUID()  // changing this forces CardView @State reset
+@MainActor
+@Observable
+final class CardGameViewModel {
+    // Observe the game directly: Card equality compares pair identity, not flip state.
+    var cards: [Card] { game.cards }
+    var score: Int64 = 0
+    var isGameOver = false
+    var isInteractionDisabled = false
+    var hiddenCardIndices: Set<Int> = []
+    var gameID = UUID()  // changing this forces CardView @State reset
 
     let theme: ThemeItem
     private var game: EmojiMatchModel
@@ -22,7 +25,6 @@ final class CardGameViewModel: ObservableObject {
         self.theme = theme
         let g = EmojiMatchModel(numberOfPairsOfCards: 10)
         game = g
-        cards = g.cards
         buildEmojiMap(from: theme.emojis)
     }
 
@@ -30,7 +32,6 @@ final class CardGameViewModel: ObservableObject {
         emojiMap[card] ?? "?"
     }
 
-    @MainActor
     func chooseCard(at index: Int) {
         guard !isInteractionDisabled else { return }
         let card = cards[index]
@@ -41,9 +42,6 @@ final class CardGameViewModel: ObservableObject {
         }
 
         game.chooseCard(at: index)
-        
-        // update state so CardView will receive the updated card state after a tap
-        cards = game.cards
 
         let faceUpIndices = game.indicesOfTransitioningToFaceUpCardsAndFaceUpCards
         guard faceUpIndices.count == 2 else {
@@ -89,7 +87,6 @@ final class CardGameViewModel: ObservableObject {
         }
     }
 
-    @MainActor
     func newGame() {
         let g = EmojiMatchModel(numberOfPairsOfCards: 10)
         game = g
@@ -101,18 +98,15 @@ final class CardGameViewModel: ObservableObject {
         firstTouchedCardIndex = nil
         hiddenCardIndices = []
         gameID = UUID()  // forces all CardView @State to reset
-        cards = g.cards
     }
 
     // MARK: - Private
 
-    @MainActor
     private func resetFaceUp(at indices: [Int]) {
         for i in indices {
             game.cards[i].isFaceUp = false
             game.cards[i].isTransitioningToFaceUp = false
         }
-        cards = game.cards
     }
 
     private func buildEmojiMap(from emojiChoices: String) {
@@ -126,7 +120,6 @@ final class CardGameViewModel: ObservableObject {
         }
     }
 
-    @MainActor
     private func applyPenalty(for touchedIndex: Int) {
         if AppEnvironment.shared.easyScoringMode {
             if let firstIdx = firstTouchedCardIndex, let twinIdx = game.twinCardIndex(of: firstIdx),

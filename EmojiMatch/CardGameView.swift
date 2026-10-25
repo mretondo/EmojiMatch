@@ -5,10 +5,10 @@
 import SwiftUI
 
 struct CardGameView: View {
-    @StateObject private var viewModel: CardGameViewModel
+    @State private var viewModel: CardGameViewModel
 
     init(theme: ThemeItem) {
-        _viewModel = StateObject(wrappedValue: CardGameViewModel(theme: theme))
+        _viewModel = State(initialValue: CardGameViewModel(theme: theme))
     }
 
     @Environment(\.colorScheme) private var colorScheme
@@ -19,10 +19,7 @@ struct CardGameView: View {
     private var navBarColor: Color { colorScheme == .dark ? Color(UIColor.systemBackground) : bgColor }
 
     var body: some View {
-        // Capture observed properties here so @Observable registers them as
-        // dependencies of this view, not inside GeometryReader's lazy closure.
-        let cards = viewModel.cards
-        let hiddenIndices = viewModel.hiddenCardIndices
+        let cardCount = viewModel.cards.count
         let isInteractionDisabled = viewModel.isInteractionDisabled
         let score = viewModel.score
 
@@ -38,7 +35,7 @@ struct CardGameView: View {
 
                 if isLandscape {
                     HStack(spacing: 0) {
-                        grid(cards: cards, hiddenIndices: hiddenIndices,
+                        grid(cardCount: cardCount,
                              isInteractionDisabled: isInteractionDisabled, cardHeight: height)
                             .frame(width: gridAvailWidth)
                         scoreLabel(score: score)
@@ -47,7 +44,7 @@ struct CardGameView: View {
                     }
                 } else {
                     VStack(spacing: 0) {
-                        grid(cards: cards, hiddenIndices: hiddenIndices,
+                        grid(cardCount: cardCount,
                              isInteractionDisabled: isInteractionDisabled, cardHeight: height)
                         Spacer()
                         scoreLabel(score: score)
@@ -89,17 +86,11 @@ struct CardGameView: View {
     // MARK: - Subviews
 
     @ViewBuilder
-    private func grid(cards: [Card], hiddenIndices: Set<Int>,
+    private func grid(cardCount: Int,
                       isInteractionDisabled: Bool, cardHeight height: CGFloat) -> some View {
         LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(cards.indices, id: \.self) { index in
-                CardView(
-                    isFaceUp:      cards[index].isFaceUp || cards[index].isTransitioningToFaceUp,
-                    emoji:         viewModel.emoji(for: cards[index]),
-                    faceDownColor: Color(uiColor: viewModel.theme.faceDownColor),
-                    faceUpColor:   Color(uiColor: viewModel.theme.faceUpColor),
-                    isHidden:      hiddenIndices.contains(index)
-                )
+            ForEach(0..<cardCount, id: \.self) { index in
+                GameCardView(viewModel: viewModel, index: index)
                 .frame(height: height)
                 .onTapGesture { viewModel.chooseCard(at: index) }
             }
